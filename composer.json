@@ -1,0 +1,21 @@
+{
+    "name": "wexample/symfony-helpers",
+    "description": "Helpers for symfony development : constants dictionary, helpers, etc.",
+    "type": "library",
+    "license": "MIT",
+    "version": "0.1.0",
+    "autoload": {
+        "psr-4": {
+            "Wexample\\SymfonyHelpers\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "weeger",
+            "email": "romain.weeger@wexample.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1"
+    }
+}

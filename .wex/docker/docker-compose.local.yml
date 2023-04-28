@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+    wex_symfony_helpers_php-8:
+        environment:
+          - LETSENCRYPT_HOST=${DOMAINS}
+          - LETSENCRYPT_EMAIL=${EMAIL}
+

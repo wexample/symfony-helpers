@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+    wex_symfony_helpers_phpmyadmin:
+        extends:
+          file: ${WEX_COMPOSE_YML_PHPMYADMIN}
+          service: phpmyadmin
+        links:
+          - ${APP_NAME}_mysql-8
+
+    wex_symfony_helpers_php-8:
+        extends:
+            file: ${WEX_COMPOSE_YML_PHP_8}
+            service: php_8
+
+    wex_symfony_helpers_mysql-8:
+        extends:
+          file: ${WEX_COMPOSE_YML_MYSQL_8}
+          service: mysql_8
+
