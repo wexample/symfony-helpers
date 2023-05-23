@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Wex\BaseBundle\Helper;
+namespace Wexample\SymfonyHelpers\Helper;
 
 use Exception;
-use JetBrains\PhpStorm\Pure;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 use function current;
@@ -153,7 +152,6 @@ class TextHelper
         return $formatted;
     }
 
-    #[Pure]
     public static function uniqueFileNameInDir(
         string $dir,
         string $extension
@@ -344,7 +342,7 @@ class TextHelper
     public static function convertUrlsToHyperLinks(string $string): string
     {
         return preg_replace(
-            '@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@',
+            '@(https?://([-\w.]+[-\w])+(:\d+)?(/([\w/_.#-]*(\?\S+)?[^.\s])?)?)@',
             '<a href="$1" target="_blank">$1</a>',
             $string
         );

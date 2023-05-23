@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Wex\BaseBundle\Helper;
+namespace Wexample\SymfonyHelpers\Helper;
 
 use function array_map;
 use function explode;
