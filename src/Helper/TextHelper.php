@@ -1,6 +1,6 @@
 <?php
 
-namespace Wexample\SymfonyHelpers\Helper;
+namespace App\Wex\BaseBundle\Helper;
 
 use Exception;
 use JetBrains\PhpStorm\Pure;
@@ -125,7 +125,7 @@ class TextHelper
 
     public static function stringToKebab(string $string): string
     {
-        return strtolower(preg_replace('/\_/', '-', $string));
+        return strtolower(preg_replace('/_/', '-', $string));
     }
 
     public static function getStringFromIntData(
