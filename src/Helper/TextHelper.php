@@ -1,0 +1,543 @@
+<?php
+
+namespace Wexample\SymfonyHelpers\Helper;
+
+use Exception;
+use JetBrains\PhpStorm\Pure;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\String\UnicodeString;
+use function current;
+use function explode;
+use function floatval;
+use function htmlspecialchars_decode;
+use function implode;
+use function is_file;
+use function is_numeric;
+use function lcfirst;
+use function md5;
+use function mt_srand;
+use function number_format;
+use function ord;
+use function preg_replace;
+use function preg_split;
+use function random_int;
+use function round;
+use function rtrim;
+use function str_replace;
+use function str_shuffle;
+use function strip_tags;
+use function strlen;
+use function strtolower;
+use function strtoupper;
+use function uniqid;
+
+class TextHelper
+{
+    // Background color
+    final public const ASCII_BG_COLOR_BLACK = '40';
+    final public const ASCII_BG_COLOR_RED = '41';
+    final public const ASCII_BG_COLOR_GREEN = '42';
+    final public const ASCII_BG_COLOR_YELLOW = '43';
+    final public const ASCII_BG_COLOR_BLUE = '44';
+    final public const ASCII_BG_COLOR_MAGENTA = '45';
+    final public const ASCII_BG_COLOR_CYAN = '46';
+    final public const ASCII_BG_COLOR_WHITE = '47';
+    final public const ASCII_BG_COLOR_GRAY = '100';
+
+    // Darken color
+    final public const ASCII_DARK_COLOR_BLACK = '90';
+    final public const ASCII_DARK_COLOR_RED = '91';
+    final public const ASCII_DARK_COLOR_GREEN = '92';
+    final public const ASCII_DARK_COLOR_YELLOW = '93';
+    final public const ASCII_DARK_COLOR_BLUE = '94';
+    final public const ASCII_DARK_COLOR_MAGENTA = '95';
+    final public const ASCII_DARK_COLOR_CYAN = '96';
+    final public const ASCII_DARK_COLOR_WHITE = '97';
+
+    // Brighten color
+    final public const ASCII_COLOR_BLACK = '30';
+    final public const ASCII_COLOR_RED = '31';
+    final public const ASCII_COLOR_GREEN = '32';
+    final public const ASCII_COLOR_YELLOW = '33';
+    final public const ASCII_COLOR_BLUE = '34';
+    final public const ASCII_COLOR_MAGENTA = '35';
+    final public const ASCII_COLOR_CYAN = '36';
+    final public const ASCII_COLOR_WHITE = '37';
+
+    final public const TRIM_MARKER = '...';
+
+    public static function removeDoubleSpaces(string $string): string
+    {
+        return preg_replace(
+            '/\s+/',
+            ' ',
+            $string
+        );
+    }
+
+    public static function htmlToText(string $string): string
+    {
+        $string = preg_replace(
+            '/<br\s?\/?>/ius',
+            "\n",
+            str_replace(
+                "\n",
+                '',
+                str_replace("\r", '', htmlspecialchars_decode($string))
+            )
+        );
+
+        return strip_tags($string);
+    }
+
+    public static function getNumberHashFromString(string $string): string
+    {
+        $letter = TextHelper::getLetterFromString($string);
+
+        // Transform to number.
+        $first = ord('A');
+        $max = ord(strtoupper('Z')) - $first;
+        $current = ord(strtoupper($letter)) - $first;
+
+        return 1 / $max * $current;
+    }
+
+    /**
+     * Returns a single alphanumerical lowercase letter based on a various
+     * string. The letter should always be the same for the given string. Used
+     * to generate member default color / profile picture.
+     */
+    public static function getLetterFromString(string $string): string
+    {
+        mt_srand(1);
+        $string = strtolower(
+            preg_replace('/[^a-zA-Z]/', '', str_shuffle($string))[0]
+        );
+        mt_srand();
+
+        return $string;
+    }
+
+    public static function camelToDash(string $string): string
+    {
+        return strtolower(preg_replace('/([A-Z])/', '-$1', $string));
+    }
+
+    public static function stringToKebab(string $string): string
+    {
+        return strtolower(preg_replace('/\_/', '-', $string));
+    }
+
+    public static function getStringFromIntData(
+        int $data,
+        bool $trimZeros = false
+    ): string {
+        $decPoint = ',';
+        $decimals = 2;
+
+        $formatted = number_format(
+            NumberHelper::intDataToFloat($data),
+            $decimals,
+            $decPoint,
+            ' '
+        );
+
+        if ($trimZeros) {
+            for ($i = 0; $i < $decimals; ++$i) {
+                $formatted = rtrim($formatted, '0');
+            }
+
+            $formatted = rtrim($formatted, $decPoint);
+        }
+
+        return $formatted;
+    }
+
+    #[Pure]
+    public static function uniqueFileNameInDir(
+        string $dir,
+        string $extension
+    ): string {
+        do {
+            // Create file name.
+            $fileName = static::uniqueFileName().'.'.$extension;
+        } while (is_file($dir.$fileName));
+
+        return $fileName;
+    }
+
+    public static function uniqueFileName(): string
+    {
+        // md5() reduces the similarity of the file names generated by
+        // uniqid(), which is based on timestamps
+        return md5(uniqid());
+    }
+
+    public static function isBooleanOrNull(string $bool): bool
+    {
+        $bool = trim(strtolower($bool));
+
+        return $bool === 'true' || $bool === 'false' || $bool === 'null';
+    }
+
+    public static function parseBooleanOrNull(string|bool|null $bool): bool|null
+    {
+        if (is_string($bool)) {
+            $bool = trim(strtolower($bool));
+
+            if ($bool === 'true') {
+                return true;
+            }
+
+            if ($bool === 'false') {
+                return false;
+            }
+
+            // 'null' or any other string value.
+            return null;
+        }
+
+        return $bool;
+    }
+
+    public static function parseBoolean($bool): bool
+    {
+        return 'true' === $bool;
+    }
+
+    public static function renderBoolean(bool $bool): string
+    {
+        return $bool ? 'true' : 'false';
+    }
+
+    public static function objectToFileName(
+        $object,
+        string $fieldName = 'title'
+    ): string {
+        return TextHelper::toAlphaNum(
+            ClassHelper::getFieldGetterValue($object, $fieldName)
+        );
+    }
+
+    public static function toAlphaNum(string $text): string
+    {
+        return self::slugify($text);
+    }
+
+    public static function slugify(string $string): string
+    {
+        $slugger = new AsciiSlugger();
+
+        return $slugger->slug(strtolower($string));
+    }
+
+    public static function usernameFromEmail(string $email): string
+    {
+        return self::slugify(current(explode('@', $email)));
+    }
+
+    public static function getIntDataFromString(string $string): int
+    {
+        return round(self::getFloatFromString($string) * 100);
+    }
+
+    public static function getFloatFromString(string $string): ?float
+    {
+        // Replace commas by points.
+        $string = str_replace(',', '.', $string);
+        // Keep only numbers, point, and - (negative).
+        $string = preg_replace('/[^0-9.-]/', '', $string);
+
+        if (is_numeric($string)) {
+            return floatval($string);
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if haystack contain one of given needles.
+     */
+    public static function hasOne(
+        array $needles,
+        string $haystack
+    ): bool {
+        return str_replace($needles, '', $haystack) !== $haystack;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function generatePassword(int $length): string
+    {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $pass = [];
+        $alphaLength = strlen($alphabet) - 1;
+
+        for ($i = 0; $i < $length; ++$i) {
+            $n = random_int(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+
+        return implode($pass);
+    }
+
+    public static function splitLines(string $string): array
+    {
+        return preg_split("/((\r?\n)|(\r\n?))/", $string);
+    }
+
+    public static function toCamel(string $string): string
+    {
+        return lcfirst(
+            static::toClass($string)
+        );
+    }
+
+    public static function toClass(string $string): string
+    {
+        return (new UnicodeString(
+            static::kebabToDash($string)
+        ))->camel()->title();
+    }
+
+    public static function kebabToDash(string $string): string
+    {
+        return str_replace(
+            '-',
+            '_',
+            $string
+        );
+    }
+
+    public static function toKebab(string $string): string
+    {
+        return str_replace(
+            '_',
+            '-',
+            $string
+        );
+    }
+
+    public static function toSnake(string $string): string
+    {
+        return (new UnicodeString($string))->snake();
+    }
+
+    public static function emailString(
+        string $mail,
+        ?string $name = ''
+    ): string {
+        if ($name) {
+            $slugger = new AsciiSlugger();
+            $name = $slugger->slug($name, ' ');
+        }
+
+        return $name.' <'.$mail.'>';
+    }
+
+    public static function isEmail(string $string): bool
+    {
+        return filter_var($string, FILTER_VALIDATE_EMAIL);
+    }
+
+    public static function convertUrlsToHyperLinks(string $string): string
+    {
+        return preg_replace(
+            '@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@',
+            '<a href="$1" target="_blank">$1</a>',
+            $string
+        );
+    }
+
+    public static function asciiColorWrap(
+        string $string,
+        string $color = self::ASCII_COLOR_WHITE
+    ): string {
+        return "\033[1;".$color.'m'.$string."\033[0m";
+    }
+
+    public static function alphanumericOnly(string $string): string
+    {
+        return preg_replace(
+            '/[^a-zA-Z0-9]+/',
+            '',
+            $string
+        );
+    }
+
+    public static function trimString(
+        string $string,
+        string $prefix,
+        string $suffix,
+    ): string {
+        return self::trimStringPrefix(
+            self::trimStringSuffix(
+                $string,
+                $suffix
+            ),
+            $prefix
+        );
+    }
+
+    public static function trimStringPrefix(
+        string $string,
+        string $prefix
+    ): string {
+        if (str_starts_with($string, $prefix)) {
+            return substr($string, strlen($prefix));
+        }
+
+        return $string;
+    }
+
+    public static function trimStringSuffix(
+        string $string,
+        string $suffix
+    ): string {
+        if (str_ends_with($string, $suffix)) {
+            return substr(
+                $string,
+                0,
+                -strlen($suffix)
+            );
+        }
+
+        return $string;
+    }
+
+    public static function trimExtension(
+        string $filePath
+    ): string {
+        $info = pathinfo($filePath);
+
+        return TextHelper::trimLastChunk(
+            $filePath,
+            FileHelper::EXTENSION_SEPARATOR.$info['extension']
+        );
+    }
+
+    public static function trimLastChunk(
+        string $string,
+        string $separator
+    ): string {
+        $exp = explode(
+            $separator,
+            $string
+        );
+
+        array_pop($exp);
+
+        return implode(
+            $separator,
+            $exp
+        );
+    }
+
+    public static function trimFirstChunk(
+        string $string,
+        string $separator
+    ): string {
+        $exp = explode(
+            $separator,
+            $string
+        );
+
+        array_shift($exp);
+
+        return implode(
+            $separator,
+            $exp
+        );
+    }
+
+    public static function convertToBinary(
+        mixed $data,
+        string $separator = ' '
+    ): string {
+        if (!is_string($data)) {
+            $data = json_encode($data);
+        }
+
+        $characters = str_split($data);
+
+        $binary = [];
+        foreach ($characters as $character) {
+            $data = unpack('H*', $character);
+            $binary[] = base_convert($data[1], 16, 2);
+        }
+
+        return implode($separator, $binary);
+    }
+
+    public static function binaryToString(
+        string $binary,
+        string $separator = ' '
+    ): mixed {
+        $binaries = explode($separator, $binary);
+
+        $string = null;
+        foreach ($binaries as $binary) {
+            $string .= pack('H*', dechex(bindec($binary)));
+        }
+
+        if (TextHelper::isJson($string)) {
+            return json_decode($string);
+        }
+
+        return $string;
+    }
+
+    public static function isJson(mixed $string): bool
+    {
+        json_decode($string);
+
+        return JSON_ERROR_NONE === json_last_error();
+    }
+
+    /**
+     * @see https://gist.github.com/nim4n136/7fa38467181130f5a2270c39d495101e
+     */
+    public static function decrypt(
+        string $msgEncryptedBundle,
+        string $password
+    ): string {
+        $password = sha1($password);
+        $components = explode(':', $msgEncryptedBundle);
+        $iv = $components[0];
+        $salt = hash('sha256', $password.$components[1]);
+        $encrypted_msg = $components[2];
+        $decryptedMsg = openssl_decrypt(
+            $encrypted_msg, 'aes-256-cbc', $salt, 0, $iv
+        );
+
+        if ($decryptedMsg === false) {
+            return false;
+        }
+
+        return $decryptedMsg;
+    }
+
+    /**
+     * @see https://gist.github.com/nim4n136/7fa38467181130f5a2270c39d495101e
+     */
+    public static function encrypt(
+        string $string,
+        string $password
+    ): string {
+        $iv = substr(sha1(mt_rand()), 0, 16);
+        $password = sha1($password);
+        $salt = sha1(mt_rand());
+        $saltWithPassword = hash('sha256', $password.$salt);
+
+        $encrypted = \openssl_encrypt(
+            $string,
+            'aes-256-cbc',
+            "$saltWithPassword",
+            0,
+            $iv
+        );
+
+        return "$iv:$salt:$encrypted";
+    }
+}
