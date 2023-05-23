@@ -1,6 +1,9 @@
 <?php
 
-class TypesHelper {
+namespace Wexample\SymfonyHelpers\Helper;
+
+class TypesHelper
+{
     const TARRAY = 'array';
     const SIMPLE_ARRAY = 'simple_array';
     const JSON_ARRAY = 'json_array';
