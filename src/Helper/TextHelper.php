@@ -33,7 +33,7 @@ use function uniqid;
 class TextHelper
 {
     // Background color
-    final public const ASCII_BG_COLOR_BLACK = '40';
+    final public const ASCII_BG_COLOR_GRAY = '40';
     final public const ASCII_BG_COLOR_RED = '41';
     final public const ASCII_BG_COLOR_GREEN = '42';
     final public const ASCII_BG_COLOR_YELLOW = '43';
@@ -41,10 +41,9 @@ class TextHelper
     final public const ASCII_BG_COLOR_MAGENTA = '45';
     final public const ASCII_BG_COLOR_CYAN = '46';
     final public const ASCII_BG_COLOR_WHITE = '47';
-    final public const ASCII_BG_COLOR_GRAY = '100';
 
     // Darken color
-    final public const ASCII_DARK_COLOR_BLACK = '90';
+    final public const ASCII_DARK_COLOR_GRAY = '90';
     final public const ASCII_DARK_COLOR_RED = '91';
     final public const ASCII_DARK_COLOR_GREEN = '92';
     final public const ASCII_DARK_COLOR_YELLOW = '93';
@@ -54,7 +53,7 @@ class TextHelper
     final public const ASCII_DARK_COLOR_WHITE = '97';
 
     // Brighten color
-    final public const ASCII_COLOR_BLACK = '30';
+    final public const ASCII_COLOR_GRAY = '30';
     final public const ASCII_COLOR_RED = '31';
     final public const ASCII_COLOR_GREEN = '32';
     final public const ASCII_COLOR_YELLOW = '33';
