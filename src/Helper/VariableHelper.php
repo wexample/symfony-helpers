@@ -8,6 +8,7 @@ class VariableHelper
     public const ERROR = 'error';
     public const ID = 'id';
     public const LENGTH = 'length';
+    public const NAME = 'name';
     public const PAGE = 'page';
     public const SUCCESS = 'success';
     public const YEAR = 'year';
