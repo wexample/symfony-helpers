@@ -171,6 +171,14 @@ class DateHelper
         return self::startOfMonth((clone $date)->modify('first day of january'));
     }
 
+    public static function getCurrentYearDate(): DateTimeInterface
+    {
+        return \DateTime::createFromFormat(
+            DateHelper::DATE_PATTERN_DAY_DEFAULT,
+            DateHelper::getCurrentYearInt() . '-01-01'
+        );
+    }
+
     public static function getCurrentYearInt(): int
     {
         return (int) (new DateTime())->format(DateHelper::DATE_PATTERN_PART_YEAR_FULL);

@@ -66,7 +66,7 @@ trait IntegrationTestCaseTrait
     public function assertStatusCodeIsNotError(string $message = null): void
     {
         $this->assertNotContains(
-            $this->client->getResponse()->getStatusCode(),
+            $this->getGlobalClientResponse()->getStatusCode(),
             [
                 Response::HTTP_INTERNAL_SERVER_ERROR,
                 Response::HTTP_NOT_IMPLEMENTED,
@@ -117,7 +117,7 @@ trait IntegrationTestCaseTrait
         $this->assertIsRedirection();
 
         /** @var RedirectResponse $response */
-        $response = $this->client->getResponse();
+        $response = $this->getGlobalClientResponse();
 
         $targetUrl = $response->getTargetUrl();
 
@@ -135,7 +135,7 @@ trait IntegrationTestCaseTrait
     public function assertIsRedirection(): void
     {
         /** @var RedirectResponse $response */
-        $response = $this->client->getResponse();
+        $response = $this->getGlobalClientResponse();
 
         $this->assertTrue(
             RedirectResponse::class === $response::class,
@@ -199,20 +199,20 @@ trait IntegrationTestCaseTrait
 
     public function content(): string
     {
-        return $this->client->getResponse()->getContent();
+        return $this->getGlobalClientResponse()->getContent();
     }
 
     public function getResponseCode(): int
     {
-        return $this->client->getResponse()->getStatusCode();
+        return $this->getGlobalClientResponse()->getStatusCode();
     }
 
     public function followRedirectAndCheckTargetPage(): void
     {
-        while ($this->client->getResponse()->getStatusCode() === Response::HTTP_FOUND) {
+        while ($this->getGlobalClientResponse()->getStatusCode() === Response::HTTP_FOUND) {
             $this->logNavigation(
                 'Redirecting to : '
-                .$this->client->getResponse()->headers->get('location')
+                .$this->getGlobalClientResponse()->headers->get('location')
             );
             $this->client->followRedirect();
         }
@@ -225,6 +225,11 @@ trait IntegrationTestCaseTrait
     {
         $this->assertStatusCodeEquals(Response::HTTP_OK);
         $this->logSecondary('Status code is OK : '.Response::HTTP_OK);
+    }
+
+    protected function getGlobalClientResponse(): Response
+    {
+        return $this->client->getResponse();
     }
 
     protected function createGlobalClient(bool $forceRecreate = true): void
@@ -338,7 +343,7 @@ trait IntegrationTestCaseTrait
 
     public function assertStatusCodeEquals(int $expectedResponseCode): void
     {
-        $actual = $this->client->getResponse()->getStatusCode();
+        $actual = $this->getGlobalClientResponse()->getStatusCode();
 
         if ($expectedResponseCode !== $actual) {
             $this->logBodyExtract();
@@ -381,7 +386,7 @@ trait IntegrationTestCaseTrait
 
         echo PHP_EOL, '++++++++++++++++++++++++++',
         PHP_EOL, ' PATH :'.$this->client->getRequest()->getPathInfo(),
-        PHP_EOL, ' CODE :'.$this->client->getResponse()->getStatusCode(),
+        PHP_EOL, ' CODE :'.$this->getGlobalClientResponse()->getStatusCode(),
         PHP_EOL;
 
         $exceptionMessagePosition = strpos($output, 'exception_message');
