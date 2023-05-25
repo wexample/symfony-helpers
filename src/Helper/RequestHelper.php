@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RequestHelper
 {
     final public const URL_PART_SEPARATOR = '/';
+    final public const URL_QUERY_STRING_EQUAL = '=';
 
     final public const STATUS_CODES_REDIRECTIONS = [
         Response::HTTP_FOUND,
@@ -27,7 +28,7 @@ class RequestHelper
         $output = [];
 
         foreach ($parameters as $key => $value) {
-            $output[] = $key.'='.urlencode($value);
+            $output[] = $key.self::URL_QUERY_STRING_EQUAL.urlencode($value);
         }
 
         return implode('&', $output);
