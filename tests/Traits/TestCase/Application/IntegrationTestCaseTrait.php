@@ -360,7 +360,7 @@ trait IntegrationTestCaseTrait
         int $indent = null
     ): void {
         $this->logSecondary(
-            substr($this->getBody(), 0, 100),
+            substr($this->content(), 0, 100),
             $indent
         );
     }
