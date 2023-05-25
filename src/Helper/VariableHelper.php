@@ -7,6 +7,7 @@ class VariableHelper
     final public const DATA = 'data';
     final public const DAY = 'day';
     final public const ERROR = 'error';
+    final public const FULL = 'full';
     final public const ID = 'id';
     final public const LENGTH = 'length';
     final public const MESSAGE = 'message';
