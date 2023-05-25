@@ -34,14 +34,24 @@ class RequestHelper
         return implode('&', $output);
     }
 
-    public static function parseRequestValue(string|float|int|array $value): string|float|int|array
-    {
+    public static function parseRequestValue(
+        array|float|int|string $value,
+        ?string $targetType = null
+    ): array|bool|float|int|null|string {
+        if (TextHelper::isBooleanOrNull($value)) {
+            return TextHelper::parseBooleanOrNull($value);
+        }
+
         if (is_numeric($value)) {
             if (str_contains($value, '.')) {
                 return (float) $value;
             }
 
-            return (int) $value;
+            $value = (int) $value;
+        }
+
+        if ($targetType === TypesHelper::BOOLEAN) {
+            return (bool) $value;
         }
 
         return $value;

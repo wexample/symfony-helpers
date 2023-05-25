@@ -4,6 +4,7 @@ namespace Wexample\SymfonyHelpers\Helper;
 
 class VariableHelper
 {
+    final public const CUSTOM = 'custom';
     final public const DATA = 'data';
     final public const DAY = 'day';
     final public const ERROR = 'error';
@@ -15,5 +16,6 @@ class VariableHelper
     final public const NAME = 'name';
     final public const PAGE = 'page';
     final public const SUCCESS = 'success';
+    final public const TEST = 'test';
     final public const YEAR = 'year';
 }
