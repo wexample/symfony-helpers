@@ -15,7 +15,9 @@ class VariableHelper
     final public const MONTH = 'month';
     final public const NAME = 'name';
     final public const PAGE = 'page';
+    final public const STATUS = 'status';
     final public const SUCCESS = 'success';
     final public const TEST = 'test';
+    final public const TYPE = 'type';
     final public const YEAR = 'year';
 }
