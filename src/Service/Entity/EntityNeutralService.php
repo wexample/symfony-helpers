@@ -2,27 +2,23 @@
 
 namespace Wexample\SymfonyHelpers\Service\Entity;
 
-use App\Entity\Media;
-use App\Entity\User;
-use App\Wex\BaseBundle\Controller\AbstractController;
-use App\Wex\BaseBundle\Entity\AbstractEntity;
-use App\Wex\BaseBundle\Entity\Interfaces\AbstractEntityInterface;
-use App\Wex\BaseBundle\Entity\Traits\BaseEntityTrait;
-use App\Wex\BaseBundle\Entity\Traits\WithDateCreatedTrait;
-use App\Wex\BaseBundle\Entity\Traits\WithUserEntityTrait;
-use App\Wex\BaseBundle\Helper\AbstractRoleHelper;
-use App\Wex\BaseBundle\Helper\ClassHelper;
-use App\Wex\BaseBundle\Helper\TextHelper;
-use App\Wex\BaseBundle\Helper\VariableHelper;
-use App\Wex\BaseBundle\Translation\Translator;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class EntityNeutralService.
- *
  * Helper to manage operations on entities.
- * Allows to be used on any entity type.
+ * Allowed to be used with no entity type.
  */
 class EntityNeutralService
 {
+    public function __construct(
+        public EntityManagerInterface $entityManager,
+    ) {
 
+    }
+
+    public function getEntityManager(): EntityManagerInterface
+    {
+        return $this->entityManager;
+    }
 }
