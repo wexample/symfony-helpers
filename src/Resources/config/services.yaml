@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    # Ensure is loaded as a service.
+    Wexample\SymfonyHelpers\Service\:
+        resource: '../../Service/*'
+        tags: ['controller.service_arguments']
