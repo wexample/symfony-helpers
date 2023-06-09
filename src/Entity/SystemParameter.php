@@ -11,7 +11,7 @@ abstract class SystemParameter extends AbstractEntity
     use HasNameTrait;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $value;
+    protected ?string $value;
 
     public function getValue(): ?string
     {
