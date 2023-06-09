@@ -2,8 +2,8 @@
 
 namespace Wexample\SymfonyHelpers\Repository;
 
-use App\Entity\SystemParameter;
 use Doctrine\Persistence\ManagerRegistry;
+use Wexample\SymfonyHelpers\Entity\SystemParameter;
 
 /**
  * @method SystemParameter|null find($id, $lockMode = null, $lockVersion = null)
