@@ -10,6 +10,7 @@ class VariableHelper
     final public const ERROR = 'error';
     final public const FULL = 'full';
     final public const ID = 'id';
+    final public const INDEX = 'index';
     final public const LENGTH = 'length';
     final public const MESSAGE = 'message';
     final public const MONTH = 'month';
