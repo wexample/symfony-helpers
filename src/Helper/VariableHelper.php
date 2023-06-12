@@ -4,6 +4,7 @@ namespace Wexample\SymfonyHelpers\Helper;
 
 class VariableHelper
 {
+    final public const API = 'api';
     final public const CUSTOM = 'custom';
     final public const DATA = 'data';
     final public const DAY = 'day';
