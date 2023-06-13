@@ -38,6 +38,15 @@ class DateHelper
         self::INTL_DATE_FORMATTER_MONTH_FULL
         .' '.self::INTL_DATE_FORMATTER_YEAR_FULL;
 
+    final public const QUERY_STRING_DATE_FORMATS = [
+        'Y-m-d H:i:s',
+        'Y-m-d H:i',
+        'Y-m-d H',
+        'Y-m-d',
+        'Y-m',
+        'Y'
+    ];
+
     public static function generateFromTimestamp(int $timestamp): DateTimeInterface
     {
         $date = new DateTime();
@@ -192,5 +201,17 @@ class DateHelper
     public static function now(): DateTimeInterface
     {
         return new DateTime();
+    }
+
+    public static function buildFromQueryStringDate(?string $value): ?DateTimeInterface
+    {
+        foreach (self::QUERY_STRING_DATE_FORMATS as $format) {
+            $dateTime = \DateTime::createFromFormat($format, $value);
+            if ($dateTime !== false && $dateTime->format($format) == $value) {
+                return $dateTime;
+            }
+        }
+
+        return null;
     }
 }
