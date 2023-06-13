@@ -13,9 +13,9 @@ abstract class SystemParameter extends AbstractEntity
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     protected ?string $value;
 
-    public function getValue(): ?string
+    public function getValue(?string $default = null): ?string
     {
-        return $this->value;
+        return $this->value !== null ? $this->value : $default;
     }
 
     public function setValue(?string $value): self

@@ -46,12 +46,17 @@ class DateHelper
         return $date;
     }
 
-    public static function generateFromYear(int $year): DateTimeInterface
+    public static function buildFromYear(int $year): DateTimeInterface
     {
         return DateTime::createFromFormat(
             self::DATE_PATTERN_PART_YEAR_FULL,
             $year
         );
+    }
+
+    public static function buildFromTimestamp(int $timestamp): DateTimeInterface
+    {
+        return DateTime::createFromFormat('U', $timestamp);
     }
 
     public static function forEachMonthInYear(
