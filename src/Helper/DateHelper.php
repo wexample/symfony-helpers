@@ -11,40 +11,32 @@ use IntlDateFormatter;
 class DateHelper
 {
     final public const DATE_PATTERN_PART_YEAR_FULL = 'Y';
-
     final public const DATE_PATTERN_PART_MONTH_FULL = 'm';
-
     final public const DATE_PATTERN_PART_DAY_FULL = 'd';
-
     final public const DATE_PATTERN_DAY_DEFAULT =
         self::DATE_PATTERN_PART_YEAR_FULL.'-'.
         self::DATE_PATTERN_PART_MONTH_FULL.'-'.
         self::DATE_PATTERN_PART_DAY_FULL;
-
     final public const DATE_PATTERN_YMD_FR =
         self::DATE_PATTERN_PART_DAY_FULL.'/'.
         self::DATE_PATTERN_PART_MONTH_FULL.'/'.
         self::DATE_PATTERN_PART_YEAR_FULL;
-
-    final public const DATE_PATTERN_TIME_DEFAULT = self::DATE_PATTERN_DAY_DEFAULT.' H:i:s';
-
+    final public const TIME_PATTERN_SECOND_DEFAULT = 'H:i:s';
+    final public const DATE_PATTERN_TIME_DEFAULT = self::DATE_PATTERN_DAY_DEFAULT.' '.self::TIME_PATTERN_SECOND_DEFAULT;
+    final public const DATE_PATTERN_ISO08601 = self::DATE_PATTERN_DAY_DEFAULT.'T'.self::TIME_PATTERN_SECOND_DEFAULT;
     // @see https://unicode-org.github.io/icu/userguide/format_parse/datetime/
-
     final public const INTL_DATE_FORMATTER_MONTH_FULL = 'MMMM';
-
     final public const INTL_DATE_FORMATTER_YEAR_FULL = 'YYYY';
-
     final public const INTL_DATE_PATTERN_MONTH_AND_YEAR_FULL =
         self::INTL_DATE_FORMATTER_MONTH_FULL
         .' '.self::INTL_DATE_FORMATTER_YEAR_FULL;
-
     final public const QUERY_STRING_DATE_FORMATS = [
-        'Y-m-d H:i:s',
+        self::DATE_PATTERN_TIME_DEFAULT,
         'Y-m-d H:i',
         'Y-m-d H',
         'Y-m-d',
         'Y-m',
-        'Y'
+        self::DATE_PATTERN_PART_YEAR_FULL,
     ];
 
     public static function generateFromTimestamp(int $timestamp): DateTimeInterface
@@ -189,7 +181,7 @@ class DateHelper
     {
         return \DateTime::createFromFormat(
             DateHelper::DATE_PATTERN_DAY_DEFAULT,
-            DateHelper::getCurrentYearInt() . '-01-01'
+            DateHelper::getCurrentYearInt().'-01-01'
         );
     }
 
