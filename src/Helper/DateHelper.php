@@ -13,6 +13,9 @@ class DateHelper
     final public const DATE_PATTERN_PART_YEAR_FULL = 'Y';
     final public const DATE_PATTERN_PART_MONTH_FULL = 'm';
     final public const DATE_PATTERN_PART_DAY_FULL = 'd';
+    final public const DATE_PATTERN_PART_HOURS_FULL = 'H';
+    final public const DATE_PATTERN_PART_MINUTES_FULL = 'i';
+    final public const DATE_PATTERN_PART_SECONDS_FULL = 's';
     final public const DATE_PATTERN_DAY_DEFAULT =
         self::DATE_PATTERN_PART_YEAR_FULL.'-'.
         self::DATE_PATTERN_PART_MONTH_FULL.'-'.
@@ -25,7 +28,7 @@ class DateHelper
         self::DATE_PATTERN_PART_DAY_FULL.'/'.
         self::DATE_PATTERN_PART_MONTH_FULL.'/'.
         self::DATE_PATTERN_PART_YEAR_FULL;
-    final public const TIME_PATTERN_SECOND_DEFAULT = 'H:i:s';
+    final public const TIME_PATTERN_SECOND_DEFAULT = self::DATE_PATTERN_PART_HOURS_FULL.':'.self::DATE_PATTERN_PART_MINUTES_FULL.':'.self::DATE_PATTERN_PART_SECONDS_FULL;
     final public const DATE_PATTERN_TIME_DEFAULT = self::DATE_PATTERN_DAY_DEFAULT.' '.self::TIME_PATTERN_SECOND_DEFAULT;
     final public const DATE_PATTERN_TIME_REVERTED = self::DATE_PATTERN_DAY_REVERTED.' '.self::TIME_PATTERN_SECOND_DEFAULT;
     final public const DATE_PATTERN_ISO08601 = self::DATE_PATTERN_DAY_DEFAULT.'\T'.self::TIME_PATTERN_SECOND_DEFAULT;
@@ -204,11 +207,43 @@ class DateHelper
     {
         foreach (self::QUERY_STRING_DATE_FORMATS as $format) {
             $dateTime = \DateTime::createFromFormat($format, $value);
-            if ($dateTime !== false && $dateTime->format($format) == $value) {
+            if ($dateTime !== false &&
+                $dateTime->format($format) == $value) {
+                // Check if day is missing
+                if (!str_contains($format, self::DATE_PATTERN_PART_DAY_FULL)) {
+                    $dateTime->setDate(
+                        $dateTime->format(self::DATE_PATTERN_PART_YEAR_FULL),
+                        $dateTime->format(self::DATE_PATTERN_PART_MONTH_FULL),
+                        1
+                    );
+                }
+                // Check if month is missing
+                if (!str_contains($format, self::DATE_PATTERN_PART_MONTH_FULL)) {
+                    $dateTime->setDate(
+                        $dateTime->format(self::DATE_PATTERN_PART_YEAR_FULL), 1, 1
+                    );
+                }
+                // Check if time is missing
+                if (!str_contains($format, self::DATE_PATTERN_PART_HOURS_FULL)) {
+                    $dateTime->setTime(0, 0);
+                } elseif (!str_contains($format, self::DATE_PATTERN_PART_MINUTES_FULL)) {
+                    // if the format contains hour but not minutes
+                    $dateTime->setTime(
+                        $dateTime->format(self::DATE_PATTERN_PART_HOURS_FULL),
+                        0
+                    );
+                } elseif (!str_contains($format, self::DATE_PATTERN_PART_SECONDS_FULL)) {
+                    // if the format contains hour and minutes but not seconds
+                    $dateTime->setTime(
+                        $dateTime->format(self::DATE_PATTERN_PART_HOURS_FULL),
+                        $dateTime->format(self::DATE_PATTERN_PART_MINUTES_FULL)
+                    );
+                }
                 return $dateTime;
             }
         }
 
         return null;
     }
+
 }
