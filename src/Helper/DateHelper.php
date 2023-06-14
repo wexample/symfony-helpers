@@ -17,12 +17,17 @@ class DateHelper
         self::DATE_PATTERN_PART_YEAR_FULL.'-'.
         self::DATE_PATTERN_PART_MONTH_FULL.'-'.
         self::DATE_PATTERN_PART_DAY_FULL;
+    final public const DATE_PATTERN_DAY_REVERTED =
+        self::DATE_PATTERN_PART_YEAR_FULL.'-'.
+        self::DATE_PATTERN_PART_DAY_FULL.'-'.
+        self::DATE_PATTERN_PART_MONTH_FULL;
     final public const DATE_PATTERN_YMD_FR =
         self::DATE_PATTERN_PART_DAY_FULL.'/'.
         self::DATE_PATTERN_PART_MONTH_FULL.'/'.
         self::DATE_PATTERN_PART_YEAR_FULL;
     final public const TIME_PATTERN_SECOND_DEFAULT = 'H:i:s';
     final public const DATE_PATTERN_TIME_DEFAULT = self::DATE_PATTERN_DAY_DEFAULT.' '.self::TIME_PATTERN_SECOND_DEFAULT;
+    final public const DATE_PATTERN_TIME_REVERTED = self::DATE_PATTERN_DAY_REVERTED.' '.self::TIME_PATTERN_SECOND_DEFAULT;
     final public const DATE_PATTERN_ISO08601 = self::DATE_PATTERN_DAY_DEFAULT.'\T'.self::TIME_PATTERN_SECOND_DEFAULT;
     // @see https://unicode-org.github.io/icu/userguide/format_parse/datetime/
     final public const INTL_DATE_FORMATTER_MONTH_FULL = 'MMMM';
