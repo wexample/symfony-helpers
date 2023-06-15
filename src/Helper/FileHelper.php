@@ -3,11 +3,9 @@
 namespace Wexample\SymfonyHelpers\Helper;
 
 use FilesystemIterator;
-
-use function is_dir;
-
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use function is_dir;
 
 class FileHelper
 {
@@ -33,17 +31,6 @@ class FileHelper
     final public const FILE_EXTENSION_SVG = 'svg';
 
     final public const SUFFIX_AGGREGATED = 'agg';
-
-    public static function createDirIfMissing(string $path): void
-    {
-        if (!file_exists($path)) {
-            mkdir(
-                $path,
-                0755,
-                true
-            );
-        }
-    }
 
     public static function createFileIfMissingAndGetJson(
         string $path,
@@ -79,6 +66,17 @@ class FileHelper
             } else {
                 touch($path);
             }
+        }
+    }
+
+    public static function createDirIfMissing(string $path): void
+    {
+        if (!file_exists($path)) {
+            mkdir(
+                $path,
+                0755,
+                true
+            );
         }
     }
 
@@ -153,6 +151,14 @@ class FileHelper
         return TextHelper::trimLastChunk(
             $path,
             FileHelper::FOLDER_SEPARATOR
+        );
+    }
+
+    public static function joinPathParts(array $parts): string
+    {
+        return implode(
+            self::FOLDER_SEPARATOR,
+            $parts
         );
     }
 }
