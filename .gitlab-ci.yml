@@ -1,0 +1,7 @@
+variables:
+  SYMFONY_PACKAGE_NAME: symfony-helpers
+
+include:
+  - project: 'wexample/symfony-packages-templates'
+    ref: main
+    file: '.gitlab-ci.deploy.yml'
