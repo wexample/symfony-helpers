@@ -8,6 +8,9 @@ use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
+    public const ROUTE_OPTION_KEY_EXPOSE = 'expose';
+    public const ROUTE_OPTIONS_ONLY_EXPOSE = [self::ROUTE_OPTION_KEY_EXPOSE => true];
+
     public static function buildRouteName(string $suffix): string
     {
         $reflexion = new ReflectionClass(static::class);
