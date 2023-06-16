@@ -4,6 +4,7 @@ namespace Wexample\SymfonyHelpers\Helper;
 
 class VariableHelper
 {
+    final public const _EMPTY_STRING = '';
     final public const API = 'api';
     final public const CUSTOM = 'custom';
     final public const COMPONENT = 'component';
@@ -13,6 +14,7 @@ class VariableHelper
     final public const DEFAULT = 'default';
     final public const ERROR = 'error';
     final public const FULL = 'full';
+    final public const FORM = 'form';
     final public const HTML = 'html';
     final public const ID = 'id';
     final public const INDEX = 'index';

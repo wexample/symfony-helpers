@@ -9,11 +9,14 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 abstract class AbstractWexampleSymfonyExtension extends Extension
 {
-    protected function loadServices(
+    protected function loadConfig(
         $callingDir,
-        ContainerBuilder $container
-    ) {
+        ContainerBuilder $container,
+        $fileName = 'services.yaml'
+    ): YamlFileLoader {
         $loader = new YamlFileLoader($container, new FileLocator($callingDir.'/../Resources/config'));
-        $loader->load('services.yaml');
+        $loader->load($fileName);
+
+        return $loader;
     }
 }
