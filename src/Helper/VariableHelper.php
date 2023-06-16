@@ -7,11 +7,11 @@ class VariableHelper
     final public const API = 'api';
     final public const CUSTOM = 'custom';
     final public const DATA = 'data';
-
     final public const DATE = 'date';
     final public const DAY = 'day';
     final public const ERROR = 'error';
     final public const FULL = 'full';
+    final public const HTML = 'html';
     final public const ID = 'id';
     final public const INDEX = 'index';
     final public const LENGTH = 'length';
