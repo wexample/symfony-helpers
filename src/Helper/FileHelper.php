@@ -106,6 +106,34 @@ class FileHelper
             $method($info->getRealPath());
         }
     }
+    public static function removeExtension(string $path, string $extension = null): string
+    {
+        if (is_null($extension))
+        {
+            $extension = pathinfo($path)['extension'];
+        }
+
+        return substr($path, 0, -(strlen($extension) + 1));
+    }
+
+    public static function fileWrite(string $fileName, string $content)
+    {
+        $dir = dirname($fileName);
+
+        if (!is_dir($dir))
+        {
+            mkdir($dir, 0777, true);
+        }
+
+        file_put_contents($fileName, $content);
+    }
+
+    public static function fileWriteAndHash(string $fileName, string $content): string
+    {
+        self::fileWrite($fileName, $content);
+
+        return md5($content);
+    }
 
     public static function isCriticalPath(string $path): bool
     {

@@ -478,18 +478,11 @@ class TextHelper
             $string .= pack('H*', dechex(bindec($binary)));
         }
 
-        if (TextHelper::isJson($string)) {
+        if (JsonHelper::isJson($string)) {
             return json_decode($string);
         }
 
         return $string;
-    }
-
-    public static function isJson(mixed $string): bool
-    {
-        json_decode($string);
-
-        return JSON_ERROR_NONE === json_last_error();
     }
 
     /**
