@@ -2,6 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use Wexample\SymfonyDesignSystem\Interface\DesignSystemBundleInterface;
 use function array_map;
 use function array_slice;
 use function count;
@@ -489,5 +490,15 @@ class ClassHelper
         }
 
         return $traits;
+    }
+
+    public static function classImplementsInterface(string|object $class, string $interface):bool {
+        $interfaces = class_implements($class);
+
+        if (isset($interfaces[$interface])) {
+            return true;
+        }
+
+        return false;
     }
 }
