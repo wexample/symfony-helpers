@@ -116,6 +116,7 @@ class VariableHelper
     final public const TITLE = 'title';
     final public const TO = 'to';
     final public const TRANSLATIONS = 'translations';
+    final public const TYPE = 'type';
     final public const UNDEFINED = 'undefined';
     final public const URL = 'url';
     final public const USER = 'user';

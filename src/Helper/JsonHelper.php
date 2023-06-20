@@ -23,6 +23,21 @@ class JsonHelper
         return $default;
     }
 
+    public static function write(
+        string $path,
+        array|object $data,
+        int $flags = 0,
+        int $depth = 512
+    ): bool {
+        $json = json_encode(
+            $data,
+            flags: $flags,
+            depth: $depth
+        );
+
+        return $json && file_put_contents($path, $json);
+    }
+
     public static function isJson(mixed $string): bool
     {
         json_decode($string);
