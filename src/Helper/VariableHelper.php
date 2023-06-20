@@ -13,6 +13,7 @@ class VariableHelper
     final public const ALL = 'all';
     final public const AMOUNT = 'amount';
     final public const API = 'api';
+    final public const APP = 'app';
     final public const ASSETS = 'assets';
     final public const BASE_PATH = 'base_path';
     final public const BODY = 'body';
