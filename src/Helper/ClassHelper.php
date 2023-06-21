@@ -423,7 +423,8 @@ class ClassHelper
     public static function getChildrenAttributes(
         ReflectionMethod|ReflectionClass|string $subjectPath,
         string $attributeClass
-    ): array {
+    ): array
+    {
         if (is_string($subjectPath)) {
             if (str_contains($subjectPath, ClassHelper::METHOD_SEPARATOR)) {
                 try {
@@ -454,6 +455,38 @@ class ClassHelper
         }
 
         return $reflexion->getAttributes($attributeClass, ReflectionAttribute::IS_INSTANCEOF);
+    }
+    
+    public static function buildPathFromClassName(string $className): string
+    {
+        return FileHelper::joinPathParts(
+            static::getPathParts($className)
+        );
+    }
+    
+    public static function buildClassNameFromPath(
+        string $path,
+        string $classPathPrefix = '',
+        string $classPathSuffix = ''
+    ): string {
+        $pathParts = explode(
+            FileHelper::FOLDER_SEPARATOR,
+            rtrim(
+                $path,
+                FileHelper::FOLDER_SEPARATOR
+            )
+        );
+
+        foreach ($pathParts as $key => $part)
+        {
+            $pathParts[$key] = TextHelper::toClass($part);
+        }
+
+        return $classPathPrefix.implode(
+                ClassHelper::NAMESPACE_SEPARATOR,
+                $pathParts
+            )
+            .$classPathSuffix;
     }
 
     public static function classUsesTrait(

@@ -64,6 +64,17 @@ class TextHelper
 
     final public const TRIM_MARKER = '...';
 
+    public static function removePrefix(
+        string $string,
+        string $prefix
+    ): string {
+        return preg_replace(
+            '/^'.preg_quote($prefix, '/').'/',
+            '',
+            $string
+        );
+    }
+
     public static function removeDoubleSpaces(string $string): string
     {
         return preg_replace(
@@ -307,12 +318,23 @@ class TextHelper
         );
     }
 
+    public static function removeSuffix(
+        string $string,
+        string $suffix
+    ): string {
+        return preg_replace(
+            '/'.preg_quote($suffix, '/').'$/',
+            '',
+            $string
+        );
+    }
+
     public static function toKebab(string $string): string
     {
         return str_replace(
             '_',
             '-',
-            $string
+            self::toSnake($string)
         );
     }
 

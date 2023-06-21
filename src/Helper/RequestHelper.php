@@ -56,4 +56,13 @@ class RequestHelper
 
         return $value;
     }
+    
+    public static function getQueryBoolean(
+        Request $request,
+        string $name
+    ): bool {
+        return TextHelper::parseBoolean(
+            $request->get($name)
+        );
+    }
 }
