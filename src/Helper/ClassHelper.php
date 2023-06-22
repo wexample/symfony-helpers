@@ -129,12 +129,10 @@ class ClassHelper
             }
         }
 
-        $exp = explode(
+        return TextHelper::getLastChunk(
+            $className,
             ClassHelper::NAMESPACE_SEPARATOR,
-            $className
         );
-
-        return end($exp);
     }
 
     #[Pure]
@@ -150,11 +148,9 @@ class ClassHelper
         $classPath = is_string($entity) ? $entity : $entity::class;
 
         if (str_contains($classPath, self::METHOD_SEPARATOR)) {
-            return current(
-                explode(
-                    self::METHOD_SEPARATOR,
-                    $classPath
-                )
+            return TextHelper::getFirstChunk(
+                $classPath,
+                self::METHOD_SEPARATOR,
             );
         }
 

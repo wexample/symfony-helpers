@@ -436,6 +436,30 @@ class TextHelper
         );
     }
 
+    public static function getFirstChunk(
+        string $string,
+        string $separator
+    ): string {
+        $exp = explode(
+            $separator,
+            $string
+        );
+
+        return current($exp);
+    }
+
+    public static function getLastChunk(
+        string $string,
+        string $separator
+    ): string {
+        $exp = explode(
+            $separator,
+            $string
+        );
+
+        return end($exp);
+    }
+
     public static function trimLastChunk(
         string $string,
         string $separator
