@@ -453,6 +453,26 @@ class TextHelper
         );
     }
 
+    public static function trimLastChunkIfMoreThanOne(
+        string $string,
+        string $separator
+    ): string {
+        return TextHelper::trimLastChunk(
+            $string,
+            $separator
+        ) ?: $string;
+    }
+
+    public static function trimFirstChunkIfMoreThanOne(
+        string $string,
+        string $separator
+    ): string {
+        return TextHelper::trimFirstChunk(
+            $string,
+            $separator
+        ) ?: $string;
+    }
+
     public static function trimFirstChunk(
         string $string,
         string $separator
