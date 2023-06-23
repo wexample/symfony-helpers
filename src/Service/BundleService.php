@@ -4,6 +4,7 @@ namespace Wexample\SymfonyHelpers\Service;
 
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Wexample\SymfonyHelpers\Helper\BundleHelper;
 use Wexample\SymfonyHelpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\JsonHelper;
 
@@ -28,30 +29,46 @@ class BundleService
         return null;
     }
 
-    public function getBundle(BundleInterface|string $bundleClass): BundleInterface
+    /**
+     * @param BundleInterface|string $bundleIdentifier Can be a package directory, a bundle/short-name, a BundleShortNameBundle or a full bundle classname.
+     * @return BundleInterface
+     */
+    public function getBundle(BundleInterface|string $bundleIdentifier): BundleInterface
     {
-        if (is_string($bundleClass)) {
-            return $this->kernel->getBundle(
-                ClassHelper::getShortName(
-                    $bundleClass
-                )
-            );
+        if (is_string($bundleIdentifier)) {
+            if (is_dir($bundleIdentifier)) {
+                $bundleIdentifier = BundleHelper::buildClassNameFromPackageName(
+                    $this->getPackageComposerConfiguration($bundleIdentifier)->name
+                );
+            } elseif (count(explode('/', $bundleIdentifier)) === 2) {
+                $bundleIdentifier = BundleHelper::buildClassNameFromPackageName(
+                    $bundleIdentifier
+                );
+            }
+
+            if (class_exists($bundleIdentifier)) {
+                $bundleIdentifier = ClassHelper::getShortName(
+                    $bundleIdentifier
+                );
+            }
+
+            return $this->kernel->getBundle($bundleIdentifier);
         }
 
-        return $bundleClass;
-    }
-
-    public function getBundleComposerConfiguration(BundleInterface|string $bundle): object
-    {
-        return $this->getPackageComposerConfiguration(
-            $this->getBundleRootPath($bundle)
-        );
+        return $bundleIdentifier;
     }
 
     public function getPackageComposerConfiguration(string $packagePath): object
     {
         return JsonHelper::read(
             $packagePath.'composer.json'
+        );
+    }
+
+    public function getBundleComposerConfiguration(BundleInterface|string $bundle): object
+    {
+        return $this->getPackageComposerConfiguration(
+            $this->getBundleRootPath($bundle)
         );
     }
 
