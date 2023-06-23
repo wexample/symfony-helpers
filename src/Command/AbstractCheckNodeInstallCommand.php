@@ -6,10 +6,23 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Wexample\SymfonyHelpers\Helper\JsonHelper;
+use Wexample\SymfonyHelpers\Service\BundleService;
 
 abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
 {
+    public function __construct(
+        BundleService $bundleService,
+        private KernelInterface $kernel,
+        string $name = null
+    ) {
+        parent::__construct(
+            $bundleService,
+            $name
+        );
+    }
+
     protected function configure(): void
     {
         $this
@@ -22,19 +35,18 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
     ): int {
         $io = new SymfonyStyle($input, $output);
 
-        $bundleRootPath = $this->bundleService->getBundleRootPath(
-            $this->getBundleClassName()
-        );
-        $packageJsonPath = $bundleRootPath.'package.json';
-
+        $packageJsonPath = $this->kernel->getProjectDir().'/package.json';
         if (!file_exists($packageJsonPath)) {
-            $io->error('No package.json file found.');
+            $io->error('No package.json file found in '.$packageJsonPath);
 
             return Command::FAILURE;
         }
 
         $packageJsonContent = file_get_contents($packageJsonPath);
         $packageJsonData = json_decode($packageJsonContent, true);
+        $bundleRootPath = $this->bundleService->getBundleRootPath(
+            $this->getBundleClassName()
+        );
         $dependencyFile = $bundleRootPath.'package.dependencies.json';
 
         if (!is_file($dependencyFile)) {
