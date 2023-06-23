@@ -43,8 +43,15 @@ class BundleService
 
     public function getBundleComposerConfiguration(BundleInterface|string $bundle): object
     {
+        return $this->getPackageComposerConfiguration(
+            $this->getBundleRootPath($bundle)
+        );
+    }
+
+    public function getPackageComposerConfiguration(string $packagePath): object
+    {
         return JsonHelper::read(
-            $this->getBundleRootPath($bundle).'composer.json'
+            $packagePath.'composer.json'
         );
     }
 
@@ -53,12 +60,12 @@ class BundleService
         return realpath($this->getBundle($bundle)->getPath().'/../').'/';
     }
 
-    public function saveBundleComposerConfiguration(
-        BundleInterface|string $bundle,
+    public function savePackageComposerConfiguration(
+        string $packagePath,
         object $config
     ): bool {
         return JsonHelper::write(
-            $this->getBundleRootPath($bundle).'composer.json',
+            $packagePath.'composer.json',
             $config,
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
         );
