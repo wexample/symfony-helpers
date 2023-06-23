@@ -3,15 +3,14 @@
 namespace Wexample\SymfonyHelpers\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Wexample\SymfonyHelpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Service\BundleService;
 
 abstract class AbstractBundleCommand extends Command
 {
     public function __construct(
-        protected KernelInterface $kernel,
+        protected BundleService $bundleService,
         string $name = null,
     ) {
         parent::__construct($name ?: $this->buildDefaultName());
@@ -39,17 +38,4 @@ abstract class AbstractBundleCommand extends Command
 
     abstract public static function getBundleClassName(): string;
 
-    protected function getBundleRootPath():string
-    {
-        return realpath($this->getBundle()->getPath() . '/../') . '/';
-    }
-
-    protected function getBundle(): BundleInterface
-    {
-        return $this->kernel->getBundle(
-            ClassHelper::getShortName(
-                $this::getBundleClassName()
-            )
-        );
-    }
 }

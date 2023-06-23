@@ -10,7 +10,6 @@ use Wexample\SymfonyHelpers\Helper\JsonHelper;
 
 abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
 {
-
     protected function configure(): void
     {
         $this
@@ -23,7 +22,10 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
     ): int {
         $io = new SymfonyStyle($input, $output);
 
-        $packageJsonPath = $this->kernel->getProjectDir().'/package.json';
+        $bundleRootPath = $this->bundleService->getBundleRootPath(
+            $this->getBundleClassName()
+        );
+        $packageJsonPath = $bundleRootPath.'package.json';
 
         if (!file_exists($packageJsonPath)) {
             $io->error('No package.json file found.');
@@ -33,7 +35,7 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
 
         $packageJsonContent = file_get_contents($packageJsonPath);
         $packageJsonData = json_decode($packageJsonContent, true);
-        $dependencyFile = $this->getBundleRootPath().'package.dependencies.json';
+        $dependencyFile = $bundleRootPath.'package.dependencies.json';
 
         if (!is_file($dependencyFile)) {
             $io->error('Missing file : '.$dependencyFile);
