@@ -61,7 +61,7 @@ class BundleService
     public function getPackageComposerConfiguration(string $packagePath): object
     {
         return JsonHelper::read(
-            $packagePath.'composer.json'
+            $packagePath.BundleHelper::COMPOSER_JSON_FILE_NAME
         );
     }
 
