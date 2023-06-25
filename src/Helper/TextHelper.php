@@ -562,9 +562,9 @@ class TextHelper
         $components = explode(':', $msgEncryptedBundle);
         $iv = $components[0];
         $salt = hash('sha256', $password.$components[1]);
-        $encrypted_msg = $components[2];
+        $encryptedMsg = $components[2];
         $decryptedMsg = openssl_decrypt(
-            $encrypted_msg, 'aes-256-cbc', $salt, 0, $iv
+            $encryptedMsg, 'aes-256-cbc', $salt, 0, $iv
         );
 
         if ($decryptedMsg === false) {
