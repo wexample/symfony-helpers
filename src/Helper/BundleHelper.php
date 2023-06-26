@@ -2,6 +2,9 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
+
 class BundleHelper
 {
     final public const AUTHOR_COMPANY = 'Wexample';
@@ -120,6 +123,17 @@ class BundleHelper
         return $major.'.'.$intermediate.'.'.$minor.$preBuildInfo.($build ? '+build.'.$timestamp : '');
     }
 
+    public static function savePackageComposerConfiguration(
+        string $packagePath,
+        object $config
+    ): bool {
+        return JsonHelper::write(
+            $packagePath.'composer.json',
+            $config,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+        );
+    }
+
     public static function buildClassNameFromPackageName(string $packageName): string
     {
         [$company, $bundleName] = explode('/', $packageName);
@@ -136,5 +150,60 @@ class BundleHelper
             $bundleName,
             'Bundle',
         ]);
+    }
+
+    public static function getPackageComposerConfiguration(string $packagePath): object
+    {
+        return JsonHelper::read(
+            $packagePath.BundleHelper::COMPOSER_JSON_FILE_NAME
+        );
+    }
+
+    /**
+     * @param BundleInterface|string $bundleIdentifier Can be a package directory, a bundle/short-name, a BundleShortNameBundle or a full bundle classname.
+     * @param KernelInterface        $kernel
+     * @return ?BundleInterface
+     */
+    public static function getBundle(
+        BundleInterface|string $bundleIdentifier,
+        KernelInterface $kernel
+    ): ?BundleInterface {
+        if (is_string($bundleIdentifier)) {
+            if (is_dir($bundleIdentifier)) {
+                $bundleIdentifier = BundleHelper::buildClassNameFromPackageName(
+                    BundleHelper::getPackageComposerConfiguration($bundleIdentifier)->name
+                );
+            } elseif (count(explode('/', $bundleIdentifier)) === 2) {
+                $bundleIdentifier = BundleHelper::buildClassNameFromPackageName(
+                    $bundleIdentifier
+                );
+            }
+
+            if (class_exists($bundleIdentifier)) {
+                $bundleIdentifier = ClassHelper::getShortName(
+                    $bundleIdentifier
+                );
+            }
+
+            return $kernel->getBundle($bundleIdentifier);
+        }
+
+        return $bundleIdentifier;
+    }
+
+    public static function getBundleRootPath(
+        BundleInterface|string $bundle,
+        KernelInterface $kernel
+    ): string {
+        return realpath(BundleHelper::getBundle($bundle, $kernel)->getPath().'/../').'/';
+    }
+
+    public function getBundleComposerConfiguration(
+        BundleInterface|string $bundle,
+        KernelInterface $kernel,
+    ): object {
+        return BundleHelper::getPackageComposerConfiguration(
+            self::getBundleRootPath($bundle, $kernel)
+        );
     }
 }

@@ -81,7 +81,7 @@ trait LoggingTestCaseTrait
             unlink($logFile);
         }
 
-        $output = $body ?: $this->getBody()
+        $output = $body ?: $this->content()
                 // Error pages contains svg which breaks readability.
                 .'<style> svg { display:none; } </style>';
 

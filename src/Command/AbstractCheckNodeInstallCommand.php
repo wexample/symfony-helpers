@@ -7,18 +7,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Wexample\SymfonyHelpers\Helper\BundleHelper;
 use Wexample\SymfonyHelpers\Helper\JsonHelper;
-use Wexample\SymfonyHelpers\Service\BundleService;
 
 abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
 {
     public function __construct(
-        BundleService $bundleService,
-        private KernelInterface $kernel,
+        private readonly KernelInterface $kernel,
         string $name = null
     ) {
         parent::__construct(
-            $bundleService,
             $name
         );
     }
@@ -44,8 +42,9 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
 
         $packageJsonContent = file_get_contents($packageJsonPath);
         $packageJsonData = json_decode($packageJsonContent, true);
-        $bundleRootPath = $this->bundleService->getBundleRootPath(
-            $this->getBundleClassName()
+        $bundleRootPath = BundleHelper::getBundleRootPath(
+            $this->getBundleClassName(),
+            $this->kernel
         );
         $dependencyFile = $bundleRootPath.'package.dependencies.json';
 
