@@ -26,6 +26,13 @@ abstract class AbstractSymfonyTestCase extends AbstractWebTestCase
                 ->getProjectDir().'/';
     }
 
+    protected function getSrcDir(): string
+    {
+        $projectDir = $this->getProjectDir();
+
+        return realpath($projectDir.'src').'/';
+    }
+
     public function url(
         $route,
         $args = [],

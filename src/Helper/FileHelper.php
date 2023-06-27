@@ -106,14 +106,21 @@ class FileHelper
             $method($info->getRealPath());
         }
     }
-    public static function removeExtension(string $path, string $extension = null): string
-    {
-        if (is_null($extension))
-        {
+
+    public static function removeExtension(
+        string $path,
+        string $extension = null
+    ): string {
+        if (is_null($extension)) {
             $extension = pathinfo($path)['extension'];
         }
 
-        return substr($path, 0, -(strlen($extension) + 1));
+        // Supports if given extension starts with a dot.
+        if ($extension[0] !== '.') {
+            $extension = '.'.$extension;
+        }
+
+        return substr($path, 0, -strlen($extension));
     }
 
     public static function fileWrite(string $fileName, string $content)
@@ -188,5 +195,18 @@ class FileHelper
             self::FOLDER_SEPARATOR,
             $parts
         );
+    }
+
+    public static function buildRelativePath(
+        string $filePath,
+        string $relativeTo
+    ): ?string {
+        if (str_starts_with($filePath, $relativeTo)) {
+            $relativePath = substr($filePath, strlen($relativeTo));
+            // Ensure the relative path does not start with a '/'
+            return ltrim($relativePath, '/');
+        } else {
+            return null;
+        }
     }
 }

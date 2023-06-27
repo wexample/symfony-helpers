@@ -15,6 +15,8 @@ class BundleHelper
     final public const COMPOSER_JSON_FILE_NAME = 'composer.json';
     final public const DIR_SRC = self::FOLDER_SRC.FileHelper::FOLDER_SEPARATOR;
     final public const DIR_TEMPLATES = 'templates'.FileHelper::FOLDER_SEPARATOR;
+    final public const DIR_TEMPLATE_PAGES = 'pages'.FileHelper::FOLDER_SEPARATOR;
+    final public const DIR_TESTS = 'tests'.FileHelper::FOLDER_SEPARATOR;
     final public const FOLDER_SRC = 'src';
     final public const UPGRADE_TYPE_ALPHA = 'alpha';
     final public const UPGRADE_TYPE_BETA = 'beta';
@@ -134,22 +136,13 @@ class BundleHelper
         );
     }
 
-    public static function buildClassNameFromPackageName(string $packageName): string
-    {
-        [$company, $bundleName] = explode('/', $packageName);
-
-        $company = TextHelper::toClass($company);
-        $bundleName = TextHelper::toClass($bundleName);
-
-        return implode([
-            $company,
-            '\\',
-            $bundleName,
-            '\\',
-            $company,
-            $bundleName,
-            'Bundle',
-        ]);
+    public function getBundleComposerConfiguration(
+        BundleInterface|string $bundle,
+        KernelInterface $kernel,
+    ): object {
+        return BundleHelper::getPackageComposerConfiguration(
+            self::getBundleRootPath($bundle, $kernel)
+        );
     }
 
     public static function getPackageComposerConfiguration(string $packagePath): object
@@ -157,6 +150,13 @@ class BundleHelper
         return JsonHelper::read(
             $packagePath.BundleHelper::COMPOSER_JSON_FILE_NAME
         );
+    }
+
+    public static function getBundleRootPath(
+        BundleInterface|string $bundle,
+        KernelInterface $kernel
+    ): string {
+        return realpath(BundleHelper::getBundle($bundle, $kernel)->getPath().'/../').'/';
     }
 
     /**
@@ -189,21 +189,5 @@ class BundleHelper
         }
 
         return $bundleIdentifier;
-    }
-
-    public static function getBundleRootPath(
-        BundleInterface|string $bundle,
-        KernelInterface $kernel
-    ): string {
-        return realpath(BundleHelper::getBundle($bundle, $kernel)->getPath().'/../').'/';
-    }
-
-    public function getBundleComposerConfiguration(
-        BundleInterface|string $bundle,
-        KernelInterface $kernel,
-    ): object {
-        return BundleHelper::getPackageComposerConfiguration(
-            self::getBundleRootPath($bundle, $kernel)
-        );
     }
 }
