@@ -9,14 +9,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Wexample\SymfonyHelpers\Helper\BundleHelper;
 use Wexample\SymfonyHelpers\Helper\JsonHelper;
+use Wexample\SymfonyHelpers\Service\BundleService;
 
 abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
 {
     public function __construct(
         private readonly KernelInterface $kernel,
+        BundleService $bundleService,
         string $name = null
     ) {
         parent::__construct(
+            $bundleService,
             $name
         );
     }
