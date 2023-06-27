@@ -190,4 +190,22 @@ class BundleHelper
 
         return $bundleIdentifier;
     }
+
+    public static function buildClassNameFromPackageName(string $packageName): string
+    {
+        [$company, $bundleName] = explode('/', $packageName);
+
+        $company = TextHelper::toClass($company);
+        $bundleName = TextHelper::toClass($bundleName);
+
+        return implode([
+            $company,
+            '\\',
+            $bundleName,
+            '\\',
+            $company,
+            $bundleName,
+            'Bundle',
+        ]);
+    }
 }

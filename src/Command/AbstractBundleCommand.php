@@ -7,10 +7,12 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Wexample\SymfonyHelpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Service\BundleService;
 
 abstract class AbstractBundleCommand extends Command
 {
     public function __construct(
+        protected BundleService $bundleService,
         string $name = null,
     ) {
         parent::__construct($name ?: $this->buildDefaultName());
