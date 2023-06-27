@@ -2,27 +2,19 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
-use Wexample\SymfonyDesignSystem\Interface\DesignSystemBundleInterface;
-use function array_map;
-use function array_slice;
-use function count;
-
 use Doctrine\Common\Util\ClassUtils;
 use Exception;
-
-use function explode;
-use function implode;
-use function is_string;
-
-use JetBrains\PhpStorm\Pure;
-
-use function lcfirst;
-
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
-
+use function array_map;
+use function array_slice;
+use function count;
+use function explode;
+use function implode;
+use function is_string;
+use function lcfirst;
 use function str_replace;
 use function strlen;
 use function substr;
@@ -135,7 +127,6 @@ class ClassHelper
         );
     }
 
-    #[Pure]
     public static function getRealClassPath(object|string $entity): string
     {
         return ClassUtils::getRealClass(
@@ -157,7 +148,6 @@ class ClassHelper
         return $classPath;
     }
 
-    #[Pure]
     public static function getCousin(
         object|string $className,
         string $classBasePath,
@@ -182,7 +172,6 @@ class ClassHelper
         return $cousinBasePath.$classBase.$cousinSuffix;
     }
 
-    #[Pure]
     public static function getPathParts(
         $type,
         $offset = 2
@@ -298,9 +287,9 @@ class ClassHelper
         );
 
         return ($folder ?: self::getAutoloadFolder($className)).implode(
-            FileHelper::FOLDER_SEPARATOR,
-            $parts
-        ).FileHelper::EXTENSION_SEPARATOR.FileHelper::FILE_EXTENSION_PHP;
+                FileHelper::FOLDER_SEPARATOR,
+                $parts
+            ).FileHelper::EXTENSION_SEPARATOR.FileHelper::FILE_EXTENSION_PHP;
     }
 
     public static function splitNamespace(string $classPath): array
@@ -374,9 +363,9 @@ class ClassHelper
         bool $endSeparator = false
     ): string {
         return implode(
-            ClassHelper::NAMESPACE_SEPARATOR,
-            $parts
-        ).($endSeparator ? ClassHelper::NAMESPACE_SEPARATOR : '');
+                ClassHelper::NAMESPACE_SEPARATOR,
+                $parts
+            ).($endSeparator ? ClassHelper::NAMESPACE_SEPARATOR : '');
     }
 
     public static function isClassPath(
@@ -419,8 +408,7 @@ class ClassHelper
     public static function getChildrenAttributes(
         ReflectionMethod|ReflectionClass|string $subjectPath,
         string $attributeClass
-    ): array
-    {
+    ): array {
         if (is_string($subjectPath)) {
             if (str_contains($subjectPath, ClassHelper::METHOD_SEPARATOR)) {
                 try {
@@ -451,38 +439,6 @@ class ClassHelper
         }
 
         return $reflexion->getAttributes($attributeClass, ReflectionAttribute::IS_INSTANCEOF);
-    }
-    
-    public static function buildPathFromClassName(string $className): string
-    {
-        return FileHelper::joinPathParts(
-            static::getPathParts($className)
-        );
-    }
-    
-    public static function buildClassNameFromPath(
-        string $path,
-        string $classPathPrefix = '',
-        string $classPathSuffix = ''
-    ): string {
-        $pathParts = explode(
-            FileHelper::FOLDER_SEPARATOR,
-            rtrim(
-                $path,
-                FileHelper::FOLDER_SEPARATOR
-            )
-        );
-
-        foreach ($pathParts as $key => $part)
-        {
-            $pathParts[$key] = TextHelper::toClass($part);
-        }
-
-        return $classPathPrefix.implode(
-                ClassHelper::NAMESPACE_SEPARATOR,
-                $pathParts
-            )
-            .$classPathSuffix;
     }
 
     public static function classUsesTrait(
@@ -521,7 +477,41 @@ class ClassHelper
         return $traits;
     }
 
-    public static function classImplementsInterface(string|object $class, string $interface):bool {
+    public static function buildPathFromClassName(string $className): string
+    {
+        return FileHelper::joinPathParts(
+            static::getPathParts($className)
+        );
+    }
+
+    public static function buildClassNameFromPath(
+        string $path,
+        string $classPathPrefix = '',
+        string $classPathSuffix = ''
+    ): string {
+        $pathParts = explode(
+            FileHelper::FOLDER_SEPARATOR,
+            rtrim(
+                $path,
+                FileHelper::FOLDER_SEPARATOR
+            )
+        );
+
+        foreach ($pathParts as $key => $part) {
+            $pathParts[$key] = TextHelper::toClass($part);
+        }
+
+        return $classPathPrefix.implode(
+                ClassHelper::NAMESPACE_SEPARATOR,
+                $pathParts
+            )
+            .$classPathSuffix;
+    }
+
+    public static function classImplementsInterface(
+        string|object $class,
+        string $interface
+    ): bool {
         $interfaces = class_implements($class);
 
         if (isset($interfaces[$interface])) {
