@@ -2,6 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Tests\Class\Traits;
 
+use Symfony\Component\DomCrawler\Crawler;
 use Wexample\SymfonyHelpers\Traits\ConsoleLoggerTrait;
 use DateTime;
 use Wexample\SymfonyHelpers\Helper\DateHelper;
@@ -87,6 +88,10 @@ trait LoggingTestCaseTrait
 
         if (!$quiet) {
             $this->info('See : '.$logFile);
+
+            $crawler = new Crawler($output);
+            $errorMessage = $crawler->filter('h1.exception-message')->text();
+            $this->error($errorMessage, false);
         }
 
         file_put_contents(
