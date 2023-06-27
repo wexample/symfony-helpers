@@ -2,7 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Entity\Traits\Manipulator;
 
-use App\Entity\SystemParameter;
+use Wexample\SymfonyHelpers\Entity\SystemParameter;
 
 trait SystemParameterEntityManipulatorTrait
 {

@@ -381,8 +381,7 @@ trait IntegrationTestCaseTrait
         }
 
         $body = $crawler->filter('body');
-
-        $output = $body ? $body->html() : $this->content();
+        $output = $body->count() > 0 ? $body->html() : $this->content();
 
         echo PHP_EOL, '++++++++++++++++++++++++++',
         PHP_EOL, ' PATH :'.$this->client->getRequest()->getPathInfo(),

@@ -57,7 +57,7 @@ trait LoggingTestCaseTrait
         );
     }
 
-    public function error(string $message, bool $fatal = true)
+    public function error(string $message, bool $fatal = true): void
     {
         $this->log(
             $message,

@@ -173,7 +173,7 @@ class ClassHelper
     }
 
     public static function getPathParts(
-        $type,
+        object|string $type,
         $offset = 2
     ): array {
         return array_slice(
@@ -197,7 +197,7 @@ class ClassHelper
     public static function applyPropertiesSetters(
         object $target,
         array $properties
-    ) {
+    ): void {
         foreach ($properties as $fieldName => $value) {
             ClassHelper::setFieldSetterValue(
                 $target,
@@ -234,11 +234,8 @@ class ClassHelper
         return implode('\\', $exp);
     }
 
-    /**
-     * @param string|object $name
-     */
     public static function longTableized(
-        $name,
+        object|string $name,
         string $separator = '-'
     ): string {
         $parts = ClassHelper::getPathParts($name);

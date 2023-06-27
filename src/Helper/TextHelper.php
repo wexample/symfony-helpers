@@ -16,6 +16,7 @@ use function lcfirst;
 use function md5;
 use function mt_srand;
 use function number_format;
+use function openssl_encrypt;
 use function ord;
 use function preg_replace;
 use function preg_split;
@@ -87,7 +88,7 @@ class TextHelper
     public static function htmlToText(string $string): string
     {
         $string = preg_replace(
-            '/<br\s?\/?>/ius',
+            '/<br\s?\/?>/iu',
             "\n",
             str_replace(
                 "\n",
@@ -586,7 +587,7 @@ class TextHelper
         $salt = sha1(mt_rand());
         $saltWithPassword = hash('sha256', $password.$salt);
 
-        $encrypted = \openssl_encrypt(
+        $encrypted = openssl_encrypt(
             $string,
             'aes-256-cbc',
             "$saltWithPassword",

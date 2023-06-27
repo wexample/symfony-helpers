@@ -5,11 +5,16 @@ namespace Wexample\SymfonyHelpers\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
+use Exception;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Helper\TextHelper;
 
 /**
- * @method QueryBuilder queryById(int $id, QueryBuilder $builder = null)
+ * @method AbstractEntity|null find($id, $lockMode = null, $lockVersion = null)
+ * @method AbstractEntity[]    findAll()
+ * @method AbstractEntity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method AbstractEntity|null findOneBy(array $criteria, array $orderBy = null)
+ * @method QueryBuilder        queryById(int $id, QueryBuilder $builder = null)
  */
 abstract class AbstractRepository extends ServiceEntityRepository
 {
@@ -34,6 +39,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
         return parent::__call($method, $arguments);
     }
 
+    /**
+     * @throws InvalidMagicMethodCall
+     */
     protected function resolveMagicQueryCall(
         $method,
         $arguments
@@ -117,7 +125,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
             return (bool) $builder
                 ->getQuery()
                 ->getSingleScalarResult();
-        } catch (\Exception) {
+        } catch (Exception) {
             return false;
         }
     }
@@ -139,10 +147,13 @@ abstract class AbstractRepository extends ServiceEntityRepository
         return $this->getEntityQueryAlias().'.'.$fieldName;
     }
 
+    /**
+     * @throws Exception
+     */
     public function add(AbstractEntity $entity, bool $flush = true): void
     {
         if (!class_parents($entity, $this->getEntityName())) {
-            throw new \Exception('Entity of type ' . $entity::class . ' should be of type ' . $this->getEntityName() . ' in add() method');
+            throw new Exception('Entity of type ' . $entity::class . ' should be of type ' . $this->getEntityName() . ' in add() method');
         }
 
         $this->_em->persist($entity);

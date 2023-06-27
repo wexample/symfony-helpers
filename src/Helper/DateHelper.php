@@ -71,7 +71,7 @@ class DateHelper
     public static function forEachMonthInYear(
         DateTimeInterface $dateYear,
         callable $callback
-    ) {
+    ): void {
         $interval = new DateInterval('P1M');
         $dateStart = (clone $dateYear)->modify(
             'first day of january this year'
@@ -187,7 +187,7 @@ class DateHelper
 
     public static function getCurrentYearDate(): DateTimeInterface
     {
-        return \DateTime::createFromFormat(
+        return DateTime::createFromFormat(
             DateHelper::DATE_PATTERN_DAY_DEFAULT,
             DateHelper::getCurrentYearInt().'-01-01'
         );
@@ -206,7 +206,7 @@ class DateHelper
     public static function buildFromQueryStringDate(?string $value): ?DateTimeInterface
     {
         foreach (self::QUERY_STRING_DATE_FORMATS as $format) {
-            $dateTime = \DateTime::createFromFormat($format, $value);
+            $dateTime = DateTime::createFromFormat($format, $value);
             if ($dateTime !== false &&
                 $dateTime->format($format) == $value) {
                 // Check if day is missing

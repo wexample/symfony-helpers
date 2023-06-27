@@ -3,6 +3,7 @@
 namespace Wexample\SymfonyHelpers\Validator;
 
 use Symfony\Component\Validator\Constraint;
+use function get_class;
 
 class DateQueryStringConstraint extends Constraint
 {
@@ -11,10 +12,10 @@ class DateQueryStringConstraint extends Constraint
 
     public function validatedBy(): string
     {
-        return \get_class($this).'Validator';
+        return get_class($this).'Validator';
     }
 
-    public function getDefaultOption()
+    public function getDefaultOption(): string
     {
         return 'types';
     }

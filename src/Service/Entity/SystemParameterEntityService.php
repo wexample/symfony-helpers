@@ -2,8 +2,9 @@
 
 namespace Wexample\SymfonyHelpers\Service\Entity;
 
-use App\Entity\SystemParameter;
+use Wexample\SymfonyHelpers\Entity\SystemParameter;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\SystemParameterEntityManipulatorTrait;
+use Wexample\SymfonyHelpers\Repository\SystemParameterRepository;
 
 class SystemParameterEntityService extends AbstractEntityService
 {
@@ -23,6 +24,7 @@ class SystemParameterEntityService extends AbstractEntityService
         string $name,
         string|int|null $default
     ): SystemParameter {
+        /** @var SystemParameterRepository $repo */
         $repo = $this->getEntityRepository();
 
         // Using count supports database value to be null.

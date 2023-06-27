@@ -123,7 +123,7 @@ class FileHelper
         return substr($path, 0, -strlen($extension));
     }
 
-    public static function fileWrite(string $fileName, string $content)
+    public static function fileWrite(string $fileName, string $content): void
     {
         $dir = dirname($fileName);
 
