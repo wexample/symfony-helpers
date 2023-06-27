@@ -24,7 +24,7 @@ abstract class AbstractBundleCommand extends Command
                         ClassHelper::getShortName(static::getBundleClassName()),
                         'Bundle'
                     ),
-                    'Wexample'
+                    'WexampleSymfony'
                 )
             )
             .':'
