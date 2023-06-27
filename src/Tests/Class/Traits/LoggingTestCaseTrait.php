@@ -87,14 +87,6 @@ trait LoggingTestCaseTrait
                 // Error pages contains svg which breaks readability.
                 .'<style> svg { display:none; } </style>';
 
-        if (!$quiet) {
-            $this->info('See : '.$logFile);
-
-            $crawler = new Crawler($output);
-            $errorMessage = $crawler->filter('h1.exception-message')->text();
-            $this->error($errorMessage, false);
-        }
-
         file_put_contents(
             $logFile,
             'At '
@@ -102,6 +94,18 @@ trait LoggingTestCaseTrait
             .'<br><br>'
             .$output
         );
+
+        if (!$quiet) {
+            $this->info('See : '.$logFile);
+
+            $crawler = new Crawler($output);
+            $nodeList = $crawler->filter('h1.exception-message');
+
+            if ($nodeList->count()) {
+                $errorMessage = $nodeList->text();
+                $this->error($errorMessage, false);
+            }
+        }
     }
 
     public function initTempDir(): string
