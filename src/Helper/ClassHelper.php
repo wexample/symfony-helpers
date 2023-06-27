@@ -8,6 +8,7 @@ use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+
 use function array_map;
 use function array_slice;
 use function count;
@@ -284,9 +285,9 @@ class ClassHelper
         );
 
         return ($folder ?: self::getAutoloadFolder($className)).implode(
-                FileHelper::FOLDER_SEPARATOR,
-                $parts
-            ).FileHelper::EXTENSION_SEPARATOR.FileHelper::FILE_EXTENSION_PHP;
+            FileHelper::FOLDER_SEPARATOR,
+            $parts
+        ).FileHelper::EXTENSION_SEPARATOR.FileHelper::FILE_EXTENSION_PHP;
     }
 
     public static function splitNamespace(string $classPath): array
@@ -360,9 +361,9 @@ class ClassHelper
         bool $endSeparator = false
     ): string {
         return implode(
-                ClassHelper::NAMESPACE_SEPARATOR,
-                $parts
-            ).($endSeparator ? ClassHelper::NAMESPACE_SEPARATOR : '');
+            ClassHelper::NAMESPACE_SEPARATOR,
+            $parts
+        ).($endSeparator ? ClassHelper::NAMESPACE_SEPARATOR : '');
     }
 
     public static function isClassPath(
@@ -499,9 +500,9 @@ class ClassHelper
         }
 
         return $classPathPrefix.implode(
-                ClassHelper::NAMESPACE_SEPARATOR,
-                $pathParts
-            )
+            ClassHelper::NAMESPACE_SEPARATOR,
+            $pathParts
+        )
             .$classPathSuffix;
     }
 

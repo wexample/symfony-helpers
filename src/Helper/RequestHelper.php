@@ -57,7 +57,7 @@ class RequestHelper
 
         return $value;
     }
-    
+
     public static function getQueryBoolean(
         Request $request,
         string $name

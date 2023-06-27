@@ -285,8 +285,8 @@ trait IntegrationTestCaseTrait
 
         if (isset($parameters['query'])) {
             $path .= '?'.RequestHelper::buildQueryString(
-                    $parameters['query']
-                );
+                $parameters['query']
+            );
         }
 
         $this->logSecondary(

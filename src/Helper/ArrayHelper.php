@@ -148,9 +148,9 @@ class ArrayHelper
 
         // Keep only combinations under array total size.
         return ArrayHelper::truncateChildrenArrayByLength(
-        // Bigger length first.
+            // Bigger length first.
             ArrayHelper::sortOnChildrenArrayLength(
-            // Every possible fields combinations.
+                // Every possible fields combinations.
                 ArrayHelper::generateAllCombinations($array)
             ),
             0,

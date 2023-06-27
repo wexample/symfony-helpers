@@ -43,12 +43,12 @@ abstract class AbstractSymfonyTestCase extends AbstractWebTestCase
         $router = self::getContainer()->get(UrlGeneratorInterface::class);
 
         $url = $router->generate(
-                $route,
-                $args,
-                $absolute
+            $route,
+            $args,
+            $absolute
                     ? UrlGeneratorInterface::ABSOLUTE_URL
                     : UrlGeneratorInterface::ABSOLUTE_PATH
-            ).RequestHelper::buildQueryStringPartIfNotEmpty($parameters);
+        ).RequestHelper::buildQueryStringPartIfNotEmpty($parameters);
 
         $requestLogPath = $this->getProjectDir().'assets/json/test-requests-log.json';
         if (!$this->requestsLog) {

@@ -3,6 +3,7 @@
 namespace Wexample\SymfonyHelpers\Validator;
 
 use Symfony\Component\Validator\Constraint;
+
 use function get_class;
 
 class DateQueryStringConstraint extends Constraint

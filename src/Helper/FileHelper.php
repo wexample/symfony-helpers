@@ -5,6 +5,7 @@ namespace Wexample\SymfonyHelpers\Helper;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+
 use function is_dir;
 
 class FileHelper
@@ -127,8 +128,7 @@ class FileHelper
     {
         $dir = dirname($fileName);
 
-        if (!is_dir($dir))
-        {
+        if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
 

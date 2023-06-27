@@ -220,7 +220,9 @@ class DateHelper
                 // Check if month is missing
                 if (!str_contains($format, self::DATE_PATTERN_PART_MONTH_FULL)) {
                     $dateTime->setDate(
-                        $dateTime->format(self::DATE_PATTERN_PART_YEAR_FULL), 1, 1
+                        $dateTime->format(self::DATE_PATTERN_PART_YEAR_FULL),
+                        1,
+                        1
                     );
                 }
                 // Check if time is missing

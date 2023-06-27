@@ -15,7 +15,7 @@ abstract class AbstractWebTestCase extends WebTestCase
      */
     abstract public function url($route, array $args = []): string;
 
-    protected function setUp():void
+    protected function setUp(): void
     {
         parent::setUp();
 

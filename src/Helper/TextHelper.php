@@ -5,6 +5,7 @@ namespace Wexample\SymfonyHelpers\Helper;
 use Exception;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
+
 use function current;
 use function explode;
 use function floatval;
@@ -565,7 +566,11 @@ class TextHelper
         $salt = hash('sha256', $password.$components[1]);
         $encryptedMsg = $components[2];
         $decryptedMsg = openssl_decrypt(
-            $encryptedMsg, 'aes-256-cbc', $salt, 0, $iv
+            $encryptedMsg,
+            'aes-256-cbc',
+            $salt,
+            0,
+            $iv
         );
 
         if ($decryptedMsg === false) {
