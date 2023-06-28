@@ -159,6 +159,17 @@ class BundleHelper
         return realpath(BundleHelper::getBundle($bundle, $kernel)->getPath().'/../').'/';
     }
 
+    public static function getBundleCssAlias(string $className): string
+    {
+        return '@'.self::getBundlePackageNameFromClassName($className);
+    }
+
+    public static function getBundlePackageNameFromClassName(string $className): string
+    {
+        $parts = array_map([TextHelper::class, 'toKebab'], explode('\\', $className));
+        return $parts[0].'/'.$parts[1];
+    }
+
     /**
      * @param BundleInterface|string $bundleIdentifier Can be a package directory, a bundle/short-name, a BundleShortNameBundle or a full bundle classname.
      * @param KernelInterface        $kernel
