@@ -49,7 +49,8 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
             $this->getBundleClassName(),
             $this->kernel
         );
-        $dependencyFile = $bundleRootPath.'package.dependencies.json';
+
+        $dependencyFile = $bundleRootPath.'assets/packages.json';
 
         if (!is_file($dependencyFile)) {
             $io->error('Missing file : '.$dependencyFile);
