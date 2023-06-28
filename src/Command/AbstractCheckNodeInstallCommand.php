@@ -50,7 +50,7 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
             $this->kernel
         );
 
-        $dependencyFile = $bundleRootPath.'assets/packages.json';
+        $dependencyFile = $bundleRootPath.'assets/package.json';
 
         if (!is_file($dependencyFile)) {
             $io->error('Missing file : '.$dependencyFile);
@@ -59,11 +59,17 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
 
         $neededDependencies = JsonHelper::read(
             $dependencyFile,
+            JSON_OBJECT_AS_ARRAY
         );
 
         $missingDependencies = [];
 
-        foreach ($neededDependencies->dependencies as $dependency) {
+        $dependencies = $neededDependencies['dependencies'] ?? [];
+        $dependencies += $neededDependencies['devDependencies'] ?? [];
+        $dependencies += $neededDependencies['peerDependencies'] ?? [];
+
+        foreach ($dependencies as $dependency => $version) {
+            $io->info('Checking '.$dependency.':'.$version);
             if (!isset($packageJsonData['dependencies'][$dependency]) && !isset($packageJsonData['devDependencies'][$dependency])) {
                 $missingDependencies[] = $dependency;
             }
