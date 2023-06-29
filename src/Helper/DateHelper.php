@@ -205,43 +205,45 @@ class DateHelper
 
     public static function buildFromQueryStringDate(?string $value): ?DateTimeInterface
     {
-        foreach (self::QUERY_STRING_DATE_FORMATS as $format) {
-            $dateTime = DateTime::createFromFormat($format, $value);
-            if ($dateTime !== false &&
-                $dateTime->format($format) == $value) {
-                // Check if day is missing
-                if (!str_contains($format, self::DATE_PATTERN_PART_DAY_FULL)) {
-                    $dateTime->setDate(
-                        $dateTime->format(self::DATE_PATTERN_PART_YEAR_FULL),
-                        $dateTime->format(self::DATE_PATTERN_PART_MONTH_FULL),
-                        1
-                    );
+        if ($value) {
+            foreach (self::QUERY_STRING_DATE_FORMATS as $format) {
+                $dateTime = DateTime::createFromFormat($format, $value);
+                if ($dateTime !== false &&
+                    $dateTime->format($format) == $value) {
+                    // Check if day is missing
+                    if (!str_contains($format, self::DATE_PATTERN_PART_DAY_FULL)) {
+                        $dateTime->setDate(
+                            $dateTime->format(self::DATE_PATTERN_PART_YEAR_FULL),
+                            $dateTime->format(self::DATE_PATTERN_PART_MONTH_FULL),
+                            1
+                        );
+                    }
+                    // Check if month is missing
+                    if (!str_contains($format, self::DATE_PATTERN_PART_MONTH_FULL)) {
+                        $dateTime->setDate(
+                            $dateTime->format(self::DATE_PATTERN_PART_YEAR_FULL),
+                            1,
+                            1
+                        );
+                    }
+                    // Check if time is missing
+                    if (!str_contains($format, self::DATE_PATTERN_PART_HOURS_FULL)) {
+                        $dateTime->setTime(0, 0);
+                    } elseif (!str_contains($format, self::DATE_PATTERN_PART_MINUTES_FULL)) {
+                        // if the format contains hour but not minutes
+                        $dateTime->setTime(
+                            $dateTime->format(self::DATE_PATTERN_PART_HOURS_FULL),
+                            0
+                        );
+                    } elseif (!str_contains($format, self::DATE_PATTERN_PART_SECONDS_FULL)) {
+                        // if the format contains hour and minutes but not seconds
+                        $dateTime->setTime(
+                            $dateTime->format(self::DATE_PATTERN_PART_HOURS_FULL),
+                            $dateTime->format(self::DATE_PATTERN_PART_MINUTES_FULL)
+                        );
+                    }
+                    return $dateTime;
                 }
-                // Check if month is missing
-                if (!str_contains($format, self::DATE_PATTERN_PART_MONTH_FULL)) {
-                    $dateTime->setDate(
-                        $dateTime->format(self::DATE_PATTERN_PART_YEAR_FULL),
-                        1,
-                        1
-                    );
-                }
-                // Check if time is missing
-                if (!str_contains($format, self::DATE_PATTERN_PART_HOURS_FULL)) {
-                    $dateTime->setTime(0, 0);
-                } elseif (!str_contains($format, self::DATE_PATTERN_PART_MINUTES_FULL)) {
-                    // if the format contains hour but not minutes
-                    $dateTime->setTime(
-                        $dateTime->format(self::DATE_PATTERN_PART_HOURS_FULL),
-                        0
-                    );
-                } elseif (!str_contains($format, self::DATE_PATTERN_PART_SECONDS_FULL)) {
-                    // if the format contains hour and minutes but not seconds
-                    $dateTime->setTime(
-                        $dateTime->format(self::DATE_PATTERN_PART_HOURS_FULL),
-                        $dateTime->format(self::DATE_PATTERN_PART_MINUTES_FULL)
-                    );
-                }
-                return $dateTime;
             }
         }
 
