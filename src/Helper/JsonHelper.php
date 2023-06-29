@@ -27,7 +27,8 @@ class JsonHelper
         string $path,
         array|object $data,
         int $flags = 0,
-        int $depth = 512
+        int $depth = 512,
+        bool $newLine = true
     ): bool {
         $json = json_encode(
             $data,
@@ -35,7 +36,7 @@ class JsonHelper
             depth: $depth
         );
 
-        return $json && file_put_contents($path, $json);
+        return $json && file_put_contents($path, $json.($newLine ? PHP_EOL : ''));
     }
 
     public static function isJson(mixed $string): bool
