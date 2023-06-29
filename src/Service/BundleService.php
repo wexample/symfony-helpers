@@ -5,6 +5,7 @@ namespace Wexample\SymfonyHelpers\Service;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Wexample\SymfonyHelpers\Helper\BundleHelper;
+use Wexample\SymfonyHelpers\Helper\PackageHelper;
 
 class BundleService
 {
@@ -22,8 +23,8 @@ class BundleService
         $output = [];
 
         foreach ($paths as $path) {
-            if ($newVersion = $this->versionBuild($path)) {
-                $output[BundleHelper::getPackageComposerConfiguration($path)->name] = $newVersion;
+            if (!PackageHelper::lastCommitHasVersionTag($path)) {
+                $output[PackageHelper::getPackageComposerConfiguration($path)->name] = $this->versionBuild($path);
             }
         }
 
@@ -37,7 +38,7 @@ class BundleService
         bool $build = false,
         string $version = null
     ): string {
-        $config = BundleHelper::getPackageComposerConfiguration($packagePath);
+        $config = PackageHelper::getPackageComposerConfiguration($packagePath);
 
         if (!$version) {
             $version = $config->version;
@@ -83,7 +84,7 @@ class BundleService
         $packages = [];
         foreach ($finder as $file) {
             $path = $file->getRealPath().'/';
-            $packages[BundleHelper::getPackageComposerConfiguration($path)->name] = $path;
+            $packages[PackageHelper::getPackageComposerConfiguration($path)->name] = $path;
         }
 
         return $packages;
@@ -92,13 +93,13 @@ class BundleService
     public function updateRequirementVersion(string $packagePath): array
     {
         $packages = $this->getAllLocalPackagesPaths();
-        $config = BundleHelper::getPackageComposerConfiguration($packagePath);
+        $config = PackageHelper::getPackageComposerConfiguration($packagePath);
         $packageName = $config->name;
         $updated = [];
 
         foreach ($packages as $packageNameDest => $packageDestPath) {
             if ($packageNameDest !== $packageName) {
-                $configDest = BundleHelper::getPackageComposerConfiguration($packageDestPath);
+                $configDest = PackageHelper::getPackageComposerConfiguration($packageDestPath);
                 $changed = false;
                 $newVersion = '^'.$config->version;
 

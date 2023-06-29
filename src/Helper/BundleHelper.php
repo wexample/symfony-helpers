@@ -134,15 +134,8 @@ class BundleHelper
         BundleInterface|string $bundle,
         KernelInterface $kernel,
     ): object {
-        return BundleHelper::getPackageComposerConfiguration(
+        return PackageHelper::getPackageComposerConfiguration(
             self::getBundleRootPath($bundle, $kernel)
-        );
-    }
-
-    public static function getPackageComposerConfiguration(string $packagePath): object
-    {
-        return JsonHelper::read(
-            $packagePath.BundleHelper::COMPOSER_JSON_FILE_NAME
         );
     }
 
@@ -177,7 +170,7 @@ class BundleHelper
         if (is_string($bundleIdentifier)) {
             if (is_dir($bundleIdentifier)) {
                 $bundleIdentifier = BundleHelper::buildClassNameFromPackageName(
-                    BundleHelper::getPackageComposerConfiguration($bundleIdentifier)->name
+                    PackageHelper::getPackageComposerConfiguration($bundleIdentifier)->name
                 );
             } elseif (2 === count(explode('/', $bundleIdentifier))) {
                 $bundleIdentifier = BundleHelper::buildClassNameFromPackageName(
