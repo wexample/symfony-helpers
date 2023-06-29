@@ -97,14 +97,18 @@ trait LoggingTestCaseTrait
 
         if (!$quiet) {
             $this->info('See : '.$logFile);
+            $this->logIfErrorPage();
+        }
+    }
 
-            $crawler = new Crawler($output);
-            $nodeList = $crawler->filter('h1.exception-message');
+    public function logIfErrorPage(): void
+    {
+        $crawler = new Crawler($this->content());
+        $nodeList = $crawler->filter('h1.exception-message');
 
-            if ($nodeList->count()) {
-                $errorMessage = $nodeList->text();
-                $this->error($errorMessage, false);
-            }
+        if ($nodeList->count()) {
+            $errorMessage = $nodeList->text();
+            $this->error($errorMessage, false);
         }
     }
 

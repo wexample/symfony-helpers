@@ -223,6 +223,7 @@ trait IntegrationTestCaseTrait
 
     public function assertStatusCodeOk(): void
     {
+        $this->logIfErrorPage();
         $this->assertStatusCodeEquals(Response::HTTP_OK);
         $this->logSecondary('Status code is OK : '.Response::HTTP_OK);
     }
