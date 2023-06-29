@@ -54,6 +54,7 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
 
         if (!is_file($dependencyFile)) {
             $io->error('Missing file : '.$dependencyFile);
+
             return Command::FAILURE;
         }
 

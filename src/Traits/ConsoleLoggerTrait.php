@@ -30,7 +30,7 @@ trait ConsoleLoggerTrait
         string $message,
     ): void {
         $this->log(
-            PHP_EOL . '# '.strtoupper($message),
+            PHP_EOL.'# '.strtoupper($message),
             TextHelper::ASCII_COLOR_CYAN,
             0
         );

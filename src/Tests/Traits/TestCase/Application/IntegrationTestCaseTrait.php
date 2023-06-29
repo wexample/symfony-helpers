@@ -209,7 +209,7 @@ trait IntegrationTestCaseTrait
 
     public function followRedirectAndCheckTargetPage(): void
     {
-        while ($this->getGlobalClientResponse()->getStatusCode() === Response::HTTP_FOUND) {
+        while (Response::HTTP_FOUND === $this->getGlobalClientResponse()->getStatusCode()) {
             $this->logNavigation(
                 'Redirecting to : '
                 .$this->getGlobalClientResponse()->headers->get('location')

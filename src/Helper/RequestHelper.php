@@ -18,7 +18,7 @@ class RequestHelper
     public static function buildQueryStringPartIfNotEmpty(array $parameters): string
     {
         if (!empty($parameters)) {
-            return '?' . RequestHelper::buildQueryString($parameters);
+            return '?'.RequestHelper::buildQueryString($parameters);
         }
 
         return '';
@@ -37,7 +37,7 @@ class RequestHelper
 
     public static function parseRequestValue(
         array|float|int|string $value,
-        ?string $targetType = null
+        string $targetType = null
     ): array|bool|float|int|null|string {
         if (TextHelper::isBooleanOrNull($value)) {
             return TextHelper::parseBooleanOrNull($value);
@@ -51,7 +51,7 @@ class RequestHelper
             $value = (int) $value;
         }
 
-        if ($targetType === TypesHelper::BOOLEAN) {
+        if (TypesHelper::BOOLEAN === $targetType) {
             return (bool) $value;
         }
 

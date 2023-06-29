@@ -148,12 +148,12 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function add(AbstractEntity $entity, bool $flush = true): void
     {
         if (!class_parents($entity, $this->getEntityName())) {
-            throw new Exception('Entity of type ' . $entity::class . ' should be of type ' . $this->getEntityName() . ' in add() method');
+            throw new \Exception('Entity of type '.$entity::class.' should be of type '.$this->getEntityName().' in add() method');
         }
 
         $this->_em->persist($entity);

@@ -2,14 +2,6 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
-use function array_map;
-use function explode;
-use function floatval;
-use function floor;
-use function implode;
-use function is_string;
-use function round;
-
 class NumberHelper
 {
     public static function numberToRoman(float $number): string
@@ -30,18 +22,18 @@ class NumberHelper
      */
     public static function isWholeNumber(float|int|string $number): bool
     {
-        $number = is_string($number) ? floatval($number) : $number;
+        $number = \is_string($number) ? \floatval($number) : $number;
 
-        return (string) $number == (int) floor($number);
+        return (string) $number == (int) \floor($number);
     }
 
     public static function floatToRoman(float $number): string
     {
-        return implode(
+        return \implode(
             '.',
-            array_map(
+            \array_map(
                 NumberHelper::class.'::numberToRoman',
-                explode('.', (string) $number)
+                \explode('.', (string) $number)
             )
         );
     }
@@ -83,12 +75,12 @@ class NumberHelper
      */
     public static function roundIntData(int $int): int
     {
-        return round(self::intDataToFloat($int)) * 100;
+        return \round(self::intDataToFloat($int)) * 100;
     }
 
     public static function toIntData(float $float): int
     {
-        return round($float * 100);
+        return \round($float * 100);
     }
 
     public static function intDataToFloat(int $int): float

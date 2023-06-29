@@ -4,8 +4,6 @@ namespace Wexample\SymfonyHelpers\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
-use function get_class;
-
 class MultipleTypeConstraint extends Constraint
 {
     public array $types = [];
@@ -24,7 +22,7 @@ class MultipleTypeConstraint extends Constraint
 
     public function validatedBy(): string
     {
-        return get_class($this).'Validator';
+        return \get_class($this).'Validator';
     }
 
     public function getDefaultOption(): string

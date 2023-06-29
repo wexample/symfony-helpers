@@ -6,7 +6,7 @@ class JsonHelper
 {
     public static function read(
         string $path,
-        ?bool $associative = null,
+        bool $associative = null,
         int $flags = 0,
         array|object|null $default = null
     ): array|object|null {
