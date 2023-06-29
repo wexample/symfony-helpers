@@ -66,4 +66,14 @@ class RequestHelper
             $request->get($name)
         );
     }
+
+    public static function requestIsOnSubClassOf(
+        Request $request,
+        string $controllerClassName
+    ):bool {
+        $className = $request->attributes->get('_controller');
+        $className = explode(ClassHelper::METHOD_SEPARATOR, $className)[0];
+
+        return is_subclass_of($className, $controllerClassName);
+    }
 }
