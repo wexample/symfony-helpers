@@ -29,8 +29,6 @@ class BundleService
             }
         }
 
-        $this->updateAllRequirementsVersions();
-
         return $output;
     }
 
