@@ -14,7 +14,6 @@ class EntityNeutralService
     public function __construct(
         public EntityManagerInterface $entityManager,
     ) {
-
     }
 
     public function getEntityManager(): EntityManagerInterface

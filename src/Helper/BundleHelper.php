@@ -43,12 +43,6 @@ class BundleHelper
     /**
      * PHP port of wex script python version.
      * Please try to maintain both versions up to date.
-     *
-     * @param string $version
-     * @param string $upgradeType
-     * @param int    $increment
-     * @param bool   $build
-     * @return string
      */
     public static function defaultVersionIncrement(
         string $version,
@@ -65,7 +59,7 @@ class BundleHelper
 
             if (str_contains($preBuild, '.')) {
                 $preBuildParts = explode('.', $preBuild);
-                if (count($preBuildParts) == 2) {
+                if (2 == count($preBuildParts)) {
                     list($preBuild, $preBuildNumber) = $preBuildParts;
                 } else {
                     list($preBuild, $preBuildNumber, $_) = $preBuildParts;
@@ -88,10 +82,10 @@ class BundleHelper
         list($major, $intermediate, $minor) = explode('.', $baseVersion);
 
         // Increment according to type
-        if ($upgradeType == self::UPGRADE_TYPE_MAJOR) {
+        if (self::UPGRADE_TYPE_MAJOR == $upgradeType) {
             $major = strval((int) $major + $increment);
             $intermediate = $minor = '0';
-        } elseif ($upgradeType == self::UPGRADE_TYPE_INTERMEDIATE) {
+        } elseif (self::UPGRADE_TYPE_INTERMEDIATE == $upgradeType) {
             $intermediate = strval((int) $intermediate + $increment);
             $minor = '0';
         } elseif (in_array($upgradeType, [
@@ -167,12 +161,13 @@ class BundleHelper
     public static function getBundlePackageNameFromClassName(string $className): string
     {
         $parts = array_map([TextHelper::class, 'toKebab'], explode('\\', $className));
+
         return $parts[0].'/'.$parts[1];
     }
 
     /**
-     * @param BundleInterface|string $bundleIdentifier Can be a package directory, a bundle/short-name, a BundleShortNameBundle or a full bundle classname.
-     * @param KernelInterface        $kernel
+     * @param BundleInterface|string $bundleIdentifier can be a package directory, a bundle/short-name, a BundleShortNameBundle or a full bundle classname
+     *
      * @return ?BundleInterface
      */
     public static function getBundle(
@@ -184,7 +179,7 @@ class BundleHelper
                 $bundleIdentifier = BundleHelper::buildClassNameFromPackageName(
                     BundleHelper::getPackageComposerConfiguration($bundleIdentifier)->name
                 );
-            } elseif (count(explode('/', $bundleIdentifier)) === 2) {
+            } elseif (2 === count(explode('/', $bundleIdentifier))) {
                 $bundleIdentifier = BundleHelper::buildClassNameFromPackageName(
                     $bundleIdentifier
                 );

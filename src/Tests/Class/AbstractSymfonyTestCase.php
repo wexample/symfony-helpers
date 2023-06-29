@@ -61,12 +61,12 @@ abstract class AbstractSymfonyTestCase extends AbstractWebTestCase
         $allRoutes = $router->getRouteCollection();
         $requirements = [];
         /**
-         * @var string                           $routeName
-         * @var Route $compiledRoute
+         * @var string $routeName
+         * @var Route  $compiledRoute
          */
         foreach ($allRoutes as $routeName => $compiledRoute) {
             if ($routeName === $route) {
-                $requirements = ($compiledRoute->getRequirements());
+                $requirements = $compiledRoute->getRequirements();
             }
         }
 

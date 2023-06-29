@@ -11,12 +11,10 @@ class BundleService
     public function __construct(
         protected KernelInterface $kernel,
     ) {
-
     }
 
     /**
      * Increment every package and update dependencies.
-     * @return array
      */
     public function updateAllLocalPackages(): array
     {
@@ -77,7 +75,7 @@ class BundleService
 
     public function getAllLocalPackagesPaths(): array
     {
-        $vendorsDir = $this->kernel->getProjectDir() . '/vendor-local/';
+        $vendorsDir = $this->kernel->getProjectDir().'/vendor-local/';
         $finder = new Finder();
 
         $finder->directories()->in($vendorsDir)->depth('== 1');

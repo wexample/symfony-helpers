@@ -2,9 +2,9 @@
 
 namespace Wexample\SymfonyHelpers\Tests\Class;
 
-use Wexample\SymfonyHelpers\Tests\Class\Traits\LoggingTestCaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Tests\Class\Traits\LoggingTestCaseTrait;
 
 abstract class AbstractWebTestCase extends WebTestCase
 {
@@ -20,7 +20,7 @@ abstract class AbstractWebTestCase extends WebTestCase
         parent::setUp();
 
         $this->log(
-            PHP_EOL . '____ TESTING : ' . static::class,
+            PHP_EOL.'____ TESTING : '.static::class,
             TextHelper::ASCII_COLOR_CYAN
         );
     }
