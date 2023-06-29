@@ -6,7 +6,7 @@ use Wexample\SymfonyHelpers\Entity\SystemParameter;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\SystemParameterEntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Repository\SystemParameterRepository;
 
-class SystemParameterEntityService extends AbstractEntityService
+abstract class SystemParameterEntityService extends AbstractEntityService
 {
     use SystemParameterEntityManipulatorTrait;
 
