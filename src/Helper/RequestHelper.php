@@ -70,7 +70,7 @@ class RequestHelper
     public static function requestIsOnSubClassOf(
         Request $request,
         string $controllerClassName
-    ):bool {
+    ): bool {
         $className = $request->attributes->get('_controller');
         $className = explode(ClassHelper::METHOD_SEPARATOR, $className)[0];
 
