@@ -101,6 +101,7 @@ class VariableHelper
     final public const RESPONSIVE = 'responsive';
     final public const ROLE = 'role';
     final public const SAVE = 'save';
+    final public const SEARCH = 'search';
     final public const SELECTION = 'selection';
     final public const SEND = 'send';
     final public const SEPARATOR = 'separator';
