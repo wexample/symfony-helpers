@@ -7,7 +7,7 @@ class PackageHelper
     public static function lastCommitHasVersionTag(string $path): bool
     {
         return in_array(
-            'v' . self::getPackageComposerConfiguration($path)->version,
+            'v'.self::getPackageComposerConfiguration($path)->version,
             GitHelper::getTagsForLastCommit($path)
         );
     }
