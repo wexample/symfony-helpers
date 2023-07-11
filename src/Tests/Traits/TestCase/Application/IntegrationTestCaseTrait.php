@@ -2,7 +2,6 @@
 
 namespace Wexample\SymfonyHelpers\Tests\Traits\TestCase\Application;
 
-use App\Controller\SecurityController;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -366,7 +365,7 @@ trait IntegrationTestCaseTrait
         int $indent = null
     ): void {
         $this->logSecondary(
-            substr($this->content(), 0, 100),
+            substr($this->content(), 0, 1000),
             $indent
         );
     }
