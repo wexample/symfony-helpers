@@ -1,6 +1,6 @@
 <?php
 
-namespace Wexample\SymfonyHelpers\Tests\Traits\TestCase\Application;
+namespace Wexample\SymfonyHelpers\Tests\Class\Traits;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DomCrawler\Crawler;
@@ -10,13 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Wexample\SymfonyHelpers\Helper\RequestHelper;
 use Wexample\SymfonyHelpers\Helper\TextHelper;
 
-trait IntegrationTestCaseTrait
+trait ApplicationTestCaseTrait
 {
     protected ?KernelBrowser $client = null;
 
     protected ?string $pathPrevious = null;
-
-    protected bool $hasRequested = false;
 
     public function getCurrentPath(): string
     {
@@ -65,7 +63,7 @@ trait IntegrationTestCaseTrait
     public function assertStatusCodeIsNotError(string $message = null): void
     {
         $this->assertNotContains(
-            $this->getGlobalClientResponse()->getStatusCode(),
+            $this->client->getResponse()->getStatusCode(),
             [
                 Response::HTTP_INTERNAL_SERVER_ERROR,
                 Response::HTTP_NOT_IMPLEMENTED,
@@ -100,23 +98,12 @@ trait IntegrationTestCaseTrait
         $this->logIndentDown();
     }
 
-    public function assertRedirectionIsToLoginPage(): void
-    {
-        $this->assertRedirectionIsToTargetUrl(
-            $this->url(
-                SecurityController::buildRouteName(
-                    SecurityController::ROUTE_LOGIN
-                ),
-            )
-        );
-    }
-
     public function assertRedirectionIsToTargetUrl(string $url): void
     {
         $this->assertIsRedirection();
 
         /** @var RedirectResponse $response */
-        $response = $this->getGlobalClientResponse();
+        $response = $this->client->getResponse();
 
         $targetUrl = $response->getTargetUrl();
 
@@ -134,7 +121,7 @@ trait IntegrationTestCaseTrait
     public function assertIsRedirection(): void
     {
         /** @var RedirectResponse $response */
-        $response = $this->getGlobalClientResponse();
+        $response = $this->client->getResponse();
 
         $this->assertTrue(
             RedirectResponse::class === $response::class,
@@ -198,20 +185,20 @@ trait IntegrationTestCaseTrait
 
     public function content(): string
     {
-        return $this->getGlobalClientResponse()->getContent();
+        return $this->client->getResponse()->getContent();
     }
 
     public function getResponseCode(): int
     {
-        return $this->getGlobalClientResponse()->getStatusCode();
+        return $this->client->getResponse()->getStatusCode();
     }
 
     public function followRedirectAndCheckTargetPage(): void
     {
-        while (Response::HTTP_FOUND === $this->getGlobalClientResponse()->getStatusCode()) {
+        while ($this->client->getResponse()->getStatusCode() === Response::HTTP_FOUND) {
             $this->logNavigation(
                 'Redirecting to : '
-                .$this->getGlobalClientResponse()->headers->get('location')
+                .$this->client->getResponse()->headers->get('location')
             );
             $this->client->followRedirect();
         }
@@ -222,14 +209,8 @@ trait IntegrationTestCaseTrait
 
     public function assertStatusCodeOk(): void
     {
-        $this->logIfErrorPage();
         $this->assertStatusCodeEquals(Response::HTTP_OK);
         $this->logSecondary('Status code is OK : '.Response::HTTP_OK);
-    }
-
-    protected function getGlobalClientResponse(): Response
-    {
-        return $this->client->getResponse();
     }
 
     protected function createGlobalClient(bool $forceRecreate = true): void
@@ -285,8 +266,8 @@ trait IntegrationTestCaseTrait
 
         if (isset($parameters['query'])) {
             $path .= '?'.RequestHelper::buildQueryString(
-                $parameters['query']
-            );
+                    $parameters['query']
+                );
         }
 
         $this->logSecondary(
@@ -343,7 +324,7 @@ trait IntegrationTestCaseTrait
 
     public function assertStatusCodeEquals(int $expectedResponseCode): void
     {
-        $actual = $this->getGlobalClientResponse()->getStatusCode();
+        $actual = $this->client->getResponse()->getStatusCode();
 
         if ($expectedResponseCode !== $actual) {
             $this->logBodyExtract();
@@ -365,7 +346,7 @@ trait IntegrationTestCaseTrait
         int $indent = null
     ): void {
         $this->logSecondary(
-            substr($this->content(), 0, 1000),
+            substr($this->getBody(), 0, 100),
             $indent
         );
     }
@@ -381,11 +362,12 @@ trait IntegrationTestCaseTrait
         }
 
         $body = $crawler->filter('body');
-        $output = $body->count() > 0 ? $body->html() : $this->content();
+
+        $output = $body ? $body->html() : $this->content();
 
         echo PHP_EOL, '++++++++++++++++++++++++++',
         PHP_EOL, ' PATH :'.$this->client->getRequest()->getPathInfo(),
-        PHP_EOL, ' CODE :'.$this->getGlobalClientResponse()->getStatusCode(),
+        PHP_EOL, ' CODE :'.$this->client->getResponse()->getStatusCode(),
         PHP_EOL;
 
         $exceptionMessagePosition = strpos($output, 'exception_message');

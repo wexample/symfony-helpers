@@ -10,6 +10,8 @@ abstract class AbstractWebTestCase extends WebTestCase
 {
     use LoggingTestCaseTrait;
 
+    protected bool $hasRequested = false;
+
     /**
      * Generates an url from route.
      */

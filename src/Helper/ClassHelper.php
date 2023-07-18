@@ -343,12 +343,14 @@ class ClassHelper
 
     public static function join(
         array $parts,
-        bool $endSeparator = false
+        bool $startSeparator = false,
+        bool $endSeparator = false,
     ): string {
-        return \implode(
-            ClassHelper::NAMESPACE_SEPARATOR,
-            $parts
-        ).($endSeparator ? ClassHelper::NAMESPACE_SEPARATOR : '');
+        return ($startSeparator ? ClassHelper::NAMESPACE_SEPARATOR : '')
+            .\implode(
+                ClassHelper::NAMESPACE_SEPARATOR,
+                $parts
+            ).($endSeparator ? ClassHelper::NAMESPACE_SEPARATOR : '');
     }
 
     public static function isClassPath(

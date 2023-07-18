@@ -2,9 +2,9 @@
 
 namespace Wexample\SymfonyHelpers\Tests\Class;
 
-use Wexample\SymfonyHelpers\Tests\Traits\TestCase\Application\IntegrationTestCaseTrait;
+use Wexample\SymfonyHelpers\Tests\Class\Traits\ApplicationTestCaseTrait;
 
 abstract class AbstractApplicationTestCase extends AbstractSymfonyTestCase
 {
-    use IntegrationTestCaseTrait;
+    use ApplicationTestCaseTrait;
 }

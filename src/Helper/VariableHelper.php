@@ -26,6 +26,7 @@ class VariableHelper
     final public const CONFIGURATION = 'configuration';
     final public const COMPONENT = 'component';
     final public const CREATE = 'create';
+    final public const CURSOR = 'cursor';
     final public const CUSTOM = 'custom';
     final public const DATA = 'data';
     final public const DATE = 'date';
@@ -95,6 +96,7 @@ class VariableHelper
     final public const PASSWORD = 'password';
     final public const PICTURE = 'picture';
     final public const PRELOAD = 'preload';
+    final public const PRESET = 'preset';
     final public const PREVIOUS = 'previous';
     final public const REDIRECT = 'redirect';
     final public const REMOTE = 'remote';
@@ -104,6 +106,7 @@ class VariableHelper
     final public const SEARCH = 'search';
     final public const SELECTION = 'selection';
     final public const SEND = 'send';
+    final public const SENT = 'sent';
     final public const SEPARATOR = 'separator';
     final public const SHOW = 'show';
     final public const STATUS = 'status';
