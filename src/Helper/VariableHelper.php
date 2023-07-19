@@ -70,8 +70,10 @@ class VariableHelper
     final public const LOCAL = 'local';
     final public const MAIL = 'mail';
     final public const MANAGER = 'manager';
+    final public const MAX = 'max';
     final public const MEMBERS = 'members';
     final public const MESSAGE = 'message';
+    final public const MIN = 'min';
     final public const MODAL = 'modal';
     final public const MONTH = 'month';
     final public const MY = 'my';
