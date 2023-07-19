@@ -505,4 +505,21 @@ class ClassHelper
 
         return false;
     }
+
+    public static function callMethodIfExists(
+        object $object,
+        string $methodName,
+        array $arguments = []
+    ): mixed {
+        // Check if the method exists in the object
+        if (method_exists($object, $methodName)) {
+            // Call the method with arguments
+            return call_user_func_array([$object, $methodName], $arguments);
+        } else {
+            // Throw an exception if the method doesn't exist
+            throw new Exception('Method '.$methodName.' not found in '.get_class($object));
+        }
+
+        return null;
+    }
 }
