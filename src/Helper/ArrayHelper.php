@@ -92,36 +92,6 @@ class ArrayHelper
         return is_array($value) ? $value : [$value];
     }
 
-    public static function truncateChildrenArrayByLength(
-        array $array,
-        ?int $min = 0,
-        int $max = null
-    ): array {
-        $max = \is_null($max) ? count($array) : $max;
-        $output = [];
-
-        foreach ($array as $key => $child) {
-            $count = count($child);
-            if ($count >= $min && $count <= $max) {
-                $output[$key] = $child;
-            }
-        }
-
-        return $output;
-    }
-
-    public static function sortOnChildrenArrayLength(array $array): array
-    {
-        uasort($array, function (
-            $a,
-            $b
-        ) {
-            return count($b) - count($a);
-        });
-
-        return $array;
-    }
-
     public static function countNonArrayValues(array $array): int
     {
         $total = 0;
@@ -151,6 +121,36 @@ class ArrayHelper
             0,
             $max - 1
         );
+    }
+
+    public static function truncateChildrenArrayByLength(
+        array $array,
+        ?int $min = 0,
+        int $max = null
+    ): array {
+        $max = \is_null($max) ? count($array) : $max;
+        $output = [];
+
+        foreach ($array as $key => $child) {
+            $count = count($child);
+            if ($count >= $min && $count <= $max) {
+                $output[$key] = $child;
+            }
+        }
+
+        return $output;
+    }
+
+    public static function sortOnChildrenArrayLength(array $array): array
+    {
+        uasort($array, function(
+            $a,
+            $b
+        ) {
+            return count($b) - count($a);
+        });
+
+        return $array;
     }
 
     public static function generateAllCombinations(array $array): array
