@@ -113,9 +113,9 @@ class ArrayHelper
 
         // Keep only combinations under array total size.
         return ArrayHelper::truncateChildrenArrayByLength(
-            // Bigger length first.
+        // Bigger length first.
             ArrayHelper::sortOnChildrenArrayLength(
-                // Every possible fields combinations.
+            // Every possible fields combinations.
                 ArrayHelper::generateAllCombinations($array)
             ),
             0,
@@ -165,5 +165,37 @@ class ArrayHelper
         }
 
         return $results;
+    }
+
+    public static function filterOnInt(
+        array $array,
+        string|int $key,
+        int $search,
+    ): array {
+        return array_values(
+            array_filter($array, fn(
+                $result
+            ) => isset($result[$key])
+                && is_numeric($result[$key])
+                && (int) $result[$key] === $search
+            )
+        );
+    }
+
+    public static function sortOn(
+        array $array,
+        string|int $key
+    ): array {
+        usort($array, function(
+            $a,
+            $b
+        ) use
+        (
+            $key
+        ) {
+            return $a[$key] <=> $b[$key];
+        });
+
+        return $array;
     }
 }
