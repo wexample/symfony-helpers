@@ -3,6 +3,7 @@
 namespace Wexample\SymfonyHelpers\Tests\Class\Traits;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -345,8 +346,15 @@ trait ApplicationTestCaseTrait
     public function logBodyExtract(
         int $indent = null
     ): void {
+        /** @var ParameterBagInterface $parameterBag */
+        $parameterBag = self::getContainer()->get(ParameterBagInterface::class);
+
         $this->logSecondary(
-            substr($this->getBody(), 0, 100),
+            substr(
+                $this->getBody(),
+                0,
+                $parameterBag->get('test_error_log_length') ?: 1000
+            ),
             $indent
         );
     }
