@@ -6,6 +6,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Wexample\SymfonyHelpers\Entity\Traits\HasNameTrait;
 
+/**
+ * SystemParameter Class
+ *
+ * This is an abstract class that represents a system parameter in the application.
+ * System parameters are key-value pairs that are used for storing system configuration settings.
+ */
 abstract class SystemParameter extends AbstractEntity
 {
     use HasNameTrait;
