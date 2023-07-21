@@ -353,7 +353,7 @@ trait ApplicationTestCaseTrait
             substr(
                 $this->getBody(),
                 0,
-                $parameterBag->get('test_error_log_length') ?: 1000
+                $parameterBag->get('api_test_error_log_length') ?: 1000
             ),
             $indent
         );
