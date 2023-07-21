@@ -9,6 +9,16 @@ class ArrayHelper
         return \max(\array_keys($array));
     }
 
+    public static function pickKeys(
+        array $array,
+        array $keys
+    ): array {
+        return array_intersect_key(
+            $array,
+            array_flip($keys)
+        );
+    }
+
     public static function containsSameValues(
         array $array,
         $value = null
