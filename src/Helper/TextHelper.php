@@ -5,9 +5,6 @@ namespace Wexample\SymfonyHelpers\Helper;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 
-use function md5;
-use function uniqid;
-
 class TextHelper
 {
     // Background color
@@ -414,6 +411,23 @@ class TextHelper
         );
     }
 
+    public static function trimLastChunk(
+        string $string,
+        string $separator
+    ): string {
+        $exp = \explode(
+            $separator,
+            $string
+        );
+
+        array_pop($exp);
+
+        return \implode(
+            $separator,
+            $exp
+        );
+    }
+
     public static function getFirstChunk(
         string $string,
         string $separator
@@ -436,23 +450,6 @@ class TextHelper
         );
 
         return end($exp);
-    }
-
-    public static function trimLastChunk(
-        string $string,
-        string $separator
-    ): string {
-        $exp = \explode(
-            $separator,
-            $string
-        );
-
-        array_pop($exp);
-
-        return \implode(
-            $separator,
-            $exp
-        );
     }
 
     public static function trimLastChunkIfMoreThanOne(
