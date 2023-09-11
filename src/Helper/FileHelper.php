@@ -20,6 +20,8 @@ class FileHelper
 
     final public const FOLDER_SEPARATOR = '/';
 
+    final public const FILE_EXTENSION_CSV = 'csv';
+
     final public const FILE_EXTENSION_PDF = 'pdf';
 
     final public const FILE_EXTENSION_PHP = 'php';
@@ -29,6 +31,8 @@ class FileHelper
     final public const FILE_EXTENSION_VUE = 'vue';
 
     final public const FILE_EXTENSION_SVG = 'svg';
+
+    final public const FILE_EXTENSION_TXT = 'txt';
 
     final public const SUFFIX_AGGREGATED = 'agg';
 
