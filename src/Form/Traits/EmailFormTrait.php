@@ -2,11 +2,11 @@
 
 namespace Wexample\SymfonyHelpers\Form\Traits;
 
-use App\Wex\BaseBundle\Helper\VariableHelper;
 use Symfony\Component\Form\FormBuilderInterface;
 use Wexample\SymfonyHelpers\Form\AbstractForm;
 use Wexample\SymfonyHelpers\Form\EmailType;
 use Wexample\SymfonyHelpers\Helper\IconMaterialHelper;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 trait EmailFormTrait
 {

@@ -2,13 +2,13 @@
 
 namespace Wexample\SymfonyHelpers\Form\Traits;
 
-use App\Wex\BaseBundle\Helper\ClassHelper;
-use App\Wex\BaseBundle\Helper\TextHelper;
-use App\Wex\BaseBundle\Helper\VariableHelper;
 use Symfony\Component\Form\FormBuilderInterface;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Form\AbstractForm;
 use Wexample\SymfonyHelpers\Form\PictureType;
+use Wexample\SymfonyHelpers\Helper\ClassHelper;
+use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 trait EntityWithPictureFormTrait
 {

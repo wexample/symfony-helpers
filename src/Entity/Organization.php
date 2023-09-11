@@ -10,7 +10,6 @@ namespace Wexample\SymfonyHelpers\Entity;
 
 use App\Entity\Address;
 use App\Wex\BaseBundle\Entity\Traits\WithUserEntityTrait;
-use App\Wex\BaseBundle\Helper\VariableHelper;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -19,6 +18,7 @@ use JetBrains\PhpStorm\Pure;
 use Stringable;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Type;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 use function substr;
 
 class Organization extends AbstractEntity implements Stringable

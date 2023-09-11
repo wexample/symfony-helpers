@@ -2,12 +2,12 @@
 
 namespace Wexample\SymfonyHelpers\Form\Traits;
 
-use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Translation\Translator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Wexample\SymfonyHelpers\Form\AbstractForm;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 use function implode;
 use function strpos;
 

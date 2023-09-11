@@ -2,13 +2,13 @@
 
 namespace Wexample\SymfonyHelpers\Form\Traits;
 
-use App\Wex\BaseBundle\Helper\ClassHelper;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Form\AbstractForm;
 use Wexample\SymfonyHelpers\Form\FileType;
+use Wexample\SymfonyHelpers\Helper\ClassHelper;
 
 trait EntityWithFileFormTrait
 {
