@@ -16,6 +16,16 @@ class FileHelper
 
     final public const PATH_VAR = 'var/';
 
+    final public const ENCODING_UTF8 = 'UTF-8';
+
+    final public const ENCODING_ISO_8859_1 = 'ISO-8859-1';
+
+    final public const ENCODING_ISO_8859_15 = 'ISO-8859-15';
+
+    final public const ENCODING_WINDOWS_1252 = 'Windows-1252';
+
+    final public const ENCODING_ASCII = 'ASCII';
+
     final public const EXTENSION_SEPARATOR = '.';
 
     final public const FOLDER_SEPARATOR = '/';
@@ -35,6 +45,7 @@ class FileHelper
     final public const FILE_EXTENSION_TXT = 'txt';
 
     final public const SUFFIX_AGGREGATED = 'agg';
+
 
     public static function createFileIfMissingAndGetJson(
         string $path,
@@ -111,6 +122,13 @@ class FileHelper
         }
     }
 
+    public static function isCriticalPath(string $path): bool
+    {
+        return '' === $path
+            || '/' === $path
+            || !is_dir($path);
+    }
+
     public static function removeExtension(
         string $path,
         string $extension = null
@@ -127,6 +145,15 @@ class FileHelper
         return substr($path, 0, -strlen($extension));
     }
 
+    public static function fileWriteAndHash(
+        string $fileName,
+        string $content
+    ): string {
+        self::fileWrite($fileName, $content);
+
+        return md5($content);
+    }
+
     public static function fileWrite(
         string $fileName,
         string $content
@@ -138,22 +165,6 @@ class FileHelper
         }
 
         file_put_contents($fileName, $content);
-    }
-
-    public static function fileWriteAndHash(
-        string $fileName,
-        string $content
-    ): string {
-        self::fileWrite($fileName, $content);
-
-        return md5($content);
-    }
-
-    public static function isCriticalPath(string $path): bool
-    {
-        return '' === $path
-            || '/' === $path
-            || !is_dir($path);
     }
 
     public static function forEachValidFile(
@@ -215,5 +226,22 @@ class FileHelper
         } else {
             return null;
         }
+    }
+
+    public static function getContentUtf8(string $filePath): string
+    {
+        $content = file_get_contents($filePath);
+        $originalEncoding = mb_detect_encoding($content, [
+            self::ENCODING_UTF8,
+            self::ENCODING_ISO_8859_1,
+            self::ENCODING_ISO_8859_15,
+            self::ENCODING_WINDOWS_1252,
+            self::ENCODING_ASCII], true);
+
+        if ($originalEncoding !== self::ENCODING_UTF8) {
+            $content = mb_convert_encoding($content, self::ENCODING_UTF8, $originalEncoding);
+        }
+
+        return $content;
     }
 }
