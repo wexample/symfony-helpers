@@ -6,8 +6,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class StripePaymentForm extends AbstractForm
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(
+        FormBuilderInterface $builder,
+        array $options
+    ) {
         // No more token field,
         // We may not use a generic form for that ?
         $builder

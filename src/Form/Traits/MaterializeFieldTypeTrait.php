@@ -8,7 +8,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Wexample\SymfonyHelpers\Form\AbstractForm;
-use Wexample\SymfonyHelpers\Form\Traits\DefaultTypeTrait;
 use function implode;
 use function strpos;
 
@@ -129,7 +128,7 @@ trait MaterializeFieldTypeTrait
         FormView $view,
         FormInterface $form,
         array $options,
-                      $classes = []
+        $classes = []
     ) {
         $this->defaultTypeBuildView($view, $form, $options);
 
@@ -164,9 +163,9 @@ trait MaterializeFieldTypeTrait
         if (isset($view->vars['helper'])
             && true === $view->vars['helper']) {
             $view->vars['helper'] = $this->getTransKeyBase(
-                $view,
-                $form
-            ).'.helper';
+                    $view,
+                    $form
+                ).'.helper';
         } elseif (strpos($view->vars['helper'], Translator::DOMAIN_SEPARATOR)) {
             $view->vars['helper'] = AbstractForm::transForm(
                 $view->vars['helper'],

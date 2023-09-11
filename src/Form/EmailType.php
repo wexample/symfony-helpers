@@ -25,8 +25,8 @@ class EmailType extends \Symfony\Component\Form\Extension\Core\Type\EmailType
     public function buildView(
         FormView $view,
         FormInterface $form,
-        array $options)
-    {
+        array $options
+    ) {
         $this->materializeBuildView($view, $form, $options);
         parent::buildView($view, $form, $options);
     }

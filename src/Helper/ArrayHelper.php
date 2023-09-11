@@ -2,11 +2,16 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use function array_keys;
+use function current;
+use function is_null;
+use function max;
+
 class ArrayHelper
 {
     public static function findGreatestArrayKey(array $array)
     {
-        return \max(\array_keys($array));
+        return max(array_keys($array));
     }
 
     public static function pickKeys(
@@ -23,7 +28,7 @@ class ArrayHelper
         array $array,
         $value = null
     ): bool {
-        $value = \is_null($value) ? \current($array) : $value;
+        $value = is_null($value) ? current($array) : $value;
 
         foreach ($array as $item) {
             if ($item !== $value) {
@@ -39,7 +44,7 @@ class ArrayHelper
         $output = '';
 
         if (!empty($data)) {
-            $keys = \array_keys(\current($data));
+            $keys = array_keys(current($data));
 
             $output .= '<thead><tr>';
 
@@ -138,7 +143,7 @@ class ArrayHelper
         ?int $min = 0,
         int $max = null
     ): array {
-        $max = \is_null($max) ? count($array) : $max;
+        $max = is_null($max) ? count($array) : $max;
         $output = [];
 
         foreach ($array as $key => $child) {

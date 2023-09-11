@@ -17,8 +17,11 @@ class ChoiceType extends \Symfony\Component\Form\Extension\Core\Type\ChoiceType
         parent::configureOptions($resolver);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
+    public function buildView(
+        FormView $view,
+        FormInterface $form,
+        array $options
+    ) {
         $this->materializeBuildView($view, $form, $options);
 
         // Active label moves it from over select field.

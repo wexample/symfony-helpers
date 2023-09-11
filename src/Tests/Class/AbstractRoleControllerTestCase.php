@@ -56,7 +56,7 @@ abstract class AbstractRoleControllerTestCase extends AbstractRoleTestCase
 
         if ($checkExists) {
             if (!class_exists($controllerClass)) {
-                throw new Exception('Unable to find controller class from ' . $testControllerClass . ', tried ' . $controllerClass);
+                throw new Exception('Unable to find controller class from '.$testControllerClass.', tried '.$controllerClass);
             }
         }
 

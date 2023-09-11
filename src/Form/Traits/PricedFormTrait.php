@@ -54,13 +54,19 @@ trait PricedFormTrait
         );
     }
 
-    protected function builderAddPriceTransformer($builder, string $childName)
-    {
+    protected function builderAddPriceTransformer(
+        $builder,
+        string $childName
+    ) {
         $builder
             ->get($childName)
             ->addModelTransformer(new CallbackTransformer(
-                fn($price): float => (float) $price / 100,
-                fn(float $price): int => (int) round($price * 100)
+                fn(
+                    $price
+                ): float => (float) $price / 100,
+                fn(
+                    float $price
+                ): int => (int) round($price * 100)
             ));
     }
 

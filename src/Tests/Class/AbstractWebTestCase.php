@@ -15,7 +15,10 @@ abstract class AbstractWebTestCase extends WebTestCase
     /**
      * Generates an url from route.
      */
-    abstract public function url($route, array $args = []): string;
+    abstract public function url(
+        $route,
+        array $args = []
+    ): string;
 
     protected function setUp(): void
     {

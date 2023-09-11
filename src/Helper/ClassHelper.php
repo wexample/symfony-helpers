@@ -4,6 +4,20 @@ namespace Wexample\SymfonyHelpers\Helper;
 
 use Doctrine\Common\Util\ClassUtils;
 use Exception;
+use ReflectionAttribute;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
+use function array_map;
+use function array_slice;
+use function count;
+use function explode;
+use function implode;
+use function is_string;
+use function lcfirst;
+use function str_replace;
+use function strlen;
+use function substr;
 
 class ClassHelper
 {
@@ -82,7 +96,7 @@ class ClassHelper
 
     public static function getKebabName($className): string
     {
-        return \str_replace(
+        return str_replace(
             '_',
             '-',
             static::getTableizedName($className)
@@ -100,7 +114,7 @@ class ClassHelper
 
         if (class_exists($className)) {
             try {
-                $reflexion = new \ReflectionClass($className);
+                $reflexion = new ReflectionClass($className);
 
                 return $reflexion->getShortName();
             } catch (Exception) {
@@ -122,7 +136,7 @@ class ClassHelper
 
     public static function getClassPath(object|string $entity): string
     {
-        $classPath = \is_string($entity) ? $entity : $entity::class;
+        $classPath = is_string($entity) ? $entity : $entity::class;
 
         if (str_contains($classPath, self::METHOD_SEPARATOR)) {
             return TextHelper::getFirstChunk(
@@ -143,16 +157,16 @@ class ClassHelper
     ): string {
         $parts = static::getPathParts(
             $className,
-            \count(\explode('\\', $classBasePath)) - 1
+            count(explode('\\', $classBasePath)) - 1
         );
 
-        $classBase = \implode('\\', $parts);
+        $classBase = implode('\\', $parts);
 
         // Remove suffix if exists.
-        $classBase = $classSuffix ? \substr(
+        $classBase = $classSuffix ? substr(
             $classBase,
             0,
-            -\strlen($classSuffix)
+            -strlen($classSuffix)
         ) : $classBase;
 
         return $cousinBasePath.$classBase.$cousinSuffix;
@@ -162,8 +176,8 @@ class ClassHelper
         object|string $type,
         $offset = 2
     ): array {
-        return \array_slice(
-            \explode(
+        return array_slice(
+            explode(
                 '\\',
                 self::getRealClassPath($type)
             ),
@@ -177,7 +191,7 @@ class ClassHelper
      */
     public static function getFieldName(string $className): string
     {
-        return \lcfirst(static::getShortName($className));
+        return lcfirst(static::getShortName($className));
     }
 
     public static function applyPropertiesSetters(
@@ -214,10 +228,10 @@ class ClassHelper
 
     public static function longTableizedNameToClass(string $name): string
     {
-        $exp = \explode('-', $name);
-        $exp = \array_map(TextHelper::class.'::toClass', $exp);
+        $exp = explode('-', $name);
+        $exp = array_map(TextHelper::class.'::toClass', $exp);
 
-        return \implode('\\', $exp);
+        return implode('\\', $exp);
     }
 
     public static function longTableized(
@@ -225,9 +239,9 @@ class ClassHelper
         string $separator = '-'
     ): string {
         $parts = ClassHelper::getPathParts($name);
-        $parts = \array_map(TextHelper::class.'::toSnake', $parts);
+        $parts = array_map(TextHelper::class.'::toSnake', $parts);
 
-        return \implode(
+        return implode(
             $separator,
             $parts
         );
@@ -235,10 +249,10 @@ class ClassHelper
 
     public static function longTableizedToPath(string $name): string
     {
-        $exp = \explode('-', $name);
-        $exp = \array_map(TextHelper::class.'::stringToKebab', $exp);
+        $exp = explode('-', $name);
+        $exp = array_map(TextHelper::class.'::stringToKebab', $exp);
 
-        return \implode('/', $exp);
+        return implode('/', $exp);
     }
 
     public static function fullEntityClassPathFromEntityPath(
@@ -258,43 +272,43 @@ class ClassHelper
         string $className,
         string $folder = null
     ): string {
-        $parts = \explode(self::NAMESPACE_SEPARATOR, $className);
+        $parts = explode(self::NAMESPACE_SEPARATOR, $className);
 
-        $parts = \array_slice(
+        $parts = array_slice(
             $parts,
-            \count(
+            count(
                 ClassHelper::splitNamespace(
                     self::getAutoloadNamespace($className)
                 )
             ) - 1
         );
 
-        return ($folder ?: self::getAutoloadFolder($className)).\implode(
-            FileHelper::FOLDER_SEPARATOR,
-            $parts
-        ).FileHelper::EXTENSION_SEPARATOR.FileHelper::FILE_EXTENSION_PHP;
+        return ($folder ?: self::getAutoloadFolder($className)).implode(
+                FileHelper::FOLDER_SEPARATOR,
+                $parts
+            ).FileHelper::EXTENSION_SEPARATOR.FileHelper::FILE_EXTENSION_PHP;
     }
 
     public static function splitNamespace(string $classPath): array
     {
-        return \explode(ClassHelper::NAMESPACE_SEPARATOR, $classPath);
+        return explode(ClassHelper::NAMESPACE_SEPARATOR, $classPath);
     }
 
     public static function getAutoloadNamespace(string $classPath): string
     {
-        $parts = \explode(self::NAMESPACE_SEPARATOR, $classPath);
+        $parts = explode(self::NAMESPACE_SEPARATOR, $classPath);
         $candidate = [];
 
         foreach (ClassHelper::AUTOLOAD_DIRS as $namespace => $dir) {
-            $namespaceParts = \explode(self::NAMESPACE_SEPARATOR, $namespace);
+            $namespaceParts = explode(self::NAMESPACE_SEPARATOR, $namespace);
             $intersect = array_intersect($namespaceParts, $parts);
 
-            if (\count($intersect) > \count($candidate)) {
+            if (count($intersect) > count($candidate)) {
                 $candidate = $intersect;
             }
         }
 
-        return \implode(self::NAMESPACE_SEPARATOR, $candidate)
+        return implode(self::NAMESPACE_SEPARATOR, $candidate)
             .self::NAMESPACE_SEPARATOR;
     }
 
@@ -309,14 +323,14 @@ class ClassHelper
         string $realPath,
         string $projectDir,
     ): string {
-        $className = \substr(
+        $className = substr(
             $realPath,
-            \strlen($projectDir.self::DIR_SRC),
-            -\strlen('.'.pathinfo($realPath)['extension'])
+            strlen($projectDir.self::DIR_SRC),
+            -strlen('.'.pathinfo($realPath)['extension'])
         );
 
         return 'App'
-            .\str_replace(
+            .str_replace(
                 '/',
                 self::NAMESPACE_SEPARATOR,
                 $className
@@ -347,7 +361,7 @@ class ClassHelper
         bool $endSeparator = false,
     ): string {
         return ($startSeparator ? ClassHelper::NAMESPACE_SEPARATOR : '')
-            .\implode(
+            .implode(
                 ClassHelper::NAMESPACE_SEPARATOR,
                 $parts
             ).($endSeparator ? ClassHelper::NAMESPACE_SEPARATOR : '');
@@ -361,7 +375,7 @@ class ClassHelper
     }
 
     /**
-     * @throws \ReflectionException[]
+     * @throws ReflectionException[]
      */
     public static function getAllMethodsWithChildrenAttribute(
         string $class,
@@ -370,7 +384,7 @@ class ClassHelper
         $methods = [];
 
         try {
-            $reflexion = new \ReflectionClass($class);
+            $reflexion = new ReflectionClass($class);
         } catch (Exception) {
             return [];
         }
@@ -388,21 +402,21 @@ class ClassHelper
     }
 
     /**
-     * @return \ReflectionAttribute[]
+     * @return ReflectionAttribute[]
      */
     public static function getChildrenAttributes(
-        \ReflectionMethod|\ReflectionClass|string $subjectPath,
+        ReflectionMethod|ReflectionClass|string $subjectPath,
         string $attributeClass
     ): array {
-        if (\is_string($subjectPath)) {
+        if (is_string($subjectPath)) {
             if (str_contains($subjectPath, ClassHelper::METHOD_SEPARATOR)) {
                 try {
-                    $reflexion = new \ReflectionMethod($subjectPath);
+                    $reflexion = new ReflectionMethod($subjectPath);
                 } catch (Exception) {
                     return [];
                 }
             } elseif (class_exists($subjectPath)) {
-                $reflexion = new \ReflectionClass($subjectPath);
+                $reflexion = new ReflectionClass($subjectPath);
             } else {
                 return [];
             }
@@ -423,7 +437,7 @@ class ClassHelper
             return $output;
         }
 
-        return $reflexion->getAttributes($attributeClass, \ReflectionAttribute::IS_INSTANCEOF);
+        return $reflexion->getAttributes($attributeClass, ReflectionAttribute::IS_INSTANCEOF);
     }
 
     public static function classUsesTrait(
@@ -474,7 +488,7 @@ class ClassHelper
         string $classPathPrefix = '',
         string $classPathSuffix = ''
     ): string {
-        $pathParts = \explode(
+        $pathParts = explode(
             FileHelper::FOLDER_SEPARATOR,
             rtrim(
                 $path,
@@ -486,10 +500,10 @@ class ClassHelper
             $pathParts[$key] = TextHelper::toClass($part);
         }
 
-        return $classPathPrefix.\implode(
-            ClassHelper::NAMESPACE_SEPARATOR,
-            $pathParts
-        )
+        return $classPathPrefix.implode(
+                ClassHelper::NAMESPACE_SEPARATOR,
+                $pathParts
+            )
             .$classPathSuffix;
     }
 

@@ -2,6 +2,12 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use DateInterval;
+use DatePeriod;
+use DateTime;
+use DateTimeInterface;
+use IntlDateFormatter;
+
 class DateHelper
 {
     final public const DATE_PATTERN_PART_YEAR_FULL = 'Y';
@@ -42,51 +48,51 @@ class DateHelper
         self::DATE_PATTERN_PART_YEAR_FULL,
     ];
 
-    public static function generateFromTimestamp(int $timestamp): \DateTimeInterface
+    public static function generateFromTimestamp(int $timestamp): DateTimeInterface
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $date->setTimestamp($timestamp);
 
         return $date;
     }
 
-    public static function buildFromYear(int $year): \DateTimeInterface
+    public static function buildFromYear(int $year): DateTimeInterface
     {
-        return \DateTime::createFromFormat(
+        return DateTime::createFromFormat(
             self::DATE_PATTERN_PART_YEAR_FULL,
             $year
         );
     }
 
-    public static function buildFromTimestamp(int $timestamp): \DateTimeInterface
+    public static function buildFromTimestamp(int $timestamp): DateTimeInterface
     {
-        return \DateTime::createFromFormat('U', $timestamp);
+        return DateTime::createFromFormat('U', $timestamp);
     }
 
     public static function forEachMonthInYear(
-        \DateTimeInterface $dateYear,
+        DateTimeInterface $dateYear,
         callable $callback
     ): void {
-        $interval = new \DateInterval('P1M');
+        $interval = new DateInterval('P1M');
         $dateStart = (clone $dateYear)->modify(
             'first day of january this year'
         );
         $dateEnd = (clone $dateYear)->modify('last day of december this year');
-        $period = new \DatePeriod($dateStart, $interval, $dateEnd);
+        $period = new DatePeriod($dateStart, $interval, $dateEnd);
 
         foreach ($period as $dateMonth) {
             $callback($dateMonth);
         }
     }
 
-    public static function getMonthKey(\DateTimeInterface $dateTime): string
+    public static function getMonthKey(DateTimeInterface $dateTime): string
     {
         return $dateTime->format('Y-m');
     }
 
     public static function isInMonth(
-        \DateTimeInterface $dateSearch,
-        \DateTimeInterface $dateMonth
+        DateTimeInterface $dateSearch,
+        DateTimeInterface $dateMonth
     ): bool {
         $dateStart = DateHelper::startOfMonth($dateMonth);
         $dateEnd = DateHelper::endOfMonth($dateMonth);
@@ -95,50 +101,50 @@ class DateHelper
     }
 
     public static function startOfMonth(
-        \DateTimeInterface $date
-    ): \DateTimeInterface {
+        DateTimeInterface $date
+    ): DateTimeInterface {
         $date = static::startOfDay($date);
 
         return $date->modify('first day of this month');
     }
 
     public static function startOfDay(
-        \DateTimeInterface $date
-    ): \DateTimeInterface {
+        DateTimeInterface $date
+    ): DateTimeInterface {
         return (clone $date)->setTime(0, 0);
     }
 
     public static function endOfMonth(
-        \DateTimeInterface $date
-    ): \DateTimeInterface {
+        DateTimeInterface $date
+    ): DateTimeInterface {
         $date = static::endOfDay($date);
 
         return $date->modify('last day of this month');
     }
 
     public static function endOfDay(
-        \DateTimeInterface $date
-    ): \DateTimeInterface {
+        DateTimeInterface $date
+    ): DateTimeInterface {
         return (clone $date)->setTime(23, 59, 59);
     }
 
-    public static function endOfYear(\DateTimeInterface $date): \DateTimeInterface
+    public static function endOfYear(DateTimeInterface $date): DateTimeInterface
     {
         return self::endOfMonth((clone $date)->modify('last day of december'));
     }
 
     public static function interfaceToDateTime(
-        \DateTimeInterface $interface
-    ): \DateTimeInterface {
-        $dateTime = new \DateTime();
+        DateTimeInterface $interface
+    ): DateTimeInterface {
+        $dateTime = new DateTime();
 
         return $dateTime->setTimestamp($interface->getTimestamp());
     }
 
     public static function dayOfMonth(
-        \DateTimeInterface $dateTime,
+        DateTimeInterface $dateTime,
         int $dayOfMonth
-    ): \DateTimeInterface {
+    ): DateTimeInterface {
         return (clone $dateTime)
             ->setDate(
                 $dateTime->format(
@@ -151,38 +157,38 @@ class DateHelper
             );
     }
 
-    public static function getDayInt(\DateTimeInterface $dateTime): int
+    public static function getDayInt(DateTimeInterface $dateTime): int
     {
         return (int) $dateTime->format('j');
     }
 
     public static function translateDate(
-        \DateTimeInterface $dateTime,
+        DateTimeInterface $dateTime,
         string $format
     ): string {
-        return \IntlDateFormatter::formatObject(
+        return IntlDateFormatter::formatObject(
             $dateTime,
             $format
         );
     }
 
-    public static function getNextYearDateTime(): \DateTimeInterface
+    public static function getNextYearDateTime(): DateTimeInterface
     {
         // First january of next year.
-        $dateAccounting = new \DateTime();
+        $dateAccounting = new DateTime();
         $dateAccounting->modify('+1 year');
 
         return DateHelper::startOfYear($dateAccounting);
     }
 
-    public static function startOfYear(\DateTimeInterface $date): \DateTimeInterface
+    public static function startOfYear(DateTimeInterface $date): DateTimeInterface
     {
         return self::startOfMonth((clone $date)->modify('first day of january'));
     }
 
-    public static function getCurrentYearDate(): \DateTimeInterface
+    public static function getCurrentYearDate(): DateTimeInterface
     {
-        return \DateTime::createFromFormat(
+        return DateTime::createFromFormat(
             DateHelper::DATE_PATTERN_DAY_DEFAULT,
             DateHelper::getCurrentYearInt().'-01-01'
         );
@@ -190,19 +196,19 @@ class DateHelper
 
     public static function getCurrentYearInt(): int
     {
-        return (int) (new \DateTime())->format(DateHelper::DATE_PATTERN_PART_YEAR_FULL);
+        return (int) (new DateTime())->format(DateHelper::DATE_PATTERN_PART_YEAR_FULL);
     }
 
-    public static function now(): \DateTimeInterface
+    public static function now(): DateTimeInterface
     {
-        return new \DateTime();
+        return new DateTime();
     }
 
-    public static function buildFromQueryStringDate(?string $value): ?\DateTimeInterface
+    public static function buildFromQueryStringDate(?string $value): ?DateTimeInterface
     {
         if ($value) {
             foreach (self::QUERY_STRING_DATE_FORMATS as $format) {
-                $dateTime = \DateTime::createFromFormat($format, $value);
+                $dateTime = DateTime::createFromFormat($format, $value);
                 if (false !== $dateTime
                     && $dateTime->format($format) == $value) {
                     // Check if day is missing

@@ -5,7 +5,6 @@ namespace Wexample\SymfonyHelpers\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Wexample\SymfonyHelpers\Form\AbstractForm;
 use Wexample\SymfonyHelpers\Form\Traits\StringTypeTrait;
 
 class TextType extends \Symfony\Component\Form\Extension\Core\Type\TextType

@@ -35,7 +35,7 @@ trait ControllerTestCaseTrait
         string $routeName,
         array $routeParameters = [],
         array $payload = []
-    ):void {
+    ): void {
         $this->postToRouteAndCheckNotAllowed(
             $this->buildControllerRoute(
                 $routeName

@@ -20,14 +20,14 @@ abstract class AbstractCommand extends Command
     public static function buildDefaultName(): string
     {
         return TextHelper::toKebab(
-            TextHelper::removePrefix(
-                TextHelper::removeSuffix(
-                    ClassHelper::getShortName(static::getBundleClassName()),
-                    'Bundle'
-                ),
-                'WexampleSymfony'
+                TextHelper::removePrefix(
+                    TextHelper::removeSuffix(
+                        ClassHelper::getShortName(static::getBundleClassName()),
+                        'Bundle'
+                    ),
+                    'WexampleSymfony'
+                )
             )
-        )
             .':'
             .TextHelper::toKebab(
                 TextHelper::removeSuffix(

@@ -138,9 +138,9 @@ trait ConsoleLoggerTrait
         }
 
         return str_repeat(
-            '  ',
-            is_null($indent) ? $this->logIndentCursor : $indent
-        ).
+                '  ',
+                is_null($indent) ? $this->logIndentCursor : $indent
+            ).
             ($color ? TextHelper::asciiColorWrap($message, $color) : $message);
     }
 }

@@ -5,7 +5,6 @@ namespace Wexample\SymfonyHelpers\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Wexample\SymfonyHelpers\Form\AbstractForm;
 use Wexample\SymfonyHelpers\Form\Traits\MaterializeFieldTypeTrait;
 
 class CheckboxType extends \Symfony\Component\Form\Extension\Core\Type\CheckboxType
@@ -24,8 +23,11 @@ class CheckboxType extends \Symfony\Component\Form\Extension\Core\Type\CheckboxT
         parent::configureOptions($resolver);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
+    public function buildView(
+        FormView $view,
+        FormInterface $form,
+        array $options
+    ) {
         $classes = [];
         if ($options[AbstractForm::FIELD_OPTION_NAME_FILLED]) {
             $classes[] = 'filled-in';

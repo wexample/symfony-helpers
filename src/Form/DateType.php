@@ -6,7 +6,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Wexample\SymfonyHelpers\Form\AbstractForm;
 use Wexample\SymfonyHelpers\Form\Traits\MaterializeFieldTypeTrait;
 
 class DateType extends \Symfony\Component\Form\Extension\Core\Type\DateType
@@ -26,17 +25,26 @@ class DateType extends \Symfony\Component\Form\Extension\Core\Type\DateType
 
         $resolver->setDefault(
             'format',
-            fn(Options $options, $value) => ($options[AbstractForm::FIELD_OPTION_NAME_DATE_PICKER]) ? self::HTML5_FORMAT : $value
+            fn(
+                Options $options,
+                $value
+            ) => ($options[AbstractForm::FIELD_OPTION_NAME_DATE_PICKER]) ? self::HTML5_FORMAT : $value
         );
 
         $resolver->setDefault(
             'widget',
-            fn(Options $options, $value) => ($options[AbstractForm::FIELD_OPTION_NAME_DATE_PICKER]) ? 'single_text' : $value
+            fn(
+                Options $options,
+                $value
+            ) => ($options[AbstractForm::FIELD_OPTION_NAME_DATE_PICKER]) ? 'single_text' : $value
         );
 
         $resolver->setDefault(
             'html5',
-            fn(Options $options, $value) => ($options[AbstractForm::FIELD_OPTION_NAME_DATE_PICKER] && 'html5' === $options[AbstractForm::FIELD_OPTION_NAME_DATE_PICKER]) ? true : $value
+            fn(
+                Options $options,
+                $value
+            ) => ($options[AbstractForm::FIELD_OPTION_NAME_DATE_PICKER] && 'html5' === $options[AbstractForm::FIELD_OPTION_NAME_DATE_PICKER]) ? true : $value
         );
     }
 

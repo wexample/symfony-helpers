@@ -9,7 +9,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Validator\Constraints\Length;
 use Wexample\SymfonyHelpers\Form\AbstractForm;
-use Wexample\SymfonyHelpers\Form\Traits\MaterializeFieldTypeTrait;
 use function is_object;
 
 trait StringTypeTrait
@@ -20,8 +19,10 @@ trait StringTypeTrait
      * Add attribute "maxlength" on field, regarding "Length" annotation on
      * entity field.
      */
-    protected function stringRestrictLength(FormView $view, FormInterface $form)
-    {
+    protected function stringRestrictLength(
+        FormView $view,
+        FormInterface $form
+    ) {
         if (!isset($view->vars[AbstractForm::FIELD_OPTION_NAME_ATTR]['maxlength'])) {
             $entity = $form->getRoot()->getData();
 

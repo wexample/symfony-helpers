@@ -17,8 +17,10 @@ class Login extends AbstractForm
 
     public static bool $ajax = true;
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(
+        FormBuilderInterface $builder,
+        array $options
+    ) {
         $builder
             ->add(
                 'username',

@@ -3,7 +3,6 @@
 namespace Wexample\SymfonyHelpers\Form;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Wexample\SymfonyHelpers\Form\AbstractForm;
 
 class EntityForm extends AbstractForm
 {

@@ -38,7 +38,10 @@ class RoleSyntaxService
             foreach ($controllerDirs as $subDir) {
                 FileHelper::forEachValidFile(
                     $this->controllerSyntaxService->buildControllerPath($subDir),
-                    function (string $classFilePath) use (
+                    function(
+                        string $classFilePath
+                    ) use
+                    (
                         $roleClass,
                         $subDir
                     ) {

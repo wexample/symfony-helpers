@@ -20,8 +20,11 @@ class FloatType extends AbstractType
         parent::configureOptions($resolver);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
+    public function buildView(
+        FormView $view,
+        FormInterface $form,
+        array $options
+    ) {
         $view->vars['value'] = $view->vars['data'];
 
         $this->materializeBuildView($view, $form, $options);

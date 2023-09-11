@@ -15,8 +15,10 @@ class RegistrationFormType extends \FOS\UserBundle\Form\Type\RegistrationFormTyp
 {
     use SecurityFormTrait;
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(
+        FormBuilderInterface $builder,
+        array $options
+    ) {
         $this->builderAddPasswordAndConfirmation($builder);
     }
 }

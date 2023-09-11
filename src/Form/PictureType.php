@@ -6,7 +6,6 @@ use App\Wex\BaseBundle\Helper\VariableHelper;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Wexample\SymfonyHelpers\Form\FileType;
 
 class PictureType extends FileType
 {

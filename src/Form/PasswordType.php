@@ -22,8 +22,11 @@ class PasswordType extends \Symfony\Component\Form\Extension\Core\Type\PasswordT
         parent::configureOptions($resolver);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
+    public function buildView(
+        FormView $view,
+        FormInterface $form,
+        array $options
+    ) {
         $view->vars[AbstractForm::FIELD_OPTION_NAME_SHOW_BUTTON] = isset($options[AbstractForm::FIELD_OPTION_NAME_SHOW_BUTTON]);
         $this->materializeBuildView($view, $form, $options);
         parent::buildView($view, $form, $options);

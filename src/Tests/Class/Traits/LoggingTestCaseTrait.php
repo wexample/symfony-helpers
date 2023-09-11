@@ -2,10 +2,18 @@
 
 namespace Wexample\SymfonyHelpers\Tests\Class\Traits;
 
+use DateTime;
 use Symfony\Component\DomCrawler\Crawler;
 use Wexample\SymfonyHelpers\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Traits\ConsoleLoggerTrait;
+use function file_put_contents;
+use function fwrite;
+use function is_dir;
+use function is_file;
+use function mkdir;
+use function print_r;
+use function unlink;
 
 /**
  * Trait LoggingTestCase
@@ -20,7 +28,7 @@ trait LoggingTestCaseTrait
         string $color = TextHelper::ASCII_COLOR_WHITE,
         int $indent = null
     ): void {
-        \fwrite(
+        fwrite(
             STDERR,
             PHP_EOL.$this->formatLogMessage(
                 $message,
@@ -44,15 +52,17 @@ trait LoggingTestCaseTrait
     public function logArray($array): void
     {
         $this->log(
-            \print_r(
+            print_r(
                 $array,
                 true
             )
         );
     }
 
-    public function error(string $message, bool $fatal = true): void
-    {
+    public function error(
+        string $message,
+        bool $fatal = true
+    ): void {
         $this->log(
             $message,
             31
@@ -71,18 +81,18 @@ trait LoggingTestCaseTrait
 
         $logFile = $tmpDir.$fileName;
 
-        if (\is_file($logFile)) {
-            \unlink($logFile);
+        if (is_file($logFile)) {
+            unlink($logFile);
         }
 
         $output = $body ?: $this->content()
-                // Error pages contains svg which breaks readability.
-                .'<style> svg { display:none; } </style>';
+            // Error pages contains svg which breaks readability.
+            .'<style> svg { display:none; } </style>';
 
-        \file_put_contents(
+        file_put_contents(
             $logFile,
             'At '
-            .(new \DateTime())->format(DateHelper::DATE_PATTERN_TIME_DEFAULT)
+            .(new DateTime())->format(DateHelper::DATE_PATTERN_TIME_DEFAULT)
             .'<br><br>'
             .$output
         );
@@ -108,8 +118,8 @@ trait LoggingTestCaseTrait
     {
         $tmpDir = $this->getStorageDir('tmp');
 
-        if (!\is_dir($tmpDir)) {
-            \mkdir($tmpDir, 0777, true);
+        if (!is_dir($tmpDir)) {
+            mkdir($tmpDir, 0777, true);
         }
 
         return $tmpDir;

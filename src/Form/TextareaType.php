@@ -5,7 +5,6 @@ namespace Wexample\SymfonyHelpers\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Wexample\SymfonyHelpers\Form\AbstractForm;
 use Wexample\SymfonyHelpers\Form\Traits\MaterializeFieldTypeTrait;
 
 class TextareaType extends \Symfony\Component\Form\Extension\Core\Type\TextareaType
@@ -25,8 +24,11 @@ class TextareaType extends \Symfony\Component\Form\Extension\Core\Type\TextareaT
         parent::configureOptions($resolver);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
+    public function buildView(
+        FormView $view,
+        FormInterface $form,
+        array $options
+    ) {
         $classes = [];
 
         if ($options[AbstractForm::FIELD_OPTION_NAME_CHARACTER_COUNTER]) {

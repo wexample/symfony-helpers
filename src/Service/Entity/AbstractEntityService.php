@@ -2,17 +2,19 @@
 
 namespace Wexample\SymfonyHelpers\Service\Entity;
 
+use Exception;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Repository\AbstractRepository;
 use Wexample\SymfonyHelpers\Traits\EntityManipulatorTrait;
+use function call_user_func_array;
 
 abstract class AbstractEntityService extends EntityNeutralService
 {
     use EntityManipulatorTrait;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __call(
         $method,
@@ -29,9 +31,9 @@ abstract class AbstractEntityService extends EntityNeutralService
                 $fillMethodName = 'fill'.$className;
 
                 if (method_exists($this, $fillMethodName) && is_callable([$this, $fillMethodName])) {
-                    return \call_user_func_array([$this, $fillMethodName], $arguments);
+                    return call_user_func_array([$this, $fillMethodName], $arguments);
                 } else {
-                    throw new \Exception('Unable to find method '.$fillMethodName.'() on '.$this::class);
+                    throw new Exception('Unable to find method '.$fillMethodName.'() on '.$this::class);
                 }
             }
         }

@@ -2,6 +2,11 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use function is_dir;
+
 class FileHelper
 {
     /**
@@ -88,12 +93,12 @@ class FileHelper
             return;
         }
 
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
                 $path,
-                \FilesystemIterator::SKIP_DOTS
+                FilesystemIterator::SKIP_DOTS
             ),
-            \RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ($files as $info) {
@@ -118,19 +123,23 @@ class FileHelper
         return substr($path, 0, -strlen($extension));
     }
 
-    public static function fileWrite(string $fileName, string $content): void
-    {
+    public static function fileWrite(
+        string $fileName,
+        string $content
+    ): void {
         $dir = dirname($fileName);
 
-        if (!\is_dir($dir)) {
+        if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
 
         file_put_contents($fileName, $content);
     }
 
-    public static function fileWriteAndHash(string $fileName, string $content): string
-    {
+    public static function fileWriteAndHash(
+        string $fileName,
+        string $content
+    ): string {
         self::fileWrite($fileName, $content);
 
         return md5($content);
@@ -140,7 +149,7 @@ class FileHelper
     {
         return '' === $path
             || '/' === $path
-            || !\is_dir($path);
+            || !is_dir($path);
     }
 
     public static function forEachValidFile(
@@ -153,7 +162,7 @@ class FileHelper
 
         foreach ($items as $item) {
             if ('.' !== $item[0]) {
-                if (\is_dir($dir.$item)) {
+                if (is_dir($dir.$item)) {
                     static::forEachValidFile(
                         $dir.$item.FileHelper::FOLDER_SEPARATOR,
                         $callback

@@ -28,15 +28,19 @@ class HtmlType extends TextareaType
 
     public function buildForm(
         FormBuilderInterface $builder,
-        array $options)
-    {
+        array $options
+    ) {
         parent::buildForm($builder, $options);
 
         $builder
             ->addModelTransformer(
                 new CallbackTransformer(
-                    fn(?string $text) => $text,
-                    function (?string $text) {
+                    fn(
+                        ?string $text
+                    ) => $text,
+                    function(
+                        ?string $text
+                    ) {
                         // Prevent hacky html.
                         $config = HTMLPurifier_Config::createDefault();
                         $purifier = new HTMLPurifier($config);

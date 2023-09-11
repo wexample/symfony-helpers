@@ -13,11 +13,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Wexample\SymfonyHelpers\Form\ChoiceType;
-use Wexample\SymfonyHelpers\Form\EntitySearchType;
-use Wexample\SymfonyHelpers\Form\SubmitType;
-use Wexample\SymfonyHelpers\Form\TextType;
-use Wexample\SymfonyHelpers\Form\UrlType;
 use Wexample\SymfonyHelpers\Helper\IconMaterialHelper;
 
 class AbstractForm extends AbstractType
@@ -99,8 +94,10 @@ class AbstractForm extends AbstractType
         );
     }
 
-    public static function transForm(string $key, FormInterface $form): string
-    {
+    public static function transForm(
+        string $key,
+        FormInterface $form
+    ): string {
         return self::transFormDomain($form)
             .Translator::DOMAIN_SEPARATOR
             .$key;

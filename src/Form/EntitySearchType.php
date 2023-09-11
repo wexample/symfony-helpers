@@ -129,8 +129,8 @@ class EntitySearchType extends TextType
 
     public function buildForm(
         FormBuilderInterface $builder,
-        array $options)
-    {
+        array $options
+    ) {
         $repos = [];
         $classesTypes = is_array($options[DomHelper::ATTRIBUTE_CLASS])
             ? $options[DomHelper::ATTRIBUTE_CLASS]
@@ -146,7 +146,8 @@ class EntitySearchType extends TextType
         $builder
             ->addModelTransformer(
                 new CallbackTransformer(
-                    function () use (
+                    function() use
+                    (
                         $options
                     ): ?string {
                         $value = [];
@@ -169,7 +170,10 @@ class EntitySearchType extends TextType
                         // transform the array to a string
                         return empty($value) ? null : implode(',', $value);
                     },
-                    function ($tagsAsString) use (
+                    function(
+                        $tagsAsString
+                    ) use
+                    (
                         $options,
                         $repos
                     ) {
@@ -199,8 +203,7 @@ class EntitySearchType extends TextType
                                         unset($previousEntitiesRegistry[$id]);
                                     }
                                 }
-                            }
-                            // Keep value if not valid, may be used later.
+                            } // Keep value if not valid, may be used later.
                             else {
                                 $entities[] = $value;
                             }

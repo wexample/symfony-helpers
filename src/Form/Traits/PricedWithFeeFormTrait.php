@@ -7,7 +7,6 @@ use App\Service\AccountingService;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Wexample\SymfonyHelpers\Form\FloatType;
-use Wexample\SymfonyHelpers\Form\Traits\PricedFormTrait;
 use Wexample\SymfonyHelpers\Helper\IconMaterialHelper;
 
 trait PricedWithFeeFormTrait
