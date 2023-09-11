@@ -7,6 +7,8 @@ use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
+    public const PATH_TYPE_SHOW = VariableHelper::SHOW;
+
     public const ROUTE_OPTION_KEY_EXPOSE = 'expose';
     public const ROUTE_OPTIONS_ONLY_EXPOSE = [self::ROUTE_OPTION_KEY_EXPOSE => true];
 

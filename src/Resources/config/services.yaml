@@ -8,3 +8,18 @@ services:
     Wexample\SymfonyHelpers\Service\:
         resource: '../../Service/*'
         tags: ['controller.service_arguments']
+
+    Wexample\SymfonyHelpers\Form\EntityType:
+        class: Wexample\SymfonyHelpers\Form\EntityType
+        arguments: ["@doctrine"]
+        tags:
+            - { name: form.type }
+
+    Wexample\SymfonyHelpers\Form\EntitySearchType:
+        class: Wexample\SymfonyHelpers\Form\EntitySearchType
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+            $assetsExtension: '@App\Wex\BaseBundle\Twig\AssetsExtension'
+            $transExtension: '@App\Wex\BaseBundle\Twig\TranslationExtension'
+        tags:
+            - { name: form.type }

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class EntityNeutralService.
+ *
  * Helper to manage operations on entities.
  * Allowed to be used with no entity type.
  */
