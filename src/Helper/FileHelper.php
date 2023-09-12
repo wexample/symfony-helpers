@@ -44,6 +44,8 @@ class FileHelper
 
     final public const FILE_EXTENSION_TXT = 'txt';
 
+    final public const FILE_EXTENSION_XLSX = 'xlsx';
+
     final public const SUFFIX_AGGREGATED = 'agg';
 
 
@@ -226,22 +228,5 @@ class FileHelper
         } else {
             return null;
         }
-    }
-
-    public static function getContentUtf8(string $filePath): string
-    {
-        $content = file_get_contents($filePath);
-        $originalEncoding = mb_detect_encoding($content, [
-            self::ENCODING_UTF8,
-            self::ENCODING_ISO_8859_1,
-            self::ENCODING_ISO_8859_15,
-            self::ENCODING_WINDOWS_1252,
-            self::ENCODING_ASCII], true);
-
-        if ($originalEncoding !== self::ENCODING_UTF8) {
-            $content = mb_convert_encoding($content, self::ENCODING_UTF8, $originalEncoding);
-        }
-
-        return $content;
     }
 }
