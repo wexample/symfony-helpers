@@ -65,4 +65,15 @@ abstract class AbstractType extends \Symfony\Component\Form\AbstractType
     public const FIELD_OPTION_NAME_YEARS = 'years';
 
     public const FIELD_OPTION_VALUE_ATTR_PLACEHOLDER = 'placeholder';
+
+    protected function resolveTypeClass(string $className): string
+    {
+        $map = $this->getFormTypeClassesMap();
+        return $map[$className] ?? $className;
+    }
+
+    protected function getFormTypeClassesMap(): array
+    {
+        return [];
+    }
 }
