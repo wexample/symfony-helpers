@@ -17,9 +17,5 @@ services:
 
     Wexample\SymfonyHelpers\Form\EntitySearchType:
         class: Wexample\SymfonyHelpers\Form\EntitySearchType
-        arguments:
-            $em: '@doctrine.orm.entity_manager'
-            $assetsExtension: '@App\Wex\BaseBundle\Twig\AssetsExtension'
-            $transExtension: '@App\Wex\BaseBundle\Twig\TranslationExtension'
         tags:
             - { name: form.type }

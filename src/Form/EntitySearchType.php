@@ -3,7 +3,6 @@
 namespace Wexample\SymfonyHelpers\Form;
 
 use App\Wex\BaseBundle\Api\Dto\Traits\EntityDtoTrait;
-use App\Wex\BaseBundle\Entity\AbstractEntity;
 use App\Wex\BaseBundle\Helper\ClassHelper;
 use App\Wex\BaseBundle\Helper\DomHelper;
 use App\Wex\BaseBundle\Helper\EntityHelper;
@@ -11,8 +10,6 @@ use App\Wex\BaseBundle\Helper\TextHelper;
 use App\Wex\BaseBundle\Helper\VariableHelper;
 use App\Wex\BaseBundle\Repository\AbstractRepository;
 use App\Wex\BaseBundle\Service\Search;
-use App\Wex\BaseBundle\Twig\AssetsExtension;
-use App\Wex\BaseBundle\Twig\TranslationExtension;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,6 +18,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Wexample\SymfonyDesignSystem\Twig\AssetsExtension;
+use Wexample\SymfonyHelpers\Entity\AbstractEntity;
+use Wexample\SymfonyTranslations\Twig\TranslationExtension;
 use function count;
 use function current;
 use function explode;
