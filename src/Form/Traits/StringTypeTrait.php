@@ -8,13 +8,11 @@ use ReflectionException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Validator\Constraints\Length;
-use Wexample\SymfonyHelpers\Form\AbstractForm;
+use Wexample\SymfonyHelpers\Form\AbstractType;
 use function is_object;
 
 trait StringTypeTrait
 {
-    use MaterializeFieldTypeTrait;
-
     /**
      * Add attribute "maxlength" on field, regarding "Length" annotation on
      * entity field.
@@ -23,7 +21,7 @@ trait StringTypeTrait
         FormView $view,
         FormInterface $form
     ) {
-        if (!isset($view->vars[AbstractForm::FIELD_OPTION_NAME_ATTR]['maxlength'])) {
+        if (!isset($view->vars[AbstractType::FIELD_OPTION_NAME_ATTR]['maxlength'])) {
             $entity = $form->getRoot()->getData();
 
             if (!is_object($entity)) {
@@ -45,7 +43,7 @@ trait StringTypeTrait
 
                     foreach ($annotations as $annotation) {
                         if ($annotation instanceof Length) {
-                            $view->vars[AbstractForm::FIELD_OPTION_NAME_ATTR]['maxlength'] = $annotation->max;
+                            $view->vars[AbstractType::FIELD_OPTION_NAME_ATTR]['maxlength'] = $annotation->max;
                         }
                     }
                 }
