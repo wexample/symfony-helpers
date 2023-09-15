@@ -24,7 +24,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
     ) {
         if (str_starts_with($method, 'hasSome')) {
             return $this->findHasSome(
-            // TODO ?
                 $this->resolveMagicQueryCall(
                     $method,
                     $arguments
@@ -140,6 +139,20 @@ abstract class AbstractRepository extends ServiceEntityRepository
         );
 
         return $builder;
+    }
+
+    public function removeAll(
+        array $entities,
+        bool $flush = true
+    ): void {
+        /** @var AbstractEntity $entry */
+        foreach ($entities as $entry) {
+            $this->remove($entry);
+        }
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
     public function queryField(string $fieldName): string

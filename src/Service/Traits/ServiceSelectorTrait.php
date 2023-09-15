@@ -13,6 +13,10 @@ trait ServiceSelectorTrait
         string $service,
         $group = VariableHelper::DEFAULT
     ): ?object {
+        if (!isset($this->servicesSelections[$group])) {
+            return null;
+        }
+
         $output = $this->servicesSelections[$group][$service] ?? null;
 
         // Support selecting with full class name.
