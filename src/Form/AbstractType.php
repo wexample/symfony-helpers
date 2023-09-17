@@ -2,7 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Form;
 
-use App\Wex\BaseBundle\Helper\DomHelper;
+use Wexample\SymfonyHelpers\Helper\DomHelper;
 
 abstract class AbstractType extends \Symfony\Component\Form\AbstractType
 {
