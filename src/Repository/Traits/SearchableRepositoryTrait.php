@@ -2,8 +2,8 @@
 
 namespace Wexample\SymfonyHelpers\Repository\Traits;
 
-use App\Wex\BaseBundle\Helper\TextHelper;
 use Doctrine\ORM\QueryBuilder;
+use Wexample\SymfonyHelpers\Helper\TextHelper;
 
 trait SearchableRepositoryTrait
 {
