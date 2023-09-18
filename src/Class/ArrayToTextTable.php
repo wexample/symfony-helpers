@@ -25,7 +25,7 @@ class ArrayToTextTable
     protected string $displayKeys;
     protected bool $upperKeys;
     protected string $keysAlignment;
-    protected string $valuesAlignment;
+    protected int $valuesAlignment;
     protected $formatter;
 
     public function __construct(protected array $data = [])
@@ -113,7 +113,7 @@ class ArrayToTextTable
         return $this->keysAlignment;
     }
 
-    public function getValuesAlignment(): string
+    public function getValuesAlignment(): int
     {
         return $this->valuesAlignment;
     }
@@ -170,7 +170,7 @@ class ArrayToTextTable
         return $this;
     }
 
-    public function setValuesAlignment(string $valuesAlignment): static
+    public function setValuesAlignment(int $valuesAlignment): static
     {
         $this->valuesAlignment = $valuesAlignment;
         return $this;
@@ -306,5 +306,4 @@ class ArrayToTextTable
 
         return $before.$input.$after;
     }
-
 }

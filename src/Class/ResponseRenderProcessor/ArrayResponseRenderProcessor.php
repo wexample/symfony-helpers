@@ -4,10 +4,12 @@ namespace Wexample\SymfonyHelpers\Class\ResponseRenderProcessor;
 
 use Wexample\SymfonyHelpers\Class\RenderableResponse;
 
-abstract class AbstractResponseRenderProcessor
+class ArrayResponseRenderProcessor extends AbstractResponseRenderProcessor
 {
-    abstract public function renderResponseData(
+    public function renderResponseData(
         array $data,
         RenderableResponse $response
-    ): array|string;
+    ): array {
+        return $data;
+    }
 }

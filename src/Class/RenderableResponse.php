@@ -4,6 +4,7 @@ namespace Wexample\SymfonyHelpers\Class;
 
 use Exception;
 use Wexample\SymfonyHelpers\Class\ResponseRenderProcessor\AbstractResponseRenderProcessor;
+use Wexample\SymfonyHelpers\Class\ResponseRenderProcessor\ArrayResponseRenderProcessor;
 use Wexample\SymfonyHelpers\Class\ResponseRenderProcessor\CliResponseRenderProcessor;
 use Wexample\SymfonyHelpers\Class\ResponseRenderProcessor\JsonResponseRenderProcessor;
 use Wexample\SymfonyHelpers\Class\ResponseRenderProcessor\YamlResponseRenderProcessor;
@@ -29,6 +30,8 @@ class RenderableResponse
 
     final public const OUTPUT_TYPE_DEFAULT = VariableHelper::DEFAULT;
 
+    final public const OUTPUT_FORMAT_ARRAY = VariableHelper::ARRAY;
+
     final public const OUTPUT_FORMAT_CLI = VariableHelper::CLI;
 
     final public const OUTPUT_FORMAT_JSON = VariableHelper::JSON;
@@ -52,6 +55,7 @@ class RenderableResponse
     protected function getResponseProcessors(): array
     {
         return [
+            self::OUTPUT_FORMAT_ARRAY => ArrayResponseRenderProcessor::class,
             self::OUTPUT_FORMAT_CLI => CliResponseRenderProcessor::class,
             self::OUTPUT_FORMAT_JSON => JsonResponseRenderProcessor::class,
             self::OUTPUT_FORMAT_YAML => YamlResponseRenderProcessor::class,
@@ -61,10 +65,15 @@ class RenderableResponse
     public function mapOutputFormats(): array
     {
         return [
-            self::OUTPUT_TYPE_API => self::OUTPUT_FORMAT_JSON,
+            self::OUTPUT_TYPE_API => self::OUTPUT_FORMAT_ARRAY,
             self::OUTPUT_TYPE_CLI => self::OUTPUT_FORMAT_CLI,
             self::OUTPUT_TYPE_DEFAULT => self::OUTPUT_FORMAT_JSON,
         ];
+    }
+
+    public function getOutputType(): string
+    {
+        return $this->outputType;
     }
 
     /**
@@ -129,7 +138,7 @@ class RenderableResponse
     /**
      * @throws Exception
      */
-    public function render(): string
+    public function render(): array|string
     {
         if (!$format = $this->mapOutputFormats()[$this->outputType] ?? null) {
             throw new Exception('Unable to find output format for type '.$this->outputType);
@@ -147,13 +156,5 @@ class RenderableResponse
             $renderData,
             $this
         );
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function __toString(): string
-    {
-        return $this->render();
     }
 }
