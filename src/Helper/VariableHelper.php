@@ -22,6 +22,7 @@ class VariableHelper
     final public const CONTEXT = 'context';
     final public const CATALOG = 'catalog';
     final public const CATEGORY = 'category';
+    final public const CLI = 'cli';
     final public const CODE = 'code';
     final public const CONFIGURATION = 'configuration';
     final public const COMPONENT = 'component';
