@@ -137,6 +137,7 @@ class VariableHelper
     final public const VARS = 'vars';
     final public const VIEW = 'view';
     final public const VUE = 'vue';
+    final public const YAML = 'yaml';
     final public const YEAR = 'year';
     final public const YEARLY = 'yearly';
 }

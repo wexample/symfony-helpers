@@ -4,18 +4,44 @@ namespace Wexample\SymfonyHelpers\Class;
 
 use Exception;
 use Wexample\SymfonyHelpers\Class\ResponseRenderProcessor\AbstractResponseRenderProcessor;
+use Wexample\SymfonyHelpers\Class\ResponseRenderProcessor\CliResponseRenderProcessor;
 use Wexample\SymfonyHelpers\Class\ResponseRenderProcessor\JsonResponseRenderProcessor;
+use Wexample\SymfonyHelpers\Class\ResponseRenderProcessor\YamlResponseRenderProcessor;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
+/**
+ * Two key concepts for this class :
+ * - Output type : is the destination of the data : cli, api, file, database, etc...
+ * - Output format : the conversion format : json, yaml, etc...
+ *
+ * The user will define the output type, and the format will be detecting regarding it.
+ * The prepareRender() method will let the child class to adjust the data regarding the output type
+ * (e.g. adding some information for the api response).
+ * A ResponseRenderProcess will be used to convert data to chosen format.
+ *
+ * Note that CLI has both output type and output format as it have a special processing behavior.
+ */
 class RenderableResponse
 {
+    final public const OUTPUT_TYPE_API = VariableHelper::API;
+
+    final public const OUTPUT_TYPE_CLI = VariableHelper::CLI;
+
     final public const OUTPUT_TYPE_DEFAULT = VariableHelper::DEFAULT;
+
+    final public const OUTPUT_FORMAT_CLI = VariableHelper::CLI;
 
     final public const OUTPUT_FORMAT_JSON = VariableHelper::JSON;
 
-    protected array $data = [];
-    private string $outputType;
+    final public const OUTPUT_FORMAT_YAML = VariableHelper::YAML;
 
+    protected array $data = [];
+
+    protected string $outputType;
+
+    /**
+     * @throws Exception
+     */
     public function __construct()
     {
         $this->setOutputType(
@@ -23,9 +49,20 @@ class RenderableResponse
         );
     }
 
+    protected function getResponseProcessors(): array
+    {
+        return [
+            self::OUTPUT_FORMAT_CLI => CliResponseRenderProcessor::class,
+            self::OUTPUT_FORMAT_JSON => JsonResponseRenderProcessor::class,
+            self::OUTPUT_FORMAT_YAML => YamlResponseRenderProcessor::class,
+        ];
+    }
+
     public function mapOutputFormats(): array
     {
         return [
+            self::OUTPUT_TYPE_API => self::OUTPUT_FORMAT_JSON,
+            self::OUTPUT_TYPE_CLI => self::OUTPUT_FORMAT_CLI,
             self::OUTPUT_TYPE_DEFAULT => self::OUTPUT_FORMAT_JSON,
         ];
     }
@@ -84,30 +121,27 @@ class RenderableResponse
         return $this->data;
     }
 
-    public function prepareRender(string $format): array
+    public function prepareRender(): array
     {
         return $this->data;
     }
 
-    protected function getResponseProcessors(): array
-    {
-        return [
-            self::OUTPUT_FORMAT_JSON => JsonResponseRenderProcessor::class,
-        ];
-    }
-
+    /**
+     * @throws Exception
+     */
     public function render(): string
     {
         if (!$format = $this->mapOutputFormats()[$this->outputType] ?? null) {
             throw new Exception('Unable to find output format for type '.$this->outputType);
         }
 
-        /** @var AbstractResponseRenderProcessor $processor */
-        if (!$processor = $this->getResponseProcessors()[$format] ?? null) {
+        if (!$processorType = $this->getResponseProcessors()[$format] ?? null) {
             throw new Exception('Unable to find output processor for format '.$format);
         }
 
-        $renderData = $this->prepareRender($format);
+        /** @var AbstractResponseRenderProcessor $processor */
+        $processor = new $processorType();
+        $renderData = $this->prepareRender();
 
         return $processor->renderResponseData(
             $renderData,
@@ -115,6 +149,9 @@ class RenderableResponse
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function __toString(): string
     {
         return $this->render();

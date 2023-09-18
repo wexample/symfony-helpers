@@ -579,6 +579,18 @@ class TextHelper
         return $decryptedMsg;
     }
 
+    public static function toString(mixed $value):string {
+        if (is_object($value)) {
+            return '['.get_class($value).']';
+        } else if (is_array($value)) {
+            return '['.gettype($value).']';
+        } elseif (is_bool($value)) {
+            return self::renderBoolean($value);
+        }
+
+        return (string) $value;
+    }
+
     /**
      * @see https://gist.github.com/nim4n136/7fa38467181130f5a2270c39d495101e
      */

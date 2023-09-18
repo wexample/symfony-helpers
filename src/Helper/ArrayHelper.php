@@ -213,4 +213,70 @@ class ArrayHelper
 
         return $array;
     }
+
+    public static function toStringTable(array $array): array
+    {
+        $table = [];
+
+        // First pass, transform objects into arrays
+        foreach ($array as $key => $item)  {
+            if (is_object($item)) {
+                $array[$key] = (array) $item;
+            }
+        }
+
+        // Items keys should be consistent
+        if (!self::hasTableStructure($array)) {
+            return $table;
+        }
+
+        foreach ($array as $line) {
+            $lineConverted = [];
+
+            foreach ($line as $key => $value) {
+                $lineConverted[$key] = TextHelper::toString($value);
+            }
+
+            $table[] = $lineConverted;
+        }
+
+        return $table;
+    }
+
+    /**
+     * Return true if array can be rendered as a two-dimensional table (no su table, same columns names).
+     */
+    public static function hasTableStructure(
+        array $array,
+        bool $acceptMissing = false
+    ): bool {
+        if (empty($array)) {
+            return true;
+        }
+
+        // First item should be an array to allow getting base keys.
+        $first = current($array);
+        if (!is_array($first)) {
+            return false;
+        }
+
+        $baseKeys = array_keys($first);
+        foreach ($array as $item) {
+            if (!is_array($item)) {
+                return false;
+            }
+
+            $itemKeys = array_keys($item);
+
+            if (!$acceptMissing && count($baseKeys) !== count($itemKeys)) {
+                return false;
+            }
+
+            if (!empty(array_diff($baseKeys, $itemKeys))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
