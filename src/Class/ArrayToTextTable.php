@@ -24,7 +24,7 @@ class ArrayToTextTable
     protected string $indentation;
     protected string $displayKeys;
     protected bool $upperKeys;
-    protected string $keysAlignment;
+    protected int $keysAlignment;
     protected int $valuesAlignment;
     protected $formatter;
 
@@ -108,7 +108,7 @@ class ArrayToTextTable
         return $this->upperKeys;
     }
 
-    public function getKeysAlignment(): string
+    public function getKeysAlignment(): int
     {
         return $this->keysAlignment;
     }
@@ -164,7 +164,7 @@ class ArrayToTextTable
         return $this;
     }
 
-    public function setKeysAlignment(string $keysAlignment): static
+    public function setKeysAlignment(int $keysAlignment): static
     {
         $this->keysAlignment = $keysAlignment;
         return $this;
