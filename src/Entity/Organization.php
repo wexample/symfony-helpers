@@ -8,7 +8,6 @@
 
 namespace Wexample\SymfonyHelpers\Entity;
 
-use App\Entity\Address;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -17,14 +16,11 @@ use JetBrains\PhpStorm\Pure;
 use Stringable;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Type;
-use Wexample\SymfonyHelpers\Entity\Traits\WithUserEntityTrait;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 use function substr;
 
 class Organization extends AbstractEntity implements Stringable
 {
-    use WithUserEntityTrait;
-
     #[ManyToOne(targetEntity: \App\Entity\OrganizationType::class)]
     #[JoinColumn(nullable: false)]
     protected OrganizationType $type;
@@ -43,14 +39,6 @@ class Organization extends AbstractEntity implements Stringable
     #[Length(max: VariableHelper::VARIABLE_TYPE_STRING_LENGTH_DEFAULT)]
     #[Column(type: Types::STRING, length: 255, nullable: true)]
     protected ?string $companyIdentifier = null;
-
-    #[ManyToOne(targetEntity: Address::class)]
-    #[JoinColumn(onDelete: 'SET NULL')]
-    protected ?Address $address = null;
-
-    #[ManyToOne(targetEntity: \App\Entity\User::class)]
-    #[JoinColumn(onDelete: 'SET NULL')]
-    protected ?\App\Entity\User $user = null;
 
     /**
      * TODO Rename to phone.
@@ -121,15 +109,5 @@ class Organization extends AbstractEntity implements Stringable
     public function setCompanyIdentifier(string $companyIdentifier)
     {
         $this->companyIdentifier = $companyIdentifier;
-    }
-
-    public function getAddress(): ?Address
-    {
-        return $this->address;
-    }
-
-    public function setAddress(?Address $address)
-    {
-        $this->address = $address;
     }
 }
