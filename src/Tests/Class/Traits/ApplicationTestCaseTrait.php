@@ -2,6 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Tests\Class\Traits;
 
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\DomCrawler\Crawler;
@@ -13,9 +14,20 @@ use Wexample\SymfonyHelpers\Helper\TextHelper;
 
 trait ApplicationTestCaseTrait
 {
+    protected ?Application $application = null;
+
     protected ?KernelBrowser $client = null;
 
     protected ?string $pathPrevious = null;
+
+    protected function createApplication(): Application
+    {
+        $kernel = self::bootKernel();
+
+        $this->application = new Application($kernel);
+
+        return $this->application;
+    }
 
     public function getCurrentPath(): string
     {
