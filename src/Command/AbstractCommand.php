@@ -25,7 +25,7 @@ abstract class AbstractCommand extends Command
 
     public static function buildDefaultName(): string
     {
-        return self::getCommandPrefixGroup()
+        return static::getCommandPrefixGroup()
             .':'.TextHelper::toKebab(
                 TextHelper::removeSuffix(
                     ClassHelper::getShortName(static::class),
