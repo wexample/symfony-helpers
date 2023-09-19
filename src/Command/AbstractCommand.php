@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Wexample\SymfonyHelpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 abstract class AbstractCommand extends Command
 {
@@ -17,27 +18,21 @@ abstract class AbstractCommand extends Command
         parent::__construct($name ?: $this->buildDefaultName());
     }
 
+    public static function getCommandPrefixGroup(): string
+    {
+        return VariableHelper::APP;
+    }
+
     public static function buildDefaultName(): string
     {
-        return TextHelper::toKebab(
-                TextHelper::removePrefix(
-                    TextHelper::removeSuffix(
-                        ClassHelper::getShortName(static::getBundleClassName()),
-                        'Bundle'
-                    ),
-                    'WexampleSymfony'
-                )
-            )
-            .':'
-            .TextHelper::toKebab(
+        return self::getCommandPrefixGroup()
+            .':'.TextHelper::toKebab(
                 TextHelper::removeSuffix(
                     ClassHelper::getShortName(static::class),
                     'Command'
                 )
             );
     }
-
-    abstract public static function getBundleClassName(): string;
 
     /**
      * @throws ExceptionInterface

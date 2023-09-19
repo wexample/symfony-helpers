@@ -227,7 +227,8 @@ class ArrayHelper
 
         // Items keys should be consistent
         if (!self::hasTableStructure($array)) {
-            return $table;
+            // If not, returns a one-line array
+            return [$array];
         }
 
         foreach ($array as $line) {

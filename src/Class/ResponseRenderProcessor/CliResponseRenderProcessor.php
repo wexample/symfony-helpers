@@ -13,7 +13,6 @@ class CliResponseRenderProcessor extends KeyValueResponseRenderProcessor
         string|int $key
     ): string {
         if (is_array($value)) {
-
             return PHP_EOL.new ArrayToTextTable(
                     ArrayHelper::toStringTable($value)
                 );
