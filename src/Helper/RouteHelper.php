@@ -2,7 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
-use App\Wex\BaseBundle\Controller\AbstractController;
+use Wexample\SymfonyHelpers\Controller\AbstractController;
 
 class RouteHelper
 {
@@ -11,10 +11,10 @@ class RouteHelper
     ): string {
         return TextHelper::toSnake(
             TextHelper::trimStringSuffix(
-                \Wexample\SymfonyHelpers\Helper\ClassHelper::getShortName(
+                ClassHelper::getShortName(
                     $controllerClass
                 ),
-                \Wexample\SymfonyHelpers\Helper\ClassHelper::CLASS_PATH_PART_CONTROLLER
+                ClassHelper::CLASS_PATH_PART_CONTROLLER
             )
         ).'_';
     }

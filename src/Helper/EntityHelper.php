@@ -2,13 +2,13 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
-use App\Wex\BaseBundle\Translation\Translator;
 use DateInterval;
 use DatePeriod;
 use DateTime;
 use DateTimeInterface;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Entity\Traits\BaseEntityTrait;
+use Wexample\SymfonyTranslations\Translation\Translator;
 use function implode;
 
 class EntityHelper
@@ -24,7 +24,7 @@ class EntityHelper
             '-',
             [
                 $entity->getId(),
-                \Wexample\SymfonyHelpers\Helper\ClassHelper::getTableizedName($entity),
+                ClassHelper::getTableizedName($entity),
             ]
         );
     }
@@ -50,7 +50,7 @@ class EntityHelper
             '.',
             [
                 'entity',
-                \Wexample\SymfonyHelpers\Helper\ClassHelper::getTableizedName($className).Translator::DOMAIN_SEPARATOR,
+                ClassHelper::getTableizedName($className).Translator::DOMAIN_SEPARATOR,
             ]
         );
     }
@@ -64,7 +64,7 @@ class EntityHelper
         // First sort.
         $monthly = [];
         foreach ($entities as $entity) {
-            $keyDateFieldValue = \Wexample\SymfonyHelpers\Helper\ClassHelper::getFieldGetterValue(
+            $keyDateFieldValue = ClassHelper::getFieldGetterValue(
                 $entity,
                 $dateFieldName
             );
@@ -106,7 +106,7 @@ class EntityHelper
         AbstractEntityInterface|string $entity,
         AbstractEntityInterface|string $entityB
     ): bool {
-        return \Wexample\SymfonyHelpers\Helper\ClassHelper::getRealClassPath($entity) === \Wexample\SymfonyHelpers\Helper\ClassHelper::getRealClassPath($entityB)
+        return ClassHelper::getRealClassPath($entity) === ClassHelper::getRealClassPath($entityB)
             && $entity->getId() === $entityB->getId();
     }
 }
