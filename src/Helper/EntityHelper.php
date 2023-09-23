@@ -109,4 +109,9 @@ class EntityHelper
         return ClassHelper::getRealClassPath($entity) === ClassHelper::getRealClassPath($entityB)
             && $entity->getId() === $entityB->getId();
     }
+
+    public static function getId(AbstractEntity|int|null $entity): ?int
+    {
+        return ClassHelper::isClassPath($entity, Product::class) ? $entity->getId() : $entity;
+    }
 }

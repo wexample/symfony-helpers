@@ -17,15 +17,9 @@ trait UserEntityTrait
     #[GeneratedValue]
     protected $id;
 
-    /**
-     * @var string
-     */
     #[Regex(pattern: '/^[a-z0-9][a-z0-9_-]{2,28}[a-z0-9]$/i')]
-    protected string $username;
+    protected $username;
 
-    /**
-     * @return string
-     */
     #[Length(max: 180)]
     public function getUsername(): string
     {
@@ -33,9 +27,11 @@ trait UserEntityTrait
     }
 
     /**
-     * @param string $username
+     * TODO Not typed for compatibility with old FOSUSer class.
+     * @param $username
+     * @return void
      */
-    public function setUsername(string $username): void
+    public function setUsername($username)
     {
         $this->username = $username;
     }

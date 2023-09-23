@@ -66,7 +66,7 @@ class GitHelper
                 $commit['author'] = trim(substr($line, strlen('Author:')));
             } elseif (str_starts_with($line, 'Date')) {
                 $commit['date'] = DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
+                    DateHelper::DATE_PATTERN_TIME_DEFAULT,
                     trim(substr($line, strlen('Date:')))
                 );
             } else {

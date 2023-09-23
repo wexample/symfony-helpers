@@ -2,7 +2,6 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
-use JetBrains\PhpStorm\Pure;
 use function round;
 
 class PriceHelper
@@ -77,7 +76,6 @@ class PriceHelper
      * so EUR should be converted in cents, but JPY should not,
      * as there is no cents in this currency.
      */
-    #[Pure]
     public static function buildPriceFromFloat(
         float $price,
         string $currency
@@ -89,7 +87,6 @@ class PriceHelper
         }
     }
 
-    #[Pure]
     public static function addInitialPercentage(
         int $number,
         int $percentage
@@ -114,8 +111,7 @@ class PriceHelper
         return round($number / ((10000 + $percentage) / 10000));
     }
 
-    #[Pure]
-    public static function calcInitialPercentage(
+    public static function calcPercentageAmountOnInitialValue(
         int $number,
         int $percentage
     ): int {
@@ -124,7 +120,6 @@ class PriceHelper
         );
     }
 
-    #[Pure]
     public static function subtractPercentage(
         int $number,
         int $percentage
@@ -134,16 +129,19 @@ class PriceHelper
         );
     }
 
+    /**
+     * Given arguments : 20000 / 300 = 600
+     * Theory          : 200,00 / 3% = 6
+     */
     public static function calcPercentage(
-        $number,
-        $percentage
+        int $number,
+        int $percentage
     ): int {
         return round(
-            $number / 10000 * $percentage
+            NumberHelper::intDataToFloat($number) / 100 * $percentage
         );
     }
 
-    #[Pure]
     public static function addPercentage(
         int $number,
         int $percentage
