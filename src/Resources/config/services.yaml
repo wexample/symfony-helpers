@@ -19,3 +19,6 @@ services:
         class: Wexample\SymfonyHelpers\Form\EntitySearchType
         tags:
             - { name: form.type }
+
+    Wexample\SymfonyHelpers\Service\ReversedRoleHierarchy:
+        arguments: ['%security.role_hierarchy.roles%']
