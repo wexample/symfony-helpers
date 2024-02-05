@@ -21,4 +21,9 @@ class PathHelper
             )
         );
     }
+
+    public static function join(array $pathParts): string
+    {
+        return implode(FileHelper::FOLDER_SEPARATOR, $pathParts);
+    }
 }
