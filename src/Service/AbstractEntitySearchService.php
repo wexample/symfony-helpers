@@ -19,7 +19,7 @@ abstract class AbstractEntitySearchService
 {
     public function __construct(
         protected EntityManagerInterface $em,
-        protected Security $security
+        protected \Symfony\Bundle\SecurityBundle\Security $security
     ) {
     }
 
