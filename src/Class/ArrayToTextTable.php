@@ -78,9 +78,7 @@ class ArrayToTextTable
         foreach ($data as $row)
             $table .= $i.implode(PHP_EOL, $this->row($row, $this->valuesAlignment)).PHP_EOL;
 
-        $table .= $i.$this->line($d->getBottomLeft(), $d->getHorizontal(), $d->getHorizontalUp(), $d->getBottomRight()).PHP_EOL;
-
-        return $table;
+        return $table . ($i.$this->line($d->getBottomLeft(), $d->getHorizontal(), $d->getHorizontalUp(), $d->getBottomRight()).PHP_EOL);
     }
 
     public function getData(): array

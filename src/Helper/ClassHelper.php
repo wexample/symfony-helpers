@@ -533,7 +533,5 @@ class ClassHelper
             // Throw an exception if the method doesn't exist
             throw new Exception('Method '.$methodName.' not found in '.get_class($object));
         }
-
-        return null;
     }
 }

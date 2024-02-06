@@ -160,8 +160,6 @@ class BundleHelper
 
     /**
      * @param BundleInterface|string $bundleIdentifier can be a package directory, a bundle/short-name, a BundleShortNameBundle or a full bundle classname
-     *
-     * @return ?BundleInterface
      */
     public static function getBundle(
         BundleInterface|string $bundleIdentifier,
