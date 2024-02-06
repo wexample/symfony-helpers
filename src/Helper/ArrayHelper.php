@@ -158,12 +158,7 @@ class ArrayHelper
 
     public static function sortOnChildrenArrayLength(array $array): array
     {
-        uasort($array, function(
-            $a,
-            $b
-        ) {
-            return count($b) - count($a);
-        });
+        uasort($array, fn($a, $b) => count($b) - count($a));
 
         return $array;
     }
@@ -201,15 +196,7 @@ class ArrayHelper
         array $array,
         string|int $key
     ): array {
-        usort($array, function(
-            $a,
-            $b
-        ) use
-        (
-            $key
-        ) {
-            return $a[$key] <=> $b[$key];
-        });
+        usort($array, fn($a, $b) => $a[$key] <=> $b[$key]);
 
         return $array;
     }
