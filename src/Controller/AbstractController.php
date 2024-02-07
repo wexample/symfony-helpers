@@ -16,11 +16,13 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 
     public const ROUTE_OPTIONS_ONLY_EXPOSE = [self::ROUTE_OPTION_KEY_EXPOSE => true];
 
-    protected function getControllerBundle(): ?string
+    public static function getControllerBundle(): ?string
     {
-        if (ClassHelper::classUsesTrait($this, BundleClassTrait::class)) {
-            /** @var BundleClassTrait $this */
-            return $this->getBundleClassName();
+        $current = static::class;
+
+        if (ClassHelper::classUsesTrait($current, BundleClassTrait::class)) {
+            /** @var BundleClassTrait $current */
+            return $current::getBundleClassName();
         }
 
         return null;
