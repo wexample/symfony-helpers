@@ -20,9 +20,6 @@ abstract class AbstractBundle extends Bundle
 
     public static function getAlias(): string
     {
-        return TextHelper::trimStringPrefix(
-            ClassHelper::getShortName(static::class),
-            BundleHelper::AUTHOR_COMPANY,
-        );
+        return ClassHelper::getShortName(static::class);
     }
 }
