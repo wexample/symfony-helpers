@@ -478,7 +478,7 @@ class ClassHelper
 
     public static function buildPathFromClassName(string $className): string
     {
-        return FileHelper::joinPathParts(
+        return PathHelper::join(
             static::getPathParts($className)
         );
     }

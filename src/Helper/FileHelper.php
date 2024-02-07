@@ -209,14 +209,6 @@ class FileHelper
         );
     }
 
-    public static function joinPathParts(array $parts): string
-    {
-        return implode(
-            self::FOLDER_SEPARATOR,
-            $parts
-        );
-    }
-
     public static function buildRelativePath(
         string $filePath,
         string $relativeTo
