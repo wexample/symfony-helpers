@@ -401,6 +401,16 @@ class ClassHelper
         return $methods;
     }
 
+    public static function hasAttributes(
+        ReflectionMethod|ReflectionClass|string $subjectPath,
+        string $attributeClass
+    ): bool {
+        return !empty(self::getChildrenAttributes(
+            $subjectPath,
+            $attributeClass
+        ));
+    }
+
     /**
      * @return ReflectionAttribute[]
      */

@@ -45,30 +45,4 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 
         return $suffix;
     }
-
-    public static function getSimpleRoutes(): array
-    {
-        return [];
-    }
-
-    public function simpleRoutesResolver(string $routeName): Response
-    {
-        return $this->renderPage(
-            $routeName,
-            [
-                'page_name' => $routeName,
-            ]
-        );
-    }
-
-    public static function getControllerRouteAttribute(): Route
-    {
-        $reflectionClass = new \ReflectionClass(
-            static::class
-        );
-
-        $routeAttributes = $reflectionClass->getAttributes(Route::class);
-
-        return $routeAttributes[0]->newInstance();
-    }
 }
