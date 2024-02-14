@@ -5,8 +5,8 @@ services:
         public: false
 
     # Ensure is loaded as a service.
-    Wexample\SymfonyHelpers\Service\:
-        resource: '../../Service/*'
+    Wexample\SymfonyHelpers\:
+        resource: '../../{Routing,Service}'
         tags: ['controller.service_arguments']
 
     Wexample\SymfonyHelpers\Form\EntityType:
@@ -19,6 +19,12 @@ services:
         class: Wexample\SymfonyHelpers\Form\EntitySearchType
         tags:
             - { name: form.type }
+
+    Wexample\SymfonyHelpers\Routing\SimpleRoutesRouteLoader:
+        arguments:
+            $taggedControllers: !tagged_iterator 'has_simple_routes'
+        tags:
+            - { name: 'routing.loader' }
 
     Wexample\SymfonyHelpers\Service\ReversedRoleHierarchy:
         arguments: ['%security.role_hierarchy.roles%']

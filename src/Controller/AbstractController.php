@@ -3,6 +3,7 @@
 namespace Wexample\SymfonyHelpers\Controller;
 
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Wexample\SymfonyHelpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
@@ -43,5 +44,31 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         }
 
         return $suffix;
+    }
+
+    public static function getSimpleRoutes(): array
+    {
+        return [];
+    }
+
+    public function simpleRoutesResolver(string $routeName): Response
+    {
+        return $this->renderPage(
+            $routeName,
+            [
+                'page_name' => $routeName,
+            ]
+        );
+    }
+
+    public static function getControllerRouteAttribute(): Route
+    {
+        $reflectionClass = new \ReflectionClass(
+            static::class
+        );
+
+        $routeAttributes = $reflectionClass->getAttributes(Route::class);
+
+        return $routeAttributes[0]->newInstance();
     }
 }

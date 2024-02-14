@@ -1,0 +1,3 @@
+simple_routes:
+    resource: .
+    type: 'simple_routes'

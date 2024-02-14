@@ -534,4 +534,14 @@ class ClassHelper
             throw new Exception('Method '.$methodName.' not found in '.get_class($object));
         }
     }
+
+    public static function isSameClassMethod(
+        $classMethodPathA,
+        $classMethodPathB
+    ): bool {
+        $reflectionMethodA = new ReflectionMethod(...explode(self::METHOD_SEPARATOR, $classMethodPathA));
+        $reflectionMethodB = new ReflectionMethod(...explode(self::METHOD_SEPARATOR, $classMethodPathB));
+
+        return $reflectionMethodA->getDeclaringClass()->getName() === $reflectionMethodB->getDeclaringClass()->getName();
+    }
 }
