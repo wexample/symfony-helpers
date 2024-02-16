@@ -5,6 +5,7 @@ namespace Wexample\SymfonyHelpers\Routing;
 use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use Wexample\SymfonyHelpers\Helper\TextHelper;
 
 class SimpleRoutesRouteLoader extends AbstractRouteLoader
 {
@@ -35,7 +36,7 @@ class SimpleRoutesRouteLoader extends AbstractRouteLoader
 
                     foreach ($routes as $routeName) {
                         $fullRouteName = $baseName.$routeName;
-                        $fullPath = $basePath.$routeName;
+                        $fullPath = $basePath.TextHelper::toKebab($routeName);
 
                         $route = new Route($fullPath, [
                             '_controller' => $reflectionClass->getName().'::simpleRoutesResolver',
