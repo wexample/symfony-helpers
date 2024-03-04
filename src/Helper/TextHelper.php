@@ -579,7 +579,8 @@ class TextHelper
         return $decryptedMsg;
     }
 
-    public static function toString(mixed $value):string {
+    public static function toString(mixed $value): string
+    {
         if (is_object($value)) {
             return '['.get_class($value).']';
         } else if (is_array($value)) {
@@ -612,5 +613,10 @@ class TextHelper
         );
 
         return "$iv:$salt:$encrypted";
+    }
+
+    public static function toList(array $array): string
+    {
+        return PHP_EOL.implode(PHP_EOL, $array).PHP_EOL;
     }
 }
