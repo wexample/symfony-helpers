@@ -3,7 +3,6 @@
 namespace Wexample\SymfonyHelpers\Controller;
 
 use ReflectionClass;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Wexample\SymfonyHelpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
@@ -27,6 +26,17 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         }
 
         return null;
+    }
+
+    protected function getParameterOrDefault(
+        string $name,
+        array|bool|float|int|null|string $default
+    ) {
+        if (!$this->container->get('parameter_bag')->has($name)) {
+            return $default;
+        }
+
+        return $this->getParameter($name);
     }
 
     public static function buildRouteName(string $suffix): string
