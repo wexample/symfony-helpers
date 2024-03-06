@@ -148,7 +148,7 @@ class BundleHelper
 
     public static function getBundleCssAlias(string $className): string
     {
-        return '@'.self::getBundlePackageNameFromClassName($className);
+        return self::ALIAS_PREFIX.self::getBundlePackageNameFromClassName($className);
     }
 
     public static function getBundlePackageNameFromClassName(string $className): string
