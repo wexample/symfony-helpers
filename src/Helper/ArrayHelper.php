@@ -158,7 +158,10 @@ class ArrayHelper
 
     public static function sortOnChildrenArrayLength(array $array): array
     {
-        uasort($array, fn($a, $b) => count($b) - count($a));
+        uasort($array, fn(
+            $a,
+            $b
+        ) => count($b) - count($a));
 
         return $array;
     }
@@ -196,7 +199,10 @@ class ArrayHelper
         array $array,
         string|int $key
     ): array {
-        usort($array, fn($a, $b) => $a[$key] <=> $b[$key]);
+        usort($array, fn(
+            $a,
+            $b
+        ) => $a[$key] <=> $b[$key]);
 
         return $array;
     }
@@ -206,7 +212,7 @@ class ArrayHelper
         $table = [];
 
         // First pass, transform objects into arrays
-        foreach ($array as $key => $item)  {
+        foreach ($array as $key => $item) {
             if (is_object($item)) {
                 $array[$key] = (array) $item;
             }
@@ -267,4 +273,38 @@ class ArrayHelper
 
         return true;
     }
+
+    /**
+     * In an array, ['one' => true, 'three' => true], adds the key 'two' after 'one'.
+     * If 'two' already exists, do not change the array.
+     * If 'one' does not exist, do not change the array.
+     */
+    public static function insertNewAfterKey(
+        array $array,
+        string $key,
+        string $newKey,
+        mixed $newValue = true,
+    ): array {
+        if (!array_key_exists($key, $array)) {
+            return $array;
+        }
+
+        // Do not edit array if key exists.
+        if (array_key_exists($newKey, $array)) {
+            return $array;
+        }
+
+        $newArray = [];
+        $inserted = false;
+        foreach ($array as $k => $value) {
+            $newArray[$k] = $value;
+            if ($k === $key && !$inserted) {
+                $newArray[$newKey] = $newValue;
+                $inserted = true;
+            }
+        }
+
+        return $newArray;
+    }
+
 }
