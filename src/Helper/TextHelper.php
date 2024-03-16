@@ -391,39 +391,13 @@ class TextHelper
         string $prefix,
         string $suffix,
     ): string {
-        return self::trimStringPrefix(
-            self::trimStringSuffix(
+        return self::removePrefix(
+            self::removeSuffix(
                 $string,
                 $suffix
             ),
             $prefix
         );
-    }
-
-    public static function trimStringPrefix(
-        string $string,
-        string $prefix
-    ): string {
-        if (str_starts_with($string, $prefix)) {
-            return substr($string, strlen($prefix));
-        }
-
-        return $string;
-    }
-
-    public static function trimStringSuffix(
-        string $string,
-        string $suffix
-    ): string {
-        if (str_ends_with($string, $suffix)) {
-            return substr(
-                $string,
-                0,
-                -strlen($suffix)
-            );
-        }
-
-        return $string;
     }
 
     public static function trimExtension(

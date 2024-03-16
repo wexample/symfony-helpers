@@ -10,12 +10,11 @@ class RouteHelper
         AbstractController|string $controllerClass
     ): string {
         return TextHelper::toSnake(
-            TextHelper::trimStringSuffix(
-                ClassHelper::getShortName(
-                    $controllerClass
-                ),
-                ClassHelper::CLASS_PATH_PART_CONTROLLER
-            )
-        ).'_';
+                AbstractController::removeSuffix(
+                    ClassHelper::getShortName(
+                        $controllerClass
+                    )
+                )
+            ).'_';
     }
 }

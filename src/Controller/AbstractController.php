@@ -5,6 +5,7 @@ namespace Wexample\SymfonyHelpers\Controller;
 use ReflectionClass;
 use Symfony\Component\Routing\Annotation\Route;
 use Wexample\SymfonyHelpers\Helper\ClassHelper;
+use Wexample\SymfonyHelpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 use Wexample\SymfonyHelpers\Traits\BundleClassTrait;
 
@@ -54,5 +55,13 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         }
 
         return $suffix;
+    }
+
+    public static function removeSuffix(string $className): string
+    {
+        return TextHelper::removeSuffix(
+            $className,
+            ClassHelper::CLASS_PATH_PART_CONTROLLER
+        );
     }
 }
