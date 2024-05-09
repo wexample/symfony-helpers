@@ -182,11 +182,21 @@ class TextHelper
         return md5(uniqid());
     }
 
+    public static function isNullOrNullString(null|string $null): bool
+    {
+        return is_null($null) || $null === 'null';
+    }
+
+    public static function isBoolOrBoolString(bool|string $bool): bool
+    {
+        return $bool === true || $bool === false || $bool === 'true' || $bool === 'false';
+    }
+
     public static function isBooleanOrNull(string $bool): bool
     {
         $bool = trim(strtolower($bool));
 
-        return 'true' === $bool || 'false' === $bool || 'null' === $bool;
+        return self::isBoolOrBoolString($bool) || self::isNullOrNullString($bool);
     }
 
     public static function parseBooleanOrNull(string|bool|null $bool): bool|null
@@ -238,6 +248,14 @@ class TextHelper
         $slugger = new AsciiSlugger();
 
         return $slugger->slug(strtolower($string));
+    }
+
+    public static function removeAccents(?string $text): string
+    {
+        return Transliterator::createFromRules(
+            ':: Any-Latin; :: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;',
+            Transliterator::FORWARD
+        )->transliterate($text);
     }
 
     public static function usernameFromEmail(string $email): string
