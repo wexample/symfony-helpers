@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Wex\BaseBundle\Entity\Traits;
+namespace Wexample\SymfonyHelpers\Entity\Traits;
 
 use DateTime;
 use DateTimeInterface;
