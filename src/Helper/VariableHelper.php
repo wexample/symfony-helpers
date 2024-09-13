@@ -132,9 +132,12 @@ class VariableHelper
     final public const USER_NAME = 'user_name';
     final public const USERNAME = 'username';
     final public const VARIABLE_TYPE_ARRAY = 'array';
+    final public const VARIABLE_TYPE_DATETIME = 'datetime';
+    final public const VARIABLE_TYPE_INTEGER = 'integer';
     final public const VARIABLE_TYPE_MIXED = 'mixed';
     final public const VARIABLE_TYPE_STRING = 'string';
     final public const VARIABLE_TYPE_STRING_LENGTH_DEFAULT = 255;
+    final public const VARIABLE_TYPE_TEXT = 'text';
     final public const VARS = 'vars';
     final public const VIEW = 'view';
     final public const VUE = 'vue';

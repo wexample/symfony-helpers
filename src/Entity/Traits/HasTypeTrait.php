@@ -5,10 +5,13 @@ namespace Wexample\SymfonyHelpers\Entity\Traits;
 use Doctrine\ORM\Mapping\Column;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 trait HasTypeTrait
 {
-    #[Column(type: 'string', length: 120)]
+    use HasLimitedValuesPropertyTrait;
+
+    #[Column(type: VariableHelper::VARIABLE_TYPE_STRING, length: 120)]
     protected ?string $type = null;
 
     /**
@@ -39,18 +42,12 @@ trait HasTypeTrait
      * @param mixed $type
      * @throws InvalidArgumentException If the type is not allowed.
      */
-    public function setType($type): void
+    public function setType(string $type): void
     {
-        $allowedTypes = $this->getAllowedTypes();
-
-        // Check if allowed types are defined and if the type is in the allowed list
-        if (is_array($allowedTypes) && !in_array($type, $allowedTypes, true)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid type "%s". Allowed types are: %s',
-                $type,
-                implode(', ', $allowedTypes)
-            ));
-        }
+        $this->checkAllowedOrFail(
+            $type,
+            $this->getAllowedTypes()
+        );
 
         $this->type = $type;
     }
