@@ -10,11 +10,11 @@ abstract class AbstractRouteLoader extends Loader
     protected bool $isLoaded = false;
 
     public function load(
-        $resource,
-        $type = null
+        mixed $resource,
+        ?string $type = null
     ) {
         if ($this->isLoaded) {
-            throw new \RuntimeException('CustomRouteLoader est déjà chargé.');
+            throw new \RuntimeException('CustomRouteLoader already loaded.');
         }
 
         $collection = $this->loadOnce(
