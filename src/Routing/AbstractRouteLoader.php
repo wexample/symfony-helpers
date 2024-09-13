@@ -12,7 +12,7 @@ abstract class AbstractRouteLoader extends Loader
     public function load(
         mixed $resource,
         ?string $type = null
-    ) {
+    ): mixed {
         if ($this->isLoaded) {
             throw new \RuntimeException('CustomRouteLoader already loaded.');
         }
