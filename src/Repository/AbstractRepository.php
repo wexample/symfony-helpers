@@ -19,9 +19,9 @@ use Wexample\SymfonyHelpers\Helper\TextHelper;
 abstract class AbstractRepository extends ServiceEntityRepository
 {
     public function __call(
-        $method,
-        $arguments
-    ) {
+        string $method,
+        array $arguments
+    ):mixed {
         if (str_starts_with($method, 'hasSome')) {
             return $this->findHasSome(
                 $this->resolveMagicQueryCall(

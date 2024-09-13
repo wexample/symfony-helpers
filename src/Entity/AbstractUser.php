@@ -13,4 +13,13 @@ abstract class AbstractUser extends AbstractEntity implements UserEntityInterfac
 
     #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
     protected $username;
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
 }
