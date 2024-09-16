@@ -100,8 +100,10 @@ class VariableHelper
     final public const PASSWORD = 'password';
     final public const PICTURE = 'picture';
     final public const PRELOAD = 'preload';
+    final public const PRIVATE = 'private';
     final public const PRESET = 'preset';
     final public const PREVIOUS = 'previous';
+    final public const PUBLIC = 'public';
     final public const REDIRECT = 'redirect';
     final public const REMOTE = 'remote';
     final public const RESPONSIVE = 'responsive';
