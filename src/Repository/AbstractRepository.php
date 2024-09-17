@@ -21,7 +21,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function __call(
         string $method,
         array $arguments
-    ):mixed {
+    ): mixed {
         if (str_starts_with($method, 'hasSome')) {
             return $this->findHasSome(
                 $this->resolveMagicQueryCall(
@@ -166,14 +166,17 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function add(
         AbstractEntity $entity,
         bool $flush = true
-    ): void {
+    ): AbstractEntity {
         if (!class_parents($entity, $this->getEntityName())) {
             throw new Exception('Entity of type '.$entity::class.' should be of type '.$this->getEntityName().' in add() method');
         }
 
-        $this->_em->persist($entity);
+        $em = $this->getEntityManager();
+        $em->persist($entity);
         if ($flush) {
-            $this->_em->flush();
+            $em->flush();
         }
+
+        return $entity;
     }
 }
