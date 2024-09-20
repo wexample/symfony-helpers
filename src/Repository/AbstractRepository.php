@@ -2,11 +2,15 @@
 
 namespace Wexample\SymfonyHelpers\Repository;
 
+use App\Entity\TimelineItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
+use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
+use Wexample\SymfonyHelpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\TextHelper;
 
 /**
@@ -18,6 +22,16 @@ use Wexample\SymfonyHelpers\Helper\TextHelper;
  */
 abstract class AbstractRepository extends ServiceEntityRepository
 {
+    use EntityManipulatorTrait;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct(
+            $registry,
+            static::getEntityClassName()
+        );
+    }
+
     public function __call(
         string $method,
         array $arguments
@@ -35,6 +49,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
             return $this->resolveMagicQueryCall($method, $arguments);
         }
 
+        if (str_starts_with($method, 'createNew')) {
+            return $this->resolveMagicSaveNewCall($method, $arguments);
+        }
+
+        if (str_starts_with($method, 'saveNew')) {
+            return $this->resolveMagicSaveNewCall($method, $arguments);
+        }
+
         return parent::__call($method, $arguments);
     }
 
@@ -47,7 +69,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     ): QueryBuilder {
         $fieldName = lcfirst(substr($method, 7));
 
-        if (!($this->_class->hasField($fieldName) || $this->_class->hasAssociation($fieldName))) {
+        if (!($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
             throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->_entityName, $fieldName, $method);
         }
 
@@ -56,6 +78,52 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $arguments[0],
             $arguments[1] ?? null
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function resolveMagicCreateNewCall(
+        $method,
+        $arguments
+    ): AbstractEntity {
+        $entityShortName = TextHelper::removePrefix($method, 'saveNew');
+        $expectedEntityShortName = ClassHelper::getShortName(static::getEntityClassName());
+
+        if ($entityShortName !== $expectedEntityShortName) {
+            throw new \Exception('Unable to create new entity of type "' . $entityShortName . '" from repository managing entities of type "' . $expectedEntityShortName . '".');
+        }
+
+        $createNewMethod = 'createNew' . $entityShortName;
+
+        if (!method_exists($this, $createNewMethod)) {
+            throw new \Exception('Creation method "'.$createNewMethod.'" not found on repository "'.static::class.'".');
+        }
+
+        return call_user_func_array(
+            [
+                $this,
+                $createNewMethod
+            ],
+            $arguments
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function resolveMagicSaveNewCall(
+        $method,
+        $arguments
+    ): AbstractEntity {
+        $entity = $this->resolveMagicCreateNewCall(
+            $method,
+            $arguments
+        );
+
+        $this->save($entity, flush: True);
+
+        return $entity;
     }
 
     public function queryByField(
@@ -74,7 +142,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     public function createOrGetQueryBuilder(
-        QueryBuilder $builder = null
+        QueryBuilder $builder = null,
     ): ?QueryBuilder {
         // Search for interesting invoices.
         return $builder ?: $this->createQueryBuilder(
@@ -178,5 +246,27 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
 
         return $entity;
+    }
+
+    public function save(
+        AbstractEntity $entity,
+        bool $flush = false
+    ): void {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(
+        AbstractEntity $entity,
+        bool $flush = false
+    ): void {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 }
