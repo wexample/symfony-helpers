@@ -28,6 +28,7 @@ class VariableHelper
     final public const CONFIGURATION = 'configuration';
     final public const COMPONENT = 'component';
     final public const CREATE = 'create';
+    final public const CURRENT = 'current';
     final public const CURSOR = 'cursor';
     final public const CUSTOM = 'custom';
     final public const DATA = 'data';
