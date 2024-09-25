@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 trait LinkedToUserTrait
 {
     #[ManyToOne(targetEntity: User::class)]
-    #[JoinColumn]
+    #[JoinColumn(name: "user_id", nullable: false)]
     protected ?User $user = null;
 
     public function getUser(): ?User
