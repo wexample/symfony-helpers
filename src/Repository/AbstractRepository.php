@@ -250,7 +250,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function save(
         AbstractEntity $entity,
-        bool $flush = false
+        bool $flush = true
     ): void {
         $this->getEntityManager()->persist($entity);
 

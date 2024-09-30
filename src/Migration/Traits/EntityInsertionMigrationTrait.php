@@ -4,7 +4,7 @@ namespace Wexample\SymfonyHelpers\Migration\Traits;
 
 trait EntityInsertionMigrationTrait
 {
-    public function addSqlToUpdateAllSequences(): void
+    protected function addSqlToUpdateAllSequences(): void
     {
         $this->addSql("
         DO $$ 
