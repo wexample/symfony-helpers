@@ -12,6 +12,7 @@ trait HasContentAndContentTypeFormatterTrait
         getContentType as _getContentType;
     }
 
+    public const string FORMAT_INTEGER = VariableHelper::VARIABLE_TYPE_INTEGER;
     public const string FORMAT_JSON = DataHelper::FORMAT_JSON;
     public const string FORMAT_SERIALIZED = 'serialized';
     public const string FORMAT_TEXT = VariableHelper::VARIABLE_TYPE_TEXT;
@@ -24,6 +25,7 @@ trait HasContentAndContentTypeFormatterTrait
     public function getContentAllowedFormats(): array
     {
         return [
+            self::FORMAT_INTEGER,
             self::FORMAT_JSON,
             self::FORMAT_SERIALIZED,
             self::FORMAT_TEXT,
@@ -34,7 +36,7 @@ trait HasContentAndContentTypeFormatterTrait
     {
         $content = $formatted;
 
-        switch ($this->getContentType()) {
+        switch ($this->getFormat()) {
             case self::FORMAT_JSON:
                 $content = json_encode($content);
             case self::FORMAT_SERIALIZED:
@@ -48,7 +50,8 @@ trait HasContentAndContentTypeFormatterTrait
     {
         $content = $this->getContent();
 
-        return match ($this->getContentType()) {
+        return match ($this->getFormat()) {
+            self::FORMAT_INTEGER => (int) $content,
             self::FORMAT_JSON => json_decode($content),
             self::FORMAT_SERIALIZED => unserialize($content),
             default => $content,
