@@ -1,7 +1,0 @@
-#variables:
-#  SYMFONY_PACKAGE_NAME: symfony-helpers
-#
-#include:
-#  - project: 'wexample-public/ci-cd'
-#    ref: main
-#    file: '.gitlab-ci.deploy.yml'
