@@ -3,6 +3,7 @@
 namespace Wexample\SymfonyHelpers\Controller;
 
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Wexample\SymfonyHelpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\TextHelper;
@@ -11,11 +12,21 @@ use Wexample\SymfonyHelpers\Traits\BundleClassTrait;
 
 abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
-    public const PATH_TYPE_SHOW = VariableHelper::SHOW;
+    public const string PATH_TYPE_SHOW = VariableHelper::SHOW;
 
-    public const ROUTE_OPTION_KEY_EXPOSE = 'expose';
+    public const string ROUTE_OPTION_KEY_EXPOSE = 'expose';
 
-    public const ROUTE_OPTIONS_ONLY_EXPOSE = [self::ROUTE_OPTION_KEY_EXPOSE => true];
+    public const array ROUTE_OPTIONS_ONLY_EXPOSE = [self::ROUTE_OPTION_KEY_EXPOSE => true];
+    public const array ROUTE_OPTIONS_METHOD_ONLY_HEAD = [Request::METHOD_HEAD];
+    public const array ROUTE_OPTIONS_METHOD_ONLY_GET = [Request::METHOD_GET];
+    public const array ROUTE_OPTIONS_METHOD_ONLY_POST = [Request::METHOD_POST];
+    public const array ROUTE_OPTIONS_METHOD_ONLY_PUT = [Request::METHOD_PUT];
+    public const array ROUTE_OPTIONS_METHOD_ONLY_PATCH = [Request::METHOD_PATCH];
+    public const array ROUTE_OPTIONS_METHOD_ONLY_DELETE = [Request::METHOD_DELETE];
+    public const array ROUTE_OPTIONS_METHOD_ONLY_PURGE = [Request::METHOD_PURGE];
+    public const array ROUTE_OPTIONS_METHOD_ONLY_OPTIONS = [Request::METHOD_OPTIONS];
+    public const array ROUTE_OPTIONS_METHOD_ONLY_TRACE = [Request::METHOD_TRACE];
+    public const array ROUTE_OPTIONS_METHOD_ONLY_CONNECT = [Request::METHOD_CONNECT];
 
     public static function getControllerBundle(): ?string
     {
