@@ -2,7 +2,6 @@
 
 namespace Wexample\SymfonyHelpers\Repository;
 
-use App\Entity\TimelineItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
@@ -55,6 +54,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         if (str_starts_with($method, 'saveNew')) {
             return $this->resolveMagicSaveNewCall($method, $arguments);
+        }
+
+        if (str_starts_with($method, 'pluck')) {
+            return $this->resolveMagicPluckCall($method, $arguments);
         }
 
         return parent::__call($method, $arguments);
@@ -124,6 +127,33 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $this->save($entity, flush: True);
 
         return $entity;
+    }
+
+    /**
+     * @throws InvalidMagicMethodCall
+     */
+    protected function resolveMagicPluckCall(
+        string $method,
+        array $arguments
+    ): array {
+        $targetValueName = TextHelper::removePrefix($method, 'pluck');
+        $getterMethod = 'get' . $targetValueName;
+        $entities = $arguments[0] ?? [];
+
+        if (!is_array($entities)) {
+            throw new InvalidMagicMethodCall("Expected an array of entities for plucking.");
+        }
+
+        $output = [];
+
+        foreach ($entities as $entity) {
+            if (!method_exists($entity, $getterMethod)) {
+                throw new InvalidMagicMethodCall("Method {$getterMethod} not found in " . get_class($entity));
+            }
+            $output[] = $entity->$getterMethod();
+        }
+
+        return $output;
     }
 
     public function queryByField(

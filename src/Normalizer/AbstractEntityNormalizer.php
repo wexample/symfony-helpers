@@ -2,6 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Normalizer;
 
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\ClassHelper;
@@ -31,7 +32,7 @@ abstract class AbstractEntityNormalizer implements NormalizerInterface
         array|Collection $items,
         ?string $format = null,
         array $context = []
-    ):array {
+    ): array {
         $output = [];
 
         foreach ($items as $item) {
