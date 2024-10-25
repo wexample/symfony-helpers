@@ -3,9 +3,11 @@
 namespace Wexample\SymfonyHelpers\Normalizer;
 
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\ClassHelper;
+use Wexample\SymfonyHelpers\Helper\DateHelper;
 
 abstract class AbstractEntityNormalizer implements NormalizerInterface
 {
@@ -40,5 +42,22 @@ abstract class AbstractEntityNormalizer implements NormalizerInterface
         }
 
         return $output;
+    }
+
+    protected function serializeDateTime(
+        \DateTimeInterface $dateTime,
+        array $context = []
+    ): string {
+        if ($dateTimeFormat = $this->getDefaultDateTimeSerializationFormat()) {
+            $context[DateTimeNormalizer::FORMAT_KEY] = $dateTimeFormat;
+        }
+
+        return (new DateTimeNormalizer($context))->normalize($dateTime);
+    }
+
+    protected function getDefaultDateTimeSerializationFormat(): ?string
+    {
+        // Use this popular format for apis.
+        return DateHelper::DATE_PATTERN_TIME_ZULU;
     }
 }
