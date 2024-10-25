@@ -94,10 +94,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $expectedEntityShortName = ClassHelper::getShortName(static::getEntityClassName());
 
         if ($entityShortName !== $expectedEntityShortName) {
-            throw new \Exception('Unable to create new entity of type "' . $entityShortName . '" from repository managing entities of type "' . $expectedEntityShortName . '".');
+            throw new \Exception('Unable to create new entity of type "'.$entityShortName.'" from repository managing entities of type "'.$expectedEntityShortName.'".');
         }
 
-        $createNewMethod = 'createNew' . $entityShortName;
+        $createNewMethod = 'createNew'.$entityShortName;
 
         if (!method_exists($this, $createNewMethod)) {
             throw new \Exception('Creation method "'.$createNewMethod.'" not found on repository "'.static::class.'".');
@@ -106,7 +106,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         return call_user_func_array(
             [
                 $this,
-                $createNewMethod
+                $createNewMethod,
             ],
             $arguments
         );
@@ -137,7 +137,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         array $arguments
     ): array {
         $targetValueName = TextHelper::removePrefix($method, 'pluck');
-        $getterMethod = 'get' . $targetValueName;
+        $getterMethod = 'get'.$targetValueName;
         $entities = $arguments[0] ?? [];
 
         if (!is_array($entities)) {
@@ -148,12 +148,32 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         foreach ($entities as $entity) {
             if (!method_exists($entity, $getterMethod)) {
-                throw new InvalidMagicMethodCall("Method {$getterMethod} not found in " . get_class($entity));
+                throw new InvalidMagicMethodCall("Method {$getterMethod} not found in ".get_class($entity));
             }
             $output[] = $entity->$getterMethod();
         }
 
         return $output;
+    }
+
+    public function queryPaginated(
+        int $page,
+        int $pageLength,
+    ): QueryBuilder {
+        $builder = $this->createOrGetQueryBuilder();
+        $builder->setMaxResults($pageLength);
+        $builder->setFirstResult($page * $pageLength);
+
+        return $builder;
+    }
+
+    public function findPaginated(
+        int $page,
+        int $pageLength,
+    ): array {
+        return $this->queryPaginated($page, $pageLength)
+            ->getQuery()
+            ->execute();
     }
 
     public function queryByField(
