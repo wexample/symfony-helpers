@@ -18,7 +18,7 @@ trait HasTypeTrait
      * Override this method to return an array of allowed types.
      * @return array|null
      */
-    public function getAllowedTypes(): ?array
+    public static function getAllowedTypes(): ?array
     {
         return null;
     }
