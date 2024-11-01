@@ -60,6 +60,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
             return $this->resolveMagicPluckCall($method, $arguments);
         }
 
+        if (str_starts_with($method, 'removeBy')) {
+            return $this->resolveMagicRemoveCall($method, $arguments);
+        }
+
         return parent::__call($method, $arguments);
     }
 
@@ -154,6 +158,29 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
 
         return $output;
+    }
+
+
+    /**
+     * @throws InvalidMagicMethodCall
+     */
+    protected function resolveMagicRemoveCall(
+        string $method,
+        array $arguments
+    ): void {
+        $fieldName = lcfirst(substr($method, 8));
+
+        if (!($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
+            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->_entityName, $fieldName, $method);
+        }
+
+        $entitiesToRemove = $this->findBy([$fieldName => $arguments[0]]);
+
+        foreach ($entitiesToRemove as $entity) {
+            $this->remove($entity, flush: false);
+        }
+
+        $this->getEntityManager()->flush();
     }
 
     public function queryPaginated(
@@ -311,7 +338,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function remove(
         AbstractEntity $entity,
-        bool $flush = false
+        bool $flush = true
     ): void {
         $this->getEntityManager()->remove($entity);
 
