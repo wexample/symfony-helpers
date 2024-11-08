@@ -2,7 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
-use Doctrine\Common\Util\ClassUtils;
+use Doctrine\Persistence\Proxy;
 use Exception;
 use ReflectionAttribute;
 use ReflectionClass;
@@ -127,11 +127,18 @@ class ClassHelper
         );
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public static function getRealClassPath(object|string $entity): string
     {
-        return ClassUtils::getRealClass(
-            self::getClassPath($entity)
-        );
+        $classPath = self::getClassPath($entity);
+        // Replacement of \Doctrine\Common\Util\ClassUtils::getRealPath()
+        if (is_subclass_of($classPath, Proxy::class)) {
+            return (new \ReflectionClass($classPath))->getParentClass();
+        }
+
+        return $classPath;
     }
 
     public static function getClassPath(object|string $entity): string
