@@ -191,21 +191,24 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function queryPaginated(
         int $page,
-        int $pageLength,
+        ?int $length = null,
         QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
-        $builder->setMaxResults($pageLength);
-        $builder->setFirstResult($page * $pageLength);
+        if ($length and $length > 0) {
+            $builder->setMaxResults($length);
+        }
+
+        $builder->setFirstResult($page * $length);
 
         return $builder;
     }
 
     public function findPaginated(
         int $page,
-        int $pageLength,
+        int $length,
     ): array {
-        return $this->queryPaginated($page, $pageLength)
+        return $this->queryPaginated($page, $length)
             ->getQuery()
             ->execute();
     }
