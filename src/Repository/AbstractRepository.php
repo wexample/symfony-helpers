@@ -206,7 +206,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function findPaginated(
         int $page,
-        int $length,
+        ?int $length,
     ): array {
         return $this->queryPaginated($page, $length)
             ->getQuery()
