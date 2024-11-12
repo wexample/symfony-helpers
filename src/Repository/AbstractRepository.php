@@ -23,6 +23,12 @@ abstract class AbstractRepository extends ServiceEntityRepository
 {
     use EntityManipulatorTrait;
 
+    public const QUERY_JOIN_TYPE_LEFT = 'left';
+    public const QUERY_JOIN_TYPE_RIGHT = 'right';
+    public const QUERY_JOIN_TYPE_DEFAULT = 'default';
+    public const SORT_ASC = 'ASC';
+    public const SORT_DESC = 'DESC';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct(
@@ -186,8 +192,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function queryPaginated(
         int $page,
         int $pageLength,
+        QueryBuilder $builder = null
     ): QueryBuilder {
-        $builder = $this->createOrGetQueryBuilder();
+        $builder = $this->createOrGetQueryBuilder($builder);
         $builder->setMaxResults($pageLength);
         $builder->setFirstResult($page * $pageLength);
 
