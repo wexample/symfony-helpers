@@ -14,6 +14,8 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 {
     public const string PATH_TYPE_SHOW = VariableHelper::SHOW;
 
+    final public const DEFAULT_ROUTE_NAME_INDEX = 'index';
+
     public const string ROUTE_OPTION_KEY_EXPOSE = 'expose';
 
     public const array ROUTE_OPTIONS_ONLY_EXPOSE = [self::ROUTE_OPTION_KEY_EXPOSE => true];
