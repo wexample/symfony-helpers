@@ -72,8 +72,12 @@ class RequestHelper
         string $controllerClassName
     ): bool {
         $className = $request->attributes->get('_controller');
-        $className = explode(ClassHelper::METHOD_SEPARATOR, $className)[0];
 
-        return is_subclass_of($className, $controllerClassName);
+        if ($className) {
+            $className = explode(ClassHelper::METHOD_SEPARATOR, $className)[0];
+            return is_subclass_of($className, $controllerClassName);
+        }
+
+        return false;
     }
 }
