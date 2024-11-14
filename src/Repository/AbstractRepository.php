@@ -3,6 +3,7 @@
 namespace Wexample\SymfonyHelpers\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
 use Doctrine\Persistence\ManagerRegistry;
@@ -297,7 +298,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     public function removeAll(
-        array $entities,
+        array|Collection $entities,
         bool $flush = true
     ): void {
         /** @var AbstractEntity $entry */
