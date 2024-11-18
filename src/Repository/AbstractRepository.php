@@ -350,11 +350,13 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function remove(
         AbstractEntity $entity,
         bool $flush = true
-    ): void {
+    ): bool {
         $this->getEntityManager()->remove($entity);
 
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+
+        return true;
     }
 }
