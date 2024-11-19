@@ -18,7 +18,7 @@ trait HasFormatTrait
      * Override this method to return an array of allowed formats.
      * @return array|null
      */
-    public function getAllowedFormats(): ?array
+    public static function getAllowedFormats(): ?array
     {
         return null;
     }

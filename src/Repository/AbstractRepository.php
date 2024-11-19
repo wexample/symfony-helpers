@@ -2,8 +2,8 @@
 
 namespace Wexample\SymfonyHelpers\Repository;
 
-use App\Entity\TimelineItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,6 +23,12 @@ use Wexample\SymfonyHelpers\Helper\TextHelper;
 abstract class AbstractRepository extends ServiceEntityRepository
 {
     use EntityManipulatorTrait;
+
+    public const QUERY_JOIN_TYPE_LEFT = 'left';
+    public const QUERY_JOIN_TYPE_RIGHT = 'right';
+    public const QUERY_JOIN_TYPE_DEFAULT = 'default';
+    public const SORT_ASC = 'ASC';
+    public const SORT_DESC = 'DESC';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -55,6 +61,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         if (str_starts_with($method, 'saveNew')) {
             return $this->resolveMagicSaveNewCall($method, $arguments);
+        }
+
+        if (str_starts_with($method, 'pluck')) {
+            return $this->resolveMagicPluckCall($method, $arguments);
+        }
+
+        if (str_starts_with($method, 'removeBy')) {
+            return $this->resolveMagicRemoveCall($method, $arguments);
         }
 
         return parent::__call($method, $arguments);
@@ -91,10 +105,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $expectedEntityShortName = ClassHelper::getShortName(static::getEntityClassName());
 
         if ($entityShortName !== $expectedEntityShortName) {
-            throw new \Exception('Unable to create new entity of type "' . $entityShortName . '" from repository managing entities of type "' . $expectedEntityShortName . '".');
+            throw new \Exception('Unable to create new entity of type "'.$entityShortName.'" from repository managing entities of type "'.$expectedEntityShortName.'".');
         }
 
-        $createNewMethod = 'createNew' . $entityShortName;
+        $createNewMethod = 'createNew'.$entityShortName;
 
         if (!method_exists($this, $createNewMethod)) {
             throw new \Exception('Creation method "'.$createNewMethod.'" not found on repository "'.static::class.'".');
@@ -103,7 +117,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         return call_user_func_array(
             [
                 $this,
-                $createNewMethod
+                $createNewMethod,
             ],
             $arguments
         );
@@ -124,6 +138,80 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $this->save($entity, flush: True);
 
         return $entity;
+    }
+
+    /**
+     * @throws InvalidMagicMethodCall
+     */
+    protected function resolveMagicPluckCall(
+        string $method,
+        array $arguments
+    ): array {
+        $targetValueName = TextHelper::removePrefix($method, 'pluck');
+        $getterMethod = 'get'.$targetValueName;
+        $entities = $arguments[0] ?? [];
+
+        if (!is_array($entities)) {
+            throw new InvalidMagicMethodCall("Expected an array of entities for plucking.");
+        }
+
+        $output = [];
+
+        foreach ($entities as $entity) {
+            if (!method_exists($entity, $getterMethod)) {
+                throw new InvalidMagicMethodCall("Method {$getterMethod} not found in ".get_class($entity));
+            }
+            $output[] = $entity->$getterMethod();
+        }
+
+        return $output;
+    }
+
+
+    /**
+     * @throws InvalidMagicMethodCall
+     */
+    protected function resolveMagicRemoveCall(
+        string $method,
+        array $arguments
+    ): void {
+        $fieldName = lcfirst(substr($method, 8));
+
+        if (!($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
+            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->_entityName, $fieldName, $method);
+        }
+
+        $entitiesToRemove = $this->findBy([$fieldName => $arguments[0]]);
+
+        foreach ($entitiesToRemove as $entity) {
+            $this->remove($entity, flush: false);
+        }
+
+        $this->getEntityManager()->flush();
+    }
+
+    public function queryPaginated(
+        int $page,
+        ?int $length = null,
+        QueryBuilder $builder = null
+    ): QueryBuilder {
+        $builder = $this->createOrGetQueryBuilder($builder);
+        if ($length and $length > 0) {
+            $builder->setMaxResults($length);
+        }
+
+        $builder->setFirstResult($page * $length);
+
+        return $builder;
+    }
+
+    public function findPaginated(
+        int $page,
+        ?int $length,
+    ): array {
+        return $this->queryPaginated($page, $length)
+            ->getQuery()
+            ->execute();
     }
 
     public function queryByField(
@@ -210,7 +298,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     public function removeAll(
-        array $entities,
+        array|Collection $entities,
         bool $flush = true
     ): void {
         /** @var AbstractEntity $entry */
@@ -261,12 +349,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function remove(
         AbstractEntity $entity,
-        bool $flush = false
-    ): void {
+        bool $flush = true
+    ): bool {
         $this->getEntityManager()->remove($entity);
 
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+
+        return true;
     }
 }

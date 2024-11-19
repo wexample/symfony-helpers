@@ -6,32 +6,26 @@ trait EntityInsertionMigrationTrait
 {
     protected function addSqlToUpdateAllSequences(): void
     {
-        $this->addSql("
-        DO $$ 
-        DECLARE 
-            seq RECORD;
-        BEGIN
-            -- Boucle sur toutes les séquences de la base de données
-            FOR seq IN 
-                SELECT 
-                    sequence_name, 
-                    table_name, 
-                    column_name 
-                FROM information_schema.sequences s
-                JOIN information_schema.columns c 
-                ON s.sequence_name = (c.table_name || '_' || c.column_name || '_seq')
-                WHERE sequence_schema = 'public'
-            LOOP
-                -- Met à jour chaque séquence en fonction de la valeur maximale de la colonne associée
-                EXECUTE format(
-                    'SELECT setval(pg_get_serial_sequence(''%I'', ''%I''), COALESCE(MAX(%I), 1)) FROM %I',
-                    seq.table_name,
-                    seq.column_name,
-                    seq.column_name,
-                    seq.table_name
-                );
-            END LOOP;
-        END $$;
-    ");
+        $sql = "SELECT table_name
+            FROM information_schema.tables
+            WHERE table_schema = 'public'
+              AND table_type = 'BASE TABLE';";
+
+        $tables = $this->connection->fetchAllAssociative($sql);
+
+        foreach ($tables as $table) {
+            $tableName = $table['table_name'];
+            $sequenceName = $tableName . '_id_seq';
+
+            $idCheckSql = "SELECT column_name 
+                FROM information_schema.columns 
+                WHERE table_name = '$tableName' 
+                  AND column_name = 'id';";
+            $hasIdColumn = $this->connection->fetchOne($idCheckSql);
+
+            if ($hasIdColumn) {
+                $this->addSql("SELECT setval('$sequenceName', (SELECT COALESCE(MAX(id), 1) FROM \"$tableName\"))");
+            }
+        }
     }
 }
