@@ -4,10 +4,11 @@ namespace Wexample\SymfonyHelpers\Entity\Traits;
 
 use Doctrine\ORM\Mapping\Column;
 use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 trait HasNameTrait
 {
-    #[Column(type: 'string', length: 255)]
+    #[Column(type: VariableHelper::VARIABLE_TYPE_STRING, length: 255)]
     protected ?string $name = null;
 
     public function getName(): ?string
@@ -15,7 +16,7 @@ trait HasNameTrait
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 

@@ -3,10 +3,11 @@
 namespace Wexample\SymfonyHelpers\Entity\Traits;
 
 use Doctrine\ORM\Mapping\Column;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 trait HasContentTypeTrait
 {
-    #[Column(type: 'string', length: 30)]
+    #[Column(type: VariableHelper::VARIABLE_TYPE_STRING, length: 30)]
     protected string $contentType;
 
     public function getContentType(): ?string

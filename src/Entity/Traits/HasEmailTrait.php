@@ -5,10 +5,11 @@ namespace Wexample\SymfonyHelpers\Entity\Traits;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\Email;
 use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 trait HasEmailTrait
 {
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: VariableHelper::VARIABLE_TYPE_STRING, length: 255)]
     #[Email()]
     protected ?string $email = null;
 

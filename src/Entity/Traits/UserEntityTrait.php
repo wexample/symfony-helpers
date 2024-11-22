@@ -7,13 +7,14 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 trait UserEntityTrait
 {
     use BaseEntityTrait;
 
     #[Id]
-    #[Column(type: 'integer')]
+    #[Column(type: VariableHelper::VARIABLE_TYPE_INTEGER)]
     #[GeneratedValue]
     protected $id;
 
