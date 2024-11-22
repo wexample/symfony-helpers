@@ -5,19 +5,19 @@ namespace Wexample\SymfonyHelpers\Entity\Traits;
 use Doctrine\ORM\Mapping\Column;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
-trait HasGroupTrait
+trait HasCategoryTrait
 {
     #[Column(type: VariableHelper::VARIABLE_TYPE_STRING, length: 255)]
-    protected ?string $group = null;
+    protected ?string $category = null;
 
-    public function getGroup(): ?string
+    public function getCategory(): ?string
     {
-        return $this->group;
+        return $this->category;
     }
 
-    public function setGroup(?string $group): static
+    public function setCategory(?string $category): static
     {
-        $this->group = $group;
+        $this->category = $category;
 
         return $this;
     }
