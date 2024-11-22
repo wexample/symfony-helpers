@@ -14,7 +14,7 @@ trait HasOriginTrait
         return $this->origin;
     }
 
-    public function setOrigin(string $origin): static
+    public function setOrigin(?string $origin): static
     {
         $this->origin = $origin;
 
