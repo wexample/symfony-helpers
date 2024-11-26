@@ -20,4 +20,13 @@ trait HasTargetTrait
 
         return $this;
     }
+
+    public function resolveTarget(): static
+    {
+        if ($target = $this->getTarget()) {
+            return $target->resolveTarget();
+        }
+
+        return $this;
+    }
 }
