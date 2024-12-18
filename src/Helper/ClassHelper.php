@@ -561,4 +561,14 @@ class ClassHelper
 
         return $reflectionMethodA->getDeclaringClass()->getName() === $reflectionMethodB->getDeclaringClass()->getName();
     }
+
+    public static function sortOn(array $classes, string $fieldName): array
+    {
+        usort($classes, fn(
+            $a,
+            $b
+        ) => ClassHelper::getFieldGetterValue($a, $fieldName) <=> ClassHelper::getFieldGetterValue($b, $fieldName));
+
+        return $classes;
+    }
 }
