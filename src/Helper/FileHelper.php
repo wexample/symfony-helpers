@@ -205,4 +205,52 @@ class FileHelper
             return null;
         }
     }
+
+    public static function convertToBytes(string|int $size): ?int
+    {
+        if (is_int($size)) {
+            return $size;
+        }
+
+        $size = trim(strtoupper($size));
+
+        if (!preg_match('/^(\d+(?:\.\d+)?)\s*([KMGTP]?B?|[KMGTP]O)?$/i', $size, $matches)) {
+            return null;
+        }
+
+        $num = (float) $matches[1];
+        $unit = $matches[2] ?? '';
+
+        $multipliers = [
+            'B' => 1,
+            'KB' => 1024,
+            'MB' => 1024 ** 2,
+            'GB' => 1024 ** 3,
+            'TB' => 1024 ** 4,
+            'PB' => 1024 ** 5,
+            'KO' => 1024,
+            'MO' => 1024 ** 2,
+            'GO' => 1024 ** 3,
+            'TO' => 1024 ** 4,
+            'PO' => 1024 ** 5,
+            'K' => 1024,
+            'M' => 1024 ** 2,
+            'G' => 1024 ** 3,
+            'T' => 1024 ** 4,
+            'P' => 1024 ** 5,
+        ];
+
+        if ($unit === '') {
+            return (int) $num;
+        }
+
+        $unit = strtoupper($unit);
+        $multiplier = $multipliers[$unit] ?? null;
+
+        if ($multiplier === null) {
+            return null;
+        }
+
+        return (int) ($num * $multiplier);
+    }
 }
