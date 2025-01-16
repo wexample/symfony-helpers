@@ -33,60 +33,6 @@ class FileHelper
 
     final public const SUFFIX_AGGREGATED = 'agg';
 
-    /**
-     * Common MIME types.
-     */
-
-    // Text files
-    final public const MIME_TEXT_PLAIN = 'text/plain';
-    final public const MIME_TEXT_HTML = 'text/html';
-    final public const MIME_TEXT_CSS = 'text/css';
-    final public const MIME_TEXT_JAVASCRIPT = 'application/javascript';
-
-    // Images
-    final public const MIME_IMAGE_JPEG = 'image/jpeg';
-    final public const MIME_IMAGE_PNG = 'image/png';
-    final public const MIME_IMAGE_GIF = 'image/gif';
-    final public const MIME_IMAGE_SVG = 'image/svg+xml';
-    final public const MIME_IMAGE_WEBP = 'image/webp';
-
-    // Audio
-    final public const MIME_AUDIO_MP3 = 'audio/mpeg';
-    final public const MIME_AUDIO_OGG = 'audio/ogg';
-    final public const MIME_AUDIO_WAV = 'audio/wav';
-
-    // Video
-    final public const MIME_VIDEO_MP4 = 'video/mp4';
-    final public const MIME_VIDEO_WEBM = 'video/webm';
-    final public const MIME_VIDEO_OGG = 'video/ogg';
-
-    // Application files
-    final public const MIME_APPLICATION_PDF = 'application/pdf';
-    final public const MIME_APPLICATION_ZIP = 'application/zip';
-    final public const MIME_APPLICATION_RAR = 'application/vnd.rar';
-    final public const MIME_APPLICATION_JSON = 'application/json';
-    final public const MIME_APPLICATION_XML = 'application/xml';
-    final public const MIME_APPLICATION_MSWORD = 'application/msword';
-    final public const MIME_APPLICATION_EXCEL = 'application/vnd.ms-excel';
-    final public const MIME_APPLICATION_POWERPOINT = 'application/vnd.ms-powerpoint';
-    final public const MIME_APPLICATION_OPENXML_WORD = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    final public const MIME_APPLICATION_OPENXML_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-    final public const MIME_APPLICATION_OPENXML_POWERPOINT = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-
-    // Archives
-    final public const MIME_ARCHIVE_TAR = 'application/x-tar';
-    final public const MIME_ARCHIVE_GZIP = 'application/gzip';
-
-    // Fonts
-    final public const MIME_FONT_WOFF = 'font/woff';
-    final public const MIME_FONT_WOFF2 = 'font/woff2';
-    final public const MIME_FONT_TTF = 'font/ttf';
-    final public const MIME_FONT_OTF = 'font/otf';
-
-    // Others
-    final public const MIME_BINARY_OCTET_STREAM = 'application/octet-stream';
-
-
     public static function createFileIfMissingAndGetJson(
         string $path,
         string $content = '{}',
