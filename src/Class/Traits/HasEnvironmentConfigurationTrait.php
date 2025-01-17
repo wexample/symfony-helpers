@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Trait;
+namespace Wexample\SymfonyHelpers\Class\Traits;
 
 use InvalidArgumentException;
+use ReflectionClass;
+use ReflectionProperty;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use TypeError;
 
 trait HasEnvironmentConfigurationTrait
@@ -11,40 +14,62 @@ trait HasEnvironmentConfigurationTrait
     private array $parameterTypes = [];
 
     /**
-     * Sets a single parameter with type checking
-     * @throws TypeError If the type does not match
+     * Automatically sets parameters from class properties marked with #[Autowire]
      */
-    public function setParameter(string $name, mixed $value, string $type): void
+    protected function initializeParameters(): void
     {
-        if (!in_array($type, ['string', 'int', 'bool', 'float', 'array'])) {
-            throw new InvalidArgumentException(
-                sprintf('Invalid type "%s" for parameter "%s". Allowed types: string, int, bool, float, array',
-                    $type,
-                    $name
-                )
-            );
+        $reflection = new ReflectionClass($this);
+        $properties = $reflection->getProperties(ReflectionProperty::IS_PRIVATE);
+
+        foreach ($properties as $property) {
+            $attributes = $property->getAttributes(Autowire::class);
+            if (empty($attributes)) {
+                continue;
+            }
+
+            $attribute = $attributes[0];
+            $autowireValue = $attribute->getArguments()[0];
+
+            // Extract parameter name from the autowire value (e.g., '%rabbitmq_host%' -> 'rabbitmq_host')
+            if (preg_match('/^%(.+)%$/', $autowireValue, $matches)) {
+                $paramName = $matches[1];
+                $value = $property->getValue($this);
+
+                $this->setParameter($paramName, $value);
+            }
         }
-
-        $this->validateParameterType($name, $value, $type);
-
+    }
+    /**
+     * Sets a single parameter
+     */
+    public function setParameter(string $name, mixed $value): void
+    {
         $this->parameters[$name] = $value;
-        $this->parameterTypes[$name] = $type;
     }
 
     /**
      * Sets multiple parameters at once
-     * @param array<string, array{value: mixed, type: string}> $parameters
+     * @param array<string, mixed> $parameters
+     * You can pass either an array with keys/values or with keys/values and an optional type
+     * Example: ['param1' => 'value1', 'param2' => ['value' => 123, 'type' => 'int']]
      */
     public function setParameters(array $parameters): void
     {
         foreach ($parameters as $name => $config) {
-            if (!isset($config['value'], $config['type'])) {
+            // If the value is an array with 'value' and 'type', handle it
+            if (is_array($config)) {
+            if (!isset($config['value'])) {
                 throw new InvalidArgumentException(
-                    sprintf('Invalid parameter configuration for "%s". Must contain "value" and "type" keys', $name)
+                    sprintf('Invalid parameter configuration for "%s". Must contain "value" key', $name)
                 );
-            }
 
-            $this->setParameter($name, $config['value'], $config['type']);
+            }
+            $type = $config['type'] ?? null;  // Type is optional
+            $this->setParameter($name, $config['value'], $type);
+            } else {
+                // If it's just a value, treat it as no type specified
+                $this->setParameter($name, $config);
+            }
         }
     }
 
