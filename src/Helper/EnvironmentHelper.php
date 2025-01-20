@@ -24,4 +24,11 @@ class EnvironmentHelper
         self::LOCAL,
         self::TEST,
     ];
+
+    public static function getMissingEnvKeys(array $expectedKeys): array
+    {
+        return array_filter($expectedKeys, function ($key) {
+            return getenv($key) === false;
+        });
+    }
 }
