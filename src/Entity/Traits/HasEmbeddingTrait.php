@@ -6,20 +6,20 @@ use Doctrine\ORM\Mapping\Column;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
-trait HasVectorDataTrait
+trait HasEmbeddingTrait
 {
     #[NotBlank]
     #[Column(type: VariableHelper::VARIABLE_TYPE_BLOB, nullable: false)]
-    protected ?string $vectorData = null;
+    protected ?string $embedding = null;
 
-    public function getVectorData(): ?string
+    public function getEmbedding(): ?string
     {
-        return $this->vectorData;
+        return $this->embedding;
     }
 
-    public function setVectorData(string $vectorData): static
+    public function setEmbedding(string $embedding): static
     {
-        $this->vectorData = $vectorData;
+        $this->embedding = $embedding;
 
         return $this;
     }
