@@ -19,7 +19,7 @@ trait DateRepositoryTrait
      * @param                   $fields
      * @param DateTimeInterface $dateMonth
      * @param QueryBuilder|null $builder
-     * @param string            $whereQuery
+     * @param string $whereQuery
      * @return QueryBuilder
      */
     public function queryDateInMonth(
@@ -27,7 +27,8 @@ trait DateRepositoryTrait
         DateTimeInterface $dateMonth,
         QueryBuilder $builder = null,
         string $whereQuery = ''
-    ): QueryBuilder {
+    ): QueryBuilder
+    {
         return $this->queryDateRange(
             $fields,
             DateHelper::startOfMonth($dateMonth),
@@ -41,7 +42,8 @@ trait DateRepositoryTrait
         string $field,
         DateTimeInterface $date,
         QueryBuilder $builder = null
-    ): QueryBuilder {
+    ): QueryBuilder
+    {
         return $this->queryDateBoundary(
             $field,
             $date,
@@ -57,19 +59,20 @@ trait DateRepositoryTrait
         string $parameterSuffix,
         string $operator,
         QueryBuilder $builder = null
-    ): QueryBuilder {
+    ): QueryBuilder
+    {
         $builder = $this->createOrGetQueryBuilder($builder);
 
         $fieldFull = $this->queryField($field);
 
         $builder
             ->andWhere(
-                $fieldFull.' IS NOT NULL AND '.$fieldFull.' '.$operator.' :'.$field.'Date'.$parameterSuffix
+                $fieldFull . ' IS NOT NULL AND ' . $fieldFull . ' ' . $operator . ' :' . $field . 'Date' . $parameterSuffix
             );
 
         $builder
             ->setParameter(
-                $field.'Date'.$parameterSuffix,
+                $field . 'Date' . $parameterSuffix,
                 $date->format('Y-m-d H:i:s')
             );
 
@@ -80,7 +83,8 @@ trait DateRepositoryTrait
         string $field,
         DateTimeInterface $date,
         QueryBuilder $builder = null
-    ): QueryBuilder {
+    ): QueryBuilder
+    {
         return $this->queryDateBoundary(
             $field,
             $date,
@@ -96,7 +100,8 @@ trait DateRepositoryTrait
         DateTimeInterface $dateLast,
         QueryBuilder $builder = null,
         string $whereQuery = ''
-    ): QueryBuilder {
+    ): QueryBuilder
+    {
         $builder = $this->createOrGetQueryBuilder($builder);
 
         if (!$whereQuery) {
@@ -113,24 +118,24 @@ trait DateRepositoryTrait
                 $query = '( ';
 
                 if ($fieldFullPrevious) {
-                    $query .= $fieldFullPrevious.' IS NULL AND ';
+                    $query .= $fieldFullPrevious . ' IS NULL AND ';
                 }
 
-                $query .= $fieldFull.' IS NOT NULL AND '.
-                    $fieldFull.
-                    ' >= :'.$field.'RangeStart AND '.
-                    $fieldFull.
-                    ' <= :'.$field.'RangeEnd )';
+                $query .= $fieldFull . ' IS NOT NULL AND ' .
+                    $fieldFull .
+                    ' >= :' . $field . 'RangeStart AND ' .
+                    $fieldFull .
+                    ' <= :' . $field . 'RangeEnd )';
 
                 $whereQuery[] = $query;
 
                 $builder
                     ->setParameter(
-                        $field.'RangeStart',
+                        $field . 'RangeStart',
                         $dateFirst->format('Y-m-d H:i:s')
                     )
                     ->setParameter(
-                        $field.'RangeEnd',
+                        $field . 'RangeEnd',
                         $dateLast->format('Y-m-d H:i:s')
                     );
 
@@ -148,7 +153,8 @@ trait DateRepositoryTrait
 
     public function findOneByYear(
         DateTimeInterface $dateAccounting
-    ): ?AbstractEntity {
+    ): ?AbstractEntity
+    {
         return $this->findOneBy([
             VariableHelper::YEAR => ((int) $dateAccounting->format(DateHelper::DATE_PATTERN_PART_YEAR_FULL)),
         ]);
@@ -160,7 +166,8 @@ trait DateRepositoryTrait
         bool $ordered = true,
         string $whereQuery = '',
         QueryBuilder $builder = null
-    ): QueryBuilder {
+    ): QueryBuilder
+    {
         $builder = $this->queryDateRange(
             $fields,
             DateHelper::startOfYear($dateYear),
@@ -187,7 +194,8 @@ trait DateRepositoryTrait
         string $field,
         QueryBuilder $builder = null,
         string $order = AbstractRepository::SORT_ASC
-    ): void {
+    ): void
+    {
         $builder = $this->createOrGetQueryBuilder($builder);
 
         $builder->orderBy(
@@ -195,5 +203,31 @@ trait DateRepositoryTrait
             // Enforce sorting as it is the only interest on this shortcut method.
             $order
         );
+    }
+
+    /**
+     * By default on postgres, when a date field can be null, the null values is ordered **before** the most recent date.
+     * Use this method to put the null dates **after** the older date.
+     *
+     * @param string $fieldName
+     * @param QueryBuilder|null $builder
+     * @return QueryBuilder
+     */
+    public function queryOrderByDateAndNull(
+        string $fieldName,
+        QueryBuilder $builder = null,
+    ): QueryBuilder
+    {
+        $builder = $this->createOrGetQueryBuilder($builder);
+
+        $builder->orderBy(
+            'CASE WHEN ' . $this->queryField($fieldName) . ' IS NULL THEN 0 ELSE 1 END',
+            order: self::SORT_DESC
+        )->addOrderBy(
+            $this->queryField($fieldName),
+            order: self::SORT_DESC
+        );
+
+        return $builder;
     }
 }
