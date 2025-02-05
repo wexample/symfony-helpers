@@ -90,9 +90,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
 
         return $this->queryByField(
-            $fieldName,
-            $arguments[0],
-            $arguments[1] ?? null
+            fieldName: $fieldName,
+            value:$arguments[0],
+            builder:$arguments[1] ?? null
         );
     }
 
