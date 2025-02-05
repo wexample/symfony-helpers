@@ -46,15 +46,15 @@ abstract class AbstractEntityNormalizer implements NormalizerInterface
         return $output;
     }
 
-    protected function serializeDateTimeOrNull(
+    protected function normalizeDateTimeOrNull(
         \DateTimeInterface|null $dateTime,
         array $context = []
     ): ?string
     {
-        return $dateTime ? $this->serializeDateTime($dateTime, $context) : null;
+        return $dateTime ? $this->normalizeDateTime($dateTime, $context) : null;
     }
 
-    protected function serializeDateTime(
+    protected function normalizeDateTime(
         \DateTimeInterface $dateTime,
         array $context = []
     ): string
