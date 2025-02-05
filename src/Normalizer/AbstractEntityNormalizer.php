@@ -26,7 +26,8 @@ abstract class AbstractEntityNormalizer implements NormalizerInterface
         mixed $data,
         ?string $format = null,
         array $context = []
-    ): bool {
+    ): bool
+    {
         return $this->isEntrypoint && ClassHelper::isClassPath($data, static::getEntityClassName());
     }
 
@@ -34,7 +35,8 @@ abstract class AbstractEntityNormalizer implements NormalizerInterface
         array|Collection $items,
         ?string $format = null,
         array $context = []
-    ): array {
+    ): array
+    {
         $output = [];
 
         foreach ($items as $item) {
@@ -44,10 +46,19 @@ abstract class AbstractEntityNormalizer implements NormalizerInterface
         return $output;
     }
 
+    protected function serializeDateTimeOrNull(
+        \DateTimeInterface|null $dateTime,
+        array $context = []
+    ): ?string
+    {
+        return $dateTime ? $this->serializeDateTime($dateTime, $context) : null;
+    }
+
     protected function serializeDateTime(
         \DateTimeInterface $dateTime,
         array $context = []
-    ): string {
+    ): string
+    {
         if ($dateTimeFormat = $this->getDefaultDateTimeSerializationFormat()) {
             $context[DateTimeNormalizer::FORMAT_KEY] = $dateTimeFormat;
         }
