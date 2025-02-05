@@ -217,12 +217,16 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function queryByField(
         string $fieldName,
         $value,
+        ?string $entityName = null,
         QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 
         $builder->andWhere(
-            $this->queryField($fieldName).' = :'.$fieldName.'Value'
+            $this->queryField(
+                fieldName: $fieldName,
+                entityName: $entityName
+            ).' = :'.$fieldName.'Value'
         )
             ->setParameter($fieldName.'Value', $value);
 
@@ -238,11 +242,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
         );
     }
 
-    public function getEntityQueryAlias(): string
+    public function getEntityQueryAlias(?string $entityName = null): string
     {
         $remove = 'app_entity_';
 
-        $alias = self::createQueryAlias($this->getEntityName());
+        $alias = self::createQueryAlias($entityName ?: $this->getEntityName());
 
         // Remove useless first part if present.
         return (str_starts_with($alias, $remove)) ?
@@ -311,9 +315,33 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
     }
 
-    public function queryField(string $fieldName): string
+    public function queryField(
+        string $fieldName,
+        ?string $entityName = null
+    ): string
     {
-        return $this->getEntityQueryAlias().'.'.$fieldName;
+        return $this->getEntityQueryAlias(entityName:$entityName).'.'.$fieldName;
+    }
+
+    public function queryRelatedToEntityHavingFieldValue(
+        string $targetEntityClassName,
+        string $fieldName,
+        $value,
+        QueryBuilder $builder = null
+    ): QueryBuilder
+    {
+        $builder = $this->createOrGetQueryBuilder($builder);
+        $builder->join(
+            $this->getEntityName()::getEntityKeyName() . '.' . $targetEntityClassName::getEntityKeyName(),
+            $targetEntityClassName::getEntityKeyName()
+        );
+
+        return $this->queryByField(
+            fieldName: $fieldName,
+            value: $value,
+            entityName: $targetEntityClassName,
+            builder: $builder
+        );
     }
 
     /**
