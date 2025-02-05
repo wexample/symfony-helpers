@@ -41,7 +41,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function __call(
         string $method,
         array $arguments
-    ): mixed {
+    ): mixed
+    {
         if (str_starts_with($method, 'hasSome')) {
             return $this->findHasSome(
                 $this->resolveMagicQueryCall(
@@ -80,7 +81,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function resolveMagicQueryCall(
         $method,
         $arguments
-    ): QueryBuilder {
+    ): QueryBuilder
+    {
         $fieldName = lcfirst(substr($method, 7));
 
         if (!($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
@@ -100,18 +102,19 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function resolveMagicCreateNewCall(
         $method,
         $arguments
-    ): AbstractEntity {
+    ): AbstractEntity
+    {
         $entityShortName = TextHelper::removePrefix($method, 'saveNew');
         $expectedEntityShortName = ClassHelper::getShortName(static::getEntityClassName());
 
         if ($entityShortName !== $expectedEntityShortName) {
-            throw new \Exception('Unable to create new entity of type "'.$entityShortName.'" from repository managing entities of type "'.$expectedEntityShortName.'".');
+            throw new \Exception('Unable to create new entity of type "' . $entityShortName . '" from repository managing entities of type "' . $expectedEntityShortName . '".');
         }
 
-        $createNewMethod = 'createNew'.$entityShortName;
+        $createNewMethod = 'createNew' . $entityShortName;
 
         if (!method_exists($this, $createNewMethod)) {
-            throw new \Exception('Creation method "'.$createNewMethod.'" not found on repository "'.static::class.'".');
+            throw new \Exception('Creation method "' . $createNewMethod . '" not found on repository "' . static::class . '".');
         }
 
         return call_user_func_array(
@@ -129,7 +132,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function resolveMagicSaveNewCall(
         $method,
         $arguments
-    ): AbstractEntity {
+    ): AbstractEntity
+    {
         $entity = $this->resolveMagicCreateNewCall(
             $method,
             $arguments
@@ -146,9 +150,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function resolveMagicPluckCall(
         string $method,
         array $arguments
-    ): array {
+    ): array
+    {
         $targetValueName = TextHelper::removePrefix($method, 'pluck');
-        $getterMethod = 'get'.$targetValueName;
+        $getterMethod = 'get' . $targetValueName;
         $entities = $arguments[0] ?? [];
 
         if (!is_array($entities)) {
@@ -159,7 +164,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         foreach ($entities as $entity) {
             if (!method_exists($entity, $getterMethod)) {
-                throw new InvalidMagicMethodCall("Method {$getterMethod} not found in ".get_class($entity));
+                throw new InvalidMagicMethodCall("Method {$getterMethod} not found in " . get_class($entity));
             }
             $output[] = $entity->$getterMethod();
         }
@@ -174,7 +179,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function resolveMagicRemoveCall(
         string $method,
         array $arguments
-    ): void {
+    ): void
+    {
         $fieldName = lcfirst(substr($method, 8));
 
         if (!($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
@@ -194,7 +200,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
         int $page,
         ?int $length = null,
         QueryBuilder $builder = null
-    ): QueryBuilder {
+    ): QueryBuilder
+    {
         $builder = $this->createOrGetQueryBuilder($builder);
         if ($length and $length > 0) {
             $builder->setMaxResults($length);
@@ -208,7 +215,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function findPaginated(
         int $page,
         ?int $length,
-    ): array {
+    ): array
+    {
         return $this->queryPaginated($page, $length)
             ->getQuery()
             ->execute();
@@ -219,23 +227,25 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $value,
         ?string $entityName = null,
         QueryBuilder $builder = null
-    ): QueryBuilder {
+    ): QueryBuilder
+    {
         $builder = $this->createOrGetQueryBuilder($builder);
 
         $builder->andWhere(
             $this->queryField(
                 fieldName: $fieldName,
                 entityName: $entityName
-            ).' = :'.$fieldName.'Value'
+            ) . ' = :' . $fieldName . 'Value'
         )
-            ->setParameter($fieldName.'Value', $value);
+            ->setParameter($fieldName . 'Value', $value);
 
         return $builder;
     }
 
     public function createOrGetQueryBuilder(
         QueryBuilder $builder = null,
-    ): ?QueryBuilder {
+    ): ?QueryBuilder
+    {
         // Search for interesting invoices.
         return $builder ?: $this->createQueryBuilder(
             $this->getEntityQueryAlias()
@@ -268,7 +278,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function findHasSome(
         array $criteria,
         QueryBuilder $builder = null
-    ): bool {
+    ): bool
+    {
         $builder = $this->querySelectCount($builder);
         $builder->setMaxResults(1);
 
@@ -291,11 +302,12 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function querySelectCount(
         QueryBuilder $builder = null
-    ): QueryBuilder {
+    ): QueryBuilder
+    {
         $builder = $this->createOrGetQueryBuilder($builder);
 
         $builder->select(
-            'COUNT('.$this->queryField(AbstractEntity::PROPERTY_NAME_ID).')'
+            'COUNT(' . $this->queryField(AbstractEntity::PROPERTY_NAME_ID) . ')'
         );
 
         return $builder;
@@ -304,7 +316,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function removeAll(
         array|Collection $entities,
         bool $flush = true
-    ): void {
+    ): void
+    {
         /** @var AbstractEntity $entry */
         foreach ($entities as $entry) {
             $this->remove($entry);
@@ -320,7 +333,20 @@ abstract class AbstractRepository extends ServiceEntityRepository
         ?string $entityName = null
     ): string
     {
-        return $this->getEntityQueryAlias(entityName:$entityName).'.'.$fieldName;
+        return $this->getEntityQueryAlias(entityName: $entityName) . '.' . $fieldName;
+    }
+
+    public function queryJoinEntity(
+        string $targetEntityClassName,
+        QueryBuilder $builder = null
+    ): QueryBuilder
+    {
+        $this->createOrGetQueryBuilder($builder)->join(
+            $this->getEntityName()::getEntityKeyName() . '.' . $targetEntityClassName::getEntityKeyName(),
+            $targetEntityClassName::getEntityKeyName()
+        );
+
+        return $builder;
     }
 
     public function queryRelatedToEntityHavingFieldValue(
@@ -330,10 +356,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
         QueryBuilder $builder = null
     ): QueryBuilder
     {
-        $builder = $this->createOrGetQueryBuilder($builder);
-        $builder->join(
-            $this->getEntityName()::getEntityKeyName() . '.' . $targetEntityClassName::getEntityKeyName(),
-            $targetEntityClassName::getEntityKeyName()
+        $builder = $this->queryJoinEntity(
+            targetEntityClassName: $targetEntityClassName,
+            builder: $builder
         );
 
         return $this->queryByField(
@@ -350,9 +375,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function add(
         AbstractEntity $entity,
         bool $flush = true
-    ): AbstractEntity {
+    ): AbstractEntity
+    {
         if (!class_parents($entity, $this->getEntityName())) {
-            throw new Exception('Entity of type '.$entity::class.' should be of type '.$this->getEntityName().' in add() method');
+            throw new Exception('Entity of type ' . $entity::class . ' should be of type ' . $this->getEntityName() . ' in add() method');
         }
 
         $em = $this->getEntityManager();
@@ -367,7 +393,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function save(
         AbstractEntity $entity,
         bool $flush = true
-    ): void {
+    ): void
+    {
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {
@@ -378,7 +405,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function remove(
         AbstractEntity $entity,
         bool $flush = true
-    ): bool {
+    ): bool
+    {
         $this->getEntityManager()->remove($entity);
 
         if ($flush) {
