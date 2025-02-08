@@ -2,6 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use Wexample\Helpers\Helper\TextHelper;
 use function round;
 
 class PriceHelper

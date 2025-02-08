@@ -2,6 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use Wexample\Helpers\Helper\TextHelper;
 use function array_keys;
 use function current;
 use function is_null;

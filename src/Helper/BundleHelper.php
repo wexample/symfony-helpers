@@ -4,6 +4,8 @@ namespace Wexample\SymfonyHelpers\Helper;
 
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\TextHelper;
 
 class BundleHelper
 {

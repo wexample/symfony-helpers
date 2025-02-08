@@ -2,6 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use Wexample\Helpers\Helper\TextHelper;
 use function htmlspecialchars;
 use function implode;
 use function is_array;

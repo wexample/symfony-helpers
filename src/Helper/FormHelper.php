@@ -2,6 +2,8 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use Wexample\Helpers\Helper\ClassHelper;
+
 class FormHelper
 {
     public static function buildRoute(string $formClassName): string

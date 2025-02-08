@@ -2,6 +2,8 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Controller\AbstractController;
 
 class RouteHelper

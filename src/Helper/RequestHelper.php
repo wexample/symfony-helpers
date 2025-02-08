@@ -4,6 +4,8 @@ namespace Wexample\SymfonyHelpers\Helper;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\TextHelper;
 
 class RequestHelper
 {

@@ -5,6 +5,7 @@ namespace Wexample\SymfonyHelpers\Helper;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Wexample\Helpers\Helper\TextHelper;
 use function is_dir;
 
 class FileHelper

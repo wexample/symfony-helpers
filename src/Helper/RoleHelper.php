@@ -2,6 +2,8 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use Wexample\Helpers\Helper\TextHelper;
+
 /**
  * Basic roles names, application should use its own helper
  * for custom roles in a class like ApplicationRoleHelper.
