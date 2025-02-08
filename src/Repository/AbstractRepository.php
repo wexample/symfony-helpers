@@ -10,8 +10,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
-use Wexample\SymfonyHelpers\Helper\ClassHelper;
-use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\TextHelper;
 
 /**
  * @method AbstractEntity|null find($id, $lockMode = null, $lockVersion = null)

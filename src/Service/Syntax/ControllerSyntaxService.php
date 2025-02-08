@@ -3,7 +3,7 @@
 namespace Wexample\SymfonyHelpers\Service\Syntax;
 
 use JetBrains\PhpStorm\Pure;
-use Wexample\SymfonyHelpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\FileHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 

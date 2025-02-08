@@ -2,8 +2,8 @@
 
 namespace Wexample\SymfonyHelpers\Command;
 
-use Wexample\SymfonyHelpers\Helper\ClassHelper;
-use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Service\BundleService;
 
 abstract class AbstractBundleCommand extends AbstractCommand

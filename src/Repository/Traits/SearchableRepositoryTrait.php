@@ -3,7 +3,7 @@
 namespace Wexample\SymfonyHelpers\Repository\Traits;
 
 use Doctrine\ORM\QueryBuilder;
-use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\Helpers\Helper\TextHelper;
 
 trait SearchableRepositoryTrait
 {

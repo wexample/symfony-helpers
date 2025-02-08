@@ -3,7 +3,7 @@
 namespace Wexample\SymfonyHelpers\Class\ResponseRenderProcessor;
 
 use Wexample\SymfonyHelpers\Class\RenderableResponse;
-use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\Helpers\Helper\TextHelper;
 
 class ListResponseRenderProcessor extends AbstractResponseRenderProcessor
 {

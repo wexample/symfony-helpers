@@ -5,9 +5,9 @@ namespace Wexample\SymfonyHelpers\Service\Syntax;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Environment;
 use Wexample\SymfonyHelpers\Helper\BundleHelper;
-use Wexample\SymfonyHelpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\FileHelper;
-use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 abstract class AbstractSyntaxService

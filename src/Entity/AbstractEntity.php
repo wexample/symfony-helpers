@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Entity\Traits\BaseEntityTrait;
-use Wexample\SymfonyHelpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 abstract class AbstractEntity implements AbstractEntityInterface

@@ -2,7 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Migration\Traits;
 
-use Wexample\SymfonyHelpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\ClassHelper;
 
 trait WithDataMigrationTrait
 {

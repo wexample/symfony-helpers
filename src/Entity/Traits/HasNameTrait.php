@@ -3,7 +3,7 @@
 namespace Wexample\SymfonyHelpers\Entity\Traits;
 
 use Doctrine\ORM\Mapping\Column;
-use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 trait HasNameTrait

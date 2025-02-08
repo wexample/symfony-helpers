@@ -2,7 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Entity\Traits;
 
-use Wexample\SymfonyHelpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\ClassHelper;
 
 /**
  * Class TraitEntityStatus.

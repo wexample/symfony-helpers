@@ -4,7 +4,7 @@ namespace Wexample\SymfonyHelpers\Class;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Wexample\SymfonyHelpers\Helper\BundleHelper;
-use Wexample\SymfonyHelpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\FileHelper;
 
 abstract class AbstractBundle extends Bundle

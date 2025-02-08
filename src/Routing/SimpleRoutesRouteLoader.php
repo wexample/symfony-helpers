@@ -5,7 +5,7 @@ namespace Wexample\SymfonyHelpers\Routing;
 use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\Helpers\Helper\TextHelper;
 
 class SimpleRoutesRouteLoader extends AbstractRouteLoader
 {

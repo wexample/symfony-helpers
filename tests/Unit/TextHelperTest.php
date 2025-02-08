@@ -2,7 +2,7 @@
 
 namespace Wexample\SymfonyApi\Tests\Unit\Helper;
 
-use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyTesting\Tests\AbstractApplicationTestCase;
 
 class TextHelperTest extends AbstractApplicationTestCase

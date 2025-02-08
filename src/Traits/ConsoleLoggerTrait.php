@@ -3,8 +3,8 @@
 namespace Wexample\SymfonyHelpers\Traits;
 
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
-use Wexample\SymfonyHelpers\Helper\ClassHelper;
-use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\TextHelper;
 
 trait ConsoleLoggerTrait
 {

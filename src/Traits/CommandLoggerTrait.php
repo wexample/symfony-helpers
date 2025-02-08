@@ -3,7 +3,7 @@
 namespace Wexample\SymfonyHelpers\Traits;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Wexample\SymfonyHelpers\Helper\TextHelper;
+use Wexample\Helpers\Helper\TextHelper;
 
 trait CommandLoggerTrait
 {

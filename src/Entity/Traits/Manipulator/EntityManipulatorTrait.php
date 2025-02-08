@@ -2,7 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Entity\Traits\Manipulator;
 
-use Wexample\SymfonyHelpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\ClassHelper;
 
 trait EntityManipulatorTrait
 {
