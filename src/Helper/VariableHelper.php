@@ -139,6 +139,13 @@ class VariableHelper
     final public const VARIABLE_TYPE_BOOLEAN = 'boolean';
     final public const VARIABLE_TYPE_DATETIME = 'datetime';
     final public const VARIABLE_TYPE_INTEGER = 'integer';
+    final public const VARIABLE_TYPE_FLOAT = 'float';
+    final public const VARIABLE_TYPE_DOUBLE = 'double';
+    final public const VARIABLE_TYPE_DECIMAL = 'decimal';
+    final public const VARIABLE_TYPE_NULL = 'null';
+    final public const VARIABLE_TYPE_OBJECT = 'object';
+    final public const VARIABLE_TYPE_RESOURCE = 'resource';
+    final public const VARIABLE_TYPE_CALLABLE = 'callable';
     final public const VARIABLE_TYPE_MIXED = 'mixed';
     final public const VARIABLE_TYPE_STRING = 'string';
     final public const VARIABLE_TYPE_STRING_LENGTH_DEFAULT = 255;
