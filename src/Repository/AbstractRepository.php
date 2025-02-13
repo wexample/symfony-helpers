@@ -8,10 +8,11 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-use Wexample\SymfonyHelpers\Entity\AbstractEntity;
-use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Entity\AbstractEntity;
+use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 /**
  * @method AbstractEntity|null find($id, $lockMode = null, $lockVersion = null)
@@ -89,10 +90,19 @@ abstract class AbstractRepository extends ServiceEntityRepository
             throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->_entityName, $fieldName, $method);
         }
 
+        // Allow both named argument or second position argument as builder.
+        $builder = null;
+        if (isset($arguments['builder'])) {
+            $builder = $arguments['builder'];
+        } elseif (isset($arguments[1])) {
+            $builder = $arguments[1];
+        }
+        $builder = $builder instanceof QueryBuilder ? $builder : null;
+
         return $this->queryByField(
             fieldName: $fieldName,
-            value:$arguments[0],
-            builder:$arguments[1] ?? null
+            value: $arguments[0],
+            builder: $builder
         );
     }
 
@@ -196,6 +206,24 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Defines a default ordering criteria as some database might not have a consistent sorting method between same requests.
+     * @param QueryBuilder|null $builder
+     * @return QueryBuilder
+     */
+    public function orderByDefaultPagination(
+        QueryBuilder $builder = null
+    ): QueryBuilder
+    {
+        $builder = $this->createOrGetQueryBuilder($builder);
+
+        $builder->orderBy(
+            $this->queryField(VariableHelper::ID)
+        );
+
+        return $builder;
+    }
+
     public function queryPaginated(
         int $page,
         ?int $length = null,
@@ -206,6 +234,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
         if ($length and $length > 0) {
             $builder->setMaxResults($length);
         }
+
+        $builder = $this->orderByDefaultPagination($builder);
 
         $builder->setFirstResult($page * $length);
 
