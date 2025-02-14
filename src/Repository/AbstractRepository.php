@@ -208,17 +208,21 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     /**
      * Defines a default ordering criteria as some database might not have a consistent sorting method between same requests.
+     * @param string $order
      * @param QueryBuilder|null $builder
      * @return QueryBuilder
      */
     public function orderByDefaultPagination(
+        string $order = self::SORT_ASC,
         QueryBuilder $builder = null
     ): QueryBuilder
     {
-        $builder = $this->createOrGetQueryBuilder($builder);
+        $builder = $this->createOrGetQueryBuilder(
+            $builder);
 
         $builder->orderBy(
-            $this->queryField(VariableHelper::ID)
+            sort: $this->queryField(VariableHelper::ID),
+            order: $order
         );
 
         return $builder;
@@ -235,7 +239,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $builder->setMaxResults($length);
         }
 
-        $builder = $this->orderByDefaultPagination($builder);
+        $builder = $this->orderByDefaultPagination(builder: $builder);
 
         $builder->setFirstResult($page * $length);
 
@@ -444,5 +448,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
 
         return true;
+    }
+
+    public function findAllSorted(
+        string $order = self::SORT_ASC
+    ): array
+    {
+        return $this->orderByDefaultPagination($order)
+            ->getQuery()
+            ->getResult();
     }
 }
