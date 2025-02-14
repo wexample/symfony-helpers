@@ -3,7 +3,7 @@
     "description": "Helpers for symfony development : constants dictionary, helpers, etc.",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "autoload": {
         "psr-4": {
             "Wexample\\SymfonyHelpers\\": "src/"
@@ -21,6 +21,6 @@
         "symfony/twig-bundle": ">=6.2",
         "laminas/laminas-text": "^2.10",
         "doctrine/common": "^3.4",
-        "wexample/helpers": "^1.0.11"
+        "wexample/helpers": "^1.0.12"
     }
 }
