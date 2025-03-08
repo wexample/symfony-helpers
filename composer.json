@@ -21,7 +21,7 @@
         "symfony/twig-bundle": ">=6.2",
         "laminas/laminas-text": "^2.10",
         "doctrine/common": "^3.4",
-        "doctrine/orm": "^3.4",
+        "doctrine/orm": "^3.3",
         "doctrine/doctrine-bundle": "^3.4",
         "wexample/helpers": "^1.0.21"
     }
