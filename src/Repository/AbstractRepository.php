@@ -58,7 +58,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
 
         if (str_starts_with($method, 'createNew')) {
-            return $this->resolveMagicSaveNewCall($method, $arguments);
+            return $this->resolveMagicCreateNewCall($method, $arguments);
         }
 
         if (str_starts_with($method, 'saveNew')) {
