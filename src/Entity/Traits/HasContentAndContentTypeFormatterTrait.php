@@ -2,6 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\Entity\Traits;
 
+use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Helper\DataHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
@@ -12,10 +13,14 @@ trait HasContentAndContentTypeFormatterTrait
         getContentType as _getContentType;
     }
 
+    public const string FORMAT_BOOLEAN = VariableHelper::VARIABLE_TYPE_BOOLEAN;
+    public const string FORMAT_FLOAT = VariableHelper::VARIABLE_TYPE_FLOAT;
     public const string FORMAT_INTEGER = VariableHelper::VARIABLE_TYPE_INTEGER;
     public const string FORMAT_JSON = DataHelper::FORMAT_JSON;
+    public const string FORMAT_NULL = VariableHelper::VARIABLE_TYPE_NULL;
     public const string FORMAT_SERIALIZED = 'serialized';
     public const string FORMAT_TEXT = VariableHelper::VARIABLE_TYPE_TEXT;
+    public const string FORMAT_YAML = VariableHelper::YAML;
 
     public function getContentType(): string
     {
@@ -32,11 +37,13 @@ trait HasContentAndContentTypeFormatterTrait
         ];
     }
 
-    public function setContentFromFormatted(mixed $formatted): HasContentAndContentTypeFormatterTrait
+    public function setContentFromFormatted(mixed $formatted): mixed
     {
         $content = $formatted;
 
         switch ($this->getFormat()) {
+            case self::FORMAT_BOOLEAN:
+                $content = TextHelper::renderBoolean((bool) $content);
             case self::FORMAT_JSON:
                 $content = json_encode($content);
             case self::FORMAT_SERIALIZED:
