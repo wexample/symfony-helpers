@@ -458,4 +458,16 @@ abstract class AbstractRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    protected function findRelatedEntity(
+        string $entityClass,
+        int $entityId
+    ): ?AbstractEntity
+    {
+        $repository = $this->getEntityManager()->getRepository($entityClass);
+        if ($entity = $repository->find($entityId)) {
+            return $entity;
+        }
+        return null;
+    }
 }
