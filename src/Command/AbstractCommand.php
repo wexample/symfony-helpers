@@ -14,7 +14,8 @@ abstract class AbstractCommand extends Command
 {
     public function __construct(
         string $name = null,
-    ) {
+    )
+    {
         parent::__construct($name ?: $this->buildDefaultName());
     }
 
@@ -26,7 +27,7 @@ abstract class AbstractCommand extends Command
     public static function buildDefaultName(): string
     {
         return static::getCommandPrefixGroup()
-            .':'.TextHelper::toKebab(
+            . ':' . TextHelper::toKebab(
                 TextHelper::removeSuffix(
                     ClassHelper::getShortName(static::class),
                     'Command'
@@ -40,7 +41,8 @@ abstract class AbstractCommand extends Command
     protected function execCommand(
         string $command,
         OutputInterface $output
-    ): void {
+    ): void
+    {
         if (is_subclass_of(
             $command,
             AbstractBundleCommand::class
