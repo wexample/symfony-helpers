@@ -44,10 +44,13 @@ trait HasContentAndContentTypeFormatterTrait
         switch ($this->getFormat()) {
             case self::FORMAT_BOOLEAN:
                 $content = TextHelper::renderBoolean((bool) $content);
+                break;
             case self::FORMAT_JSON:
                 $content = json_encode($content);
+                break;
             case self::FORMAT_SERIALIZED:
                 $content = serialize($content);
+                break;
         }
 
         return $this->setContent($content);
