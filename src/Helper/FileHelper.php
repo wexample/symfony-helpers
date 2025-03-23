@@ -194,6 +194,9 @@ class FileHelper
         );
     }
 
+    /**
+     * @deprecated Use \Wexample\SymfonyHelpers\Helper\FileHelper::buildRelativePath() instead.
+     */
     public static function buildRelativePath(
         string $filePath,
         string $relativeTo

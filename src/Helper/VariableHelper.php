@@ -4,6 +4,7 @@ namespace Wexample\SymfonyHelpers\Helper;
 
 class VariableHelper
 {
+    /** @deprecated Use \Wexample\Helpers\Helper\VariableSpecialHelper::_EMPTY_STRING instead  */
     final public const _EMPTY_STRING = '';
     final public const _SPACE = ' ';
     final public const ACCESS = 'access';
