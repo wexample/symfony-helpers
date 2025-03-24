@@ -14,6 +14,8 @@ use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 abstract class AbstractCommand extends Command
 {
+    protected static $defaultDescription = null;
+
     public function __construct(
         string $name = null,
     )
@@ -35,6 +37,13 @@ abstract class AbstractCommand extends Command
                     'Command'
                 )
             );
+    }
+
+    protected function configure(): void
+    {
+        if (static::$defaultDescription) {
+            $this->setDescription(static::$defaultDescription);
+        }
     }
 
     /**
