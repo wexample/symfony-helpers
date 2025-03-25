@@ -470,4 +470,16 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
         return null;
     }
+
+    public function getDefaultIdentifierName(): string
+    {
+        return 'id';
+    }
+
+    public function findOneByDefaultIdentifier(string|int $identifier): ?AbstractEntity
+    {
+        return $this->findOneBy([
+            $this->getDefaultIdentifierName() => $identifier
+        ]);
+    }
 }
