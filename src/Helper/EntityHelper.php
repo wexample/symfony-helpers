@@ -6,12 +6,16 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Persistence\Proxy;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Entity\Traits\BaseEntityTrait;
 use Wexample\SymfonyTranslations\Translation\Translator;
 use function implode;
+use function str_contains;
+use function str_replace;
 
 class EntityHelper
 {
@@ -115,5 +119,35 @@ class EntityHelper
     public static function getId(AbstractEntity|int|null $entity): ?int
     {
         return ClassHelper::isClassPath($entity, Product::class) ? $entity->getId() : $entity;
+    }
+
+    /**
+     * Normalize a class name by removing Doctrine proxy prefixes
+     * This handles both standard Doctrine proxies and Symfony's specific proxy format
+     *
+     * @param string $className The class name to normalize
+     * @return string The normalized class name
+     */
+    public static function getRealClassName(object|string $className): string
+    {
+        $className = is_object($className) ? $className::class : $className;
+
+        // Check if it's a Doctrine proxy class with Symfony's specific format
+        if (str_contains($className, 'Proxies\\__CG__\\')) {
+            // Extract the real entity class name from the proxy class name
+            return str_replace('Proxies\\__CG__\\', '', $className);
+        }
+        
+        // Use ClassHelper's method for other proxy types
+        if (class_exists($className) && is_subclass_of($className, Proxy::class)) {
+            try {
+                return ClassHelper::getRealClassPath($className);
+            } catch (\ReflectionException $e) {
+                // Fallback to the original class name if reflection fails
+                return $className;
+            }
+        }
+        
+        return $className;
     }
 }
