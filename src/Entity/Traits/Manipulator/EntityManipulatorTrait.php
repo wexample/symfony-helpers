@@ -3,6 +3,7 @@
 namespace Wexample\SymfonyHelpers\Entity\Traits\Manipulator;
 
 use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 
 trait EntityManipulatorTrait
 {
@@ -11,5 +12,8 @@ trait EntityManipulatorTrait
         return ClassHelper::isClassPath($entityClass, self::getEntityClassName());
     }
 
+    /**
+     * @return string|AbstractEntity
+     */
     abstract public static function getEntityClassName(): string;
 }
