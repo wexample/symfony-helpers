@@ -52,7 +52,7 @@ abstract class AbstractException extends \Exception
 
     function buildInternalCode(): string
     {
-        return implode('-', $this->getInternalCodeParts());
+        return implode('-', [...$this->getInternalCodeParts(), $this->getInternalCode()]);
     }
 
     /**
