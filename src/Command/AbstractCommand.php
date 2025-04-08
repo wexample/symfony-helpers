@@ -80,10 +80,6 @@ abstract class AbstractCommand extends Command
         $io = new SymfonyStyle($input, $output);
         try {
             return $callback($input, $output, $io);
-        } catch (\Wexample\SymfonyApi\Exception\ValidationException $e) {
-            // ValidationException already has a formatted message with error details
-            $io->error($e->getMessage());
-            return Command::FAILURE;
         } catch (\InvalidArgumentException $e) {
             $io->error($e->getMessage());
             return Command::FAILURE;
