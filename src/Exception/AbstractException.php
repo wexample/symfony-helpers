@@ -23,7 +23,7 @@ abstract class AbstractException extends \Exception
      *
      * @var string|null
      */
-    protected ?string $stringCode = null;
+    protected ?string $internalCode = null;
 
     /**
      * Creates a new base exception.
@@ -43,21 +43,26 @@ abstract class AbstractException extends \Exception
     )
     {
         $this->context = $context;
-        $this->stringCode = $internalCode;
+        $this->internalCode = $internalCode;
 
         parent::__construct($message, $code, $previous);
     }
 
-    abstract function getInternalCodePrefix(): string;
+    abstract public function getInternalCodeParts(): array;
+
+    function buildInternalCode(): string
+    {
+        return implode('-', $this->getInternalCodeParts());
+    }
 
     /**
      * Gets the string error code.
      *
      * @return string|null The string error code
      */
-    public function getStringCode(): ?string
+    public function getInternalCode(): ?string
     {
-        return $this->stringCode;
+        return $this->internalCode;
     }
 
     /**
