@@ -4,7 +4,7 @@ namespace Wexample\SymfonyHelpers\Exception;
 
 /**
  * Base exception class for all application exceptions.
- * 
+ *
  * This class provides a standardized way to handle errors across all applications
  * with support for error codes, context data, and formatted messages.
  */
@@ -16,7 +16,7 @@ abstract class AbstractException extends \Exception
      * @var array
      */
     protected array $context = [];
-    
+
     /**
      * String error code for human-readable identification across projects.
      * Format example: "C-N-021" where letters can identify the source/project.
@@ -40,13 +40,16 @@ abstract class AbstractException extends \Exception
         ?string $internalCode = null,
         array $context = [],
         \Throwable $previous = null
-    ) {
+    )
+    {
         $this->context = $context;
         $this->stringCode = $internalCode;
 
         parent::__construct($message, $code, $previous);
     }
-    
+
+    abstract function getInternalCodePrefix(): string;
+
     /**
      * Gets the string error code.
      *
@@ -56,7 +59,7 @@ abstract class AbstractException extends \Exception
     {
         return $this->stringCode;
     }
-    
+
     /**
      * Gets the error context data.
      *
