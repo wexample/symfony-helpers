@@ -27,8 +27,8 @@ trait NotAllowedItemExceptionTrait
      * @return string The formatted error message
      */
     protected function formatNotAllowedItemMessage(
-        string $itemType = 'item',
-        string $itemValue = 'item'
+        string $itemType,
+        string $itemValue
     ): string
     {
         return sprintf(
