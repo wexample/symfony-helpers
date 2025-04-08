@@ -23,36 +23,36 @@ abstract class AbstractException extends \Exception
      *
      * @var string|null
      */
-    protected ?string $internalCode = null;
+    protected ?string $internalCodeSuffix = null;
 
     /**
      * Creates a new base exception.
      *
      * @param string $message The error message
      * @param int $code The numeric error code (for HTTP/system compatibility)
-     * @param string|null $internalCode The string error code (for cross-project identification)
+     * @param string|null $internalCodeSuffix The string error code (for cross-project identification)
      * @param array $context Additional context data related to the error
      * @param \Throwable|null $previous The previous exception if nested
      */
     public function __construct(
         string $message,
         int $code = 0,
-        ?string $internalCode = null,
+        ?string $internalCodeSuffix = null,
         array $context = [],
         \Throwable $previous = null
     )
     {
         $this->context = $context;
-        $this->internalCode = $internalCode;
+        $this->internalCodeSuffix = $internalCodeSuffix;
 
         parent::__construct($message, $code, $previous);
     }
 
     abstract public function getInternalCodeParts(): array;
 
-    function buildInternalCode(): string
+    function getInternalCode(): string
     {
-        return implode('-', [...$this->getInternalCodeParts(), $this->getInternalCode()]);
+        return implode('-', [...$this->getInternalCodeParts(), $this->getInternalCodeSuffix()]);
     }
 
     /**
@@ -60,9 +60,9 @@ abstract class AbstractException extends \Exception
      *
      * @return string|null The string error code
      */
-    public function getInternalCode(): ?string
+    public function getInternalCodeSuffix(): ?string
     {
-        return $this->internalCode;
+        return $this->internalCodeSuffix;
     }
 
     /**
