@@ -98,6 +98,62 @@ class DebugHelper
      * @param int $maxFrames Maximum number of frames to display (0 = all)
      * @return string Formatted trace string
      */
+    /**
+     * Format a complete exception with all nested exceptions and their traces
+     * 
+     * @param \Throwable $exception The exception to format
+     * @param bool $ignoreArgs If true, function arguments will not be included in the output
+     * @param int $maxFrames Maximum number of frames to display per trace (0 = all)
+     * @param int $maxDepth Maximum depth of nested exceptions to display (prevents infinite loops)
+     * @return string Formatted exception details
+     */
+    public static function formatException(\Throwable $exception, bool $ignoreArgs = false, int $maxFrames = 0, int $maxDepth = 10): string
+    {
+        $result = '';
+        $depth = 0;
+        $currentException = $exception;
+        
+        while ($currentException && $depth < $maxDepth) {
+            // Add separator for nested exceptions
+            if ($depth > 0) {
+                $result .= "\n\nCaused by:\n";
+            }
+            
+            // Add exception class, code, message and file location
+            $result .= sprintf(
+                "%s [%s]: %s\nin %s:%d\n",
+                get_class($currentException),
+                $currentException->getCode(),
+                $currentException->getMessage(),
+                $currentException->getFile(),
+                $currentException->getLine()
+            );
+            
+            // Add the trace for this exception
+            $trace = $currentException->getTrace();
+            $result .= "\nStack trace:\n" . self::formatTrace($trace, $ignoreArgs, $maxFrames);
+            
+            // Move to the previous exception in the chain
+            $currentException = $currentException->getPrevious();
+            $depth++;
+        }
+        
+        // Indicate if we reached the maximum depth
+        if ($currentException && $depth >= $maxDepth) {
+            $result .= "\n\n(Maximum exception depth of {$maxDepth} reached)";
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Format an exception trace array into a readable string
+     *
+     * @param array $trace The trace array from Exception::getTrace()
+     * @param bool $ignoreArgs If true, function arguments will not be included in the output
+     * @param int $maxFrames Maximum number of frames to display (0 = all)
+     * @return string Formatted trace string
+     */
     public static function formatTrace(array $trace, bool $ignoreArgs = false, int $maxFrames = 0): string
     {
         $result = "";
