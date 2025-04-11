@@ -11,16 +11,6 @@ namespace Wexample\SymfonyHelpers\Exception\Trait;
 trait NotAllowedItemExceptionTrait
 {
     /**
-     * Gets the list of allowed items.
-     *
-     * @return array<string> The list of allowed items
-     */
-    public function getAllowedItems(): array
-    {
-        return [];
-    }
-
-    /**
      * Formats an error message for an item that is not allowed.
      *
      * @param string $itemType The type of item (e.g., 'format', 'option', 'value')
@@ -28,17 +18,17 @@ trait NotAllowedItemExceptionTrait
      */
     protected function formatNotAllowedItemMessage(
         string $itemType,
-        string $itemValue
+        string $itemValue,
+        array $allowedValues
     ): string
     {
         return sprintf(
-            "The %s '%s' is not allowed. Allowed %ss are: '%s'.",
+            "The %s '%s' is not allowed. Allowed values are: '%s'.",
             $itemType,
             $itemValue,
-            $itemType,
             implode(
                 "', '",
-                $this->getAllowedItems()
+                $allowedValues
             )
         );
     }
