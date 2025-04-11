@@ -80,11 +80,8 @@ abstract class AbstractCommand extends Command
         $io = new SymfonyStyle($input, $output);
         try {
             return $callback($input, $output, $io);
-        } catch (\InvalidArgumentException $e) {
-            $io->error($e->getMessage());
-            return Command::FAILURE;
         } catch (\Exception $e) {
-            $io->error('An unexpected error occurred: ' . $e->getMessage());
+            $io->error($e->getMessage());
             return Command::FAILURE;
         }
     }
