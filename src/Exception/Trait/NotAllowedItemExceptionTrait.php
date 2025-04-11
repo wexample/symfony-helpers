@@ -22,14 +22,24 @@ trait NotAllowedItemExceptionTrait
         array $allowedValues
     ): string
     {
-        return sprintf(
-            "The %s '%s' is not allowed. Allowed values are: '%s'.",
+        $output = sprintf(
+            "The %s '%s' is not allowed.",
             $itemType,
             $itemValue,
-            implode(
-                "', '",
-                $allowedValues
-            )
         );
+
+        if (count($allowedValues)) {
+            $output .= sprintf(
+                ' Allowed values are: %s.',
+                implode(
+                    "', '",
+                    $allowedValues
+                )
+            );
+        } else {
+            $output .= ' No suggested allowed value available.';
+        }
+
+        return $output;
     }
 }
