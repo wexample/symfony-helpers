@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Controller\Traits\HasSimpleRoutesControllerTrait;
 
 class SimpleRoutesRouteLoader extends AbstractRouteLoader
 {
@@ -32,6 +33,7 @@ class SimpleRoutesRouteLoader extends AbstractRouteLoader
                 $baseName = $routeAttribute->getName();
 
                 if (method_exists($controller, 'getSimpleRoutes')) {
+                    /** @var HasSimpleRoutesControllerTrait $controller */
                     $routes = $controller::getSimpleRoutes();
 
                     foreach ($routes as $routeName) {

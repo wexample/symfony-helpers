@@ -4,6 +4,7 @@ namespace Wexample\SymfonyHelpers\Controller;
 
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\Routing\Annotation\Route;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
@@ -30,6 +31,9 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     public const array ROUTE_OPTIONS_METHOD_ONLY_TRACE = [Request::METHOD_TRACE];
     public const array ROUTE_OPTIONS_METHOD_ONLY_CONNECT = [Request::METHOD_CONNECT];
 
+    /**
+     * @return Bundle|string
+     */
     public static function getControllerBundle(): ?string
     {
         $current = static::class;
@@ -45,7 +49,8 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     protected function getParameterOrDefault(
         string $name,
         array|bool|float|int|null|string $default
-    ) {
+    )
+    {
         if (!$this->container->get('parameter_bag')->has($name)) {
             return $default;
         }
@@ -62,7 +67,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
                 $arguments = $attribute->getArguments();
 
                 if (isset($arguments[VariableHelper::NAME])) {
-                    return $arguments[VariableHelper::NAME].$suffix;
+                    return $arguments[VariableHelper::NAME] . $suffix;
                 }
             }
         }
