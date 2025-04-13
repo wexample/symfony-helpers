@@ -5,11 +5,13 @@ namespace Wexample\SymfonyHelpers\Routing;
 use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Controller\Traits\HasSimpleRoutesControllerTrait;
+use Wexample\SymfonyHelpers\Routing\Traits\RoutePathBuilderTrait;
 
 class SimpleRoutesRouteLoader extends AbstractRouteLoader
 {
+    use RoutePathBuilderTrait;
+    
     public function __construct(
         protected RewindableGenerator $taggedControllers,
         string $env = null
@@ -27,19 +29,15 @@ class SimpleRoutesRouteLoader extends AbstractRouteLoader
             $reflectionClass = new \ReflectionClass($controller);
             $routeAttributes = $reflectionClass->getAttributes(\Symfony\Component\Routing\Annotation\Route::class);
 
-            if (!empty($routeAttributes)) {
-                $routeAttribute = $routeAttributes[0]->newInstance();
-                $basePath = $routeAttribute->getPath();
-                $baseName = $routeAttribute->getName();
+            if (!empty($routeAttributes) && method_exists($controller, 'getSimpleRoutes')) {
+                /** @var HasSimpleRoutesControllerTrait $controller */
+                $routes = $controller::getSimpleRoutes();
 
-                if (method_exists($controller, 'getSimpleRoutes')) {
-                    /** @var HasSimpleRoutesControllerTrait $controller */
-                    $routes = $controller::getSimpleRoutes();
+                foreach ($routes as $routeName) {
+                    $fullRouteName = $this->buildRouteNameFromController($controller, $routeName);
+                    $fullPath = $this->buildRoutePathFromController($controller, $routeName);
 
-                    foreach ($routes as $routeName) {
-                        $fullRouteName = $baseName.$routeName;
-                        $fullPath = $basePath.TextHelper::toKebab($routeName);
-
+                    if ($fullPath && $fullRouteName) {
                         $route = new Route($fullPath, [
                             '_controller' => $reflectionClass->getName().'::simpleRoutesResolver',
                             'routeName' => $routeName
