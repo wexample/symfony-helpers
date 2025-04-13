@@ -4,6 +4,7 @@ namespace Wexample\SymfonyHelpers\Controller\Traits;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Wexample\SymfonyHelpers\Attribute\SimpleMethodResolver;
 
 trait HasSimpleRoutesControllerTrait
 {
@@ -12,12 +13,13 @@ trait HasSimpleRoutesControllerTrait
         return [];
     }
 
-    /**
-     * Should implement #[IsSimpleMethodResolver]
-     * @param string $routeName
-     * @return Response
-     */
-    abstract public function simpleRoutesResolver(string $routeName): Response;
+    #[SimpleMethodResolver]
+    public function resolveSimpleRoute(string $routeName): Response
+    {
+        return $this->renderPage(
+            $routeName,
+        );
+    }
 
     public static function getControllerRouteAttribute(): Route
     {

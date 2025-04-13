@@ -39,7 +39,7 @@ class SimpleRoutesRouteLoader extends AbstractRouteLoader
 
                     if ($fullPath && $fullRouteName) {
                         $route = new Route($fullPath, [
-                            '_controller' => $reflectionClass->getName().'::simpleRoutesResolver',
+                            '_controller' => $reflectionClass->getName().'::resolveSimpleRoute',
                             'routeName' => $routeName
                         ]);
 
