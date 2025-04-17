@@ -278,26 +278,30 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function createOrGetQueryBuilder(
         QueryBuilder $builder = null,
+        ?string $aliasSuffix = null
     ): ?QueryBuilder
     {
         // Search for interesting invoices.
         return $builder ?: $this->createQueryBuilder(
-            $this->getEntityQueryAlias()
+            $this->getEntityQueryAlias(aliasSuffix: $aliasSuffix)
         );
     }
 
-    public function getEntityQueryAlias(?string $entityName = null): string
+    public function getEntityQueryAlias(
+        ?string $entityName = null,
+        ?string $aliasSuffix = null
+    ): string
     {
         $remove = 'app_entity_';
 
         $alias = self::createQueryAlias($entityName ?: $this->getEntityName());
 
         // Remove useless first part if present.
-        return (str_starts_with($alias, $remove)) ?
-            substr(
-                $alias,
-                strlen($remove)
-            ) : $alias;
+        return ((str_starts_with($alias, $remove)) ?
+                substr(
+                    $alias,
+                    strlen($remove)
+                ) : $alias) . ($aliasSuffix ? '_' . $aliasSuffix : '');
     }
 
     public static function createQueryAlias(string $className): string
@@ -364,10 +368,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function queryField(
         string $fieldName,
-        ?string $entityName = null
+        ?string $entityName = null,
+        ?string $aliasSuffix = null
     ): string
     {
-        return $this->getEntityQueryAlias(entityName: $entityName) . '.' . $fieldName;
+        return $this->getEntityQueryAlias(entityName: $entityName, aliasSuffix: $aliasSuffix) . '.' . $fieldName;
     }
 
     public function queryJoinEntity(
