@@ -2,10 +2,8 @@
 
 namespace Wexample\SymfonyHelpers\Routing;
 
-use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
-use Symfony\Component\Routing\Route;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouteCollection;
-use Wexample\SymfonyHelpers\Controller\Traits\HasSimpleRoutesControllerTrait;
 use Wexample\SymfonyHelpers\Routing\Traits\RoutePathBuilderTrait;
 
 class SimpleRoutesRouteLoader extends AbstractRouteLoader
@@ -17,6 +15,21 @@ class SimpleRoutesRouteLoader extends AbstractRouteLoader
         string $env = null
     ) {
         parent::__construct($env);
+    }
+
+    protected function getAllControllersClasses(): array
+    {
+        $controllers = [];
+
+        $serviceIds = $this->container->getServiceIds();
+
+        foreach ($serviceIds as $serviceId) {
+            if (str_contains($serviceId, 'Controller') && class_exists($serviceId)) {
+                $controllers[] = new \ReflectionClass($serviceId);
+            }
+        }
+
+        return $controllers;
     }
 
     protected function loadOnce(
