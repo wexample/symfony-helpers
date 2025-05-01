@@ -2,47 +2,44 @@
 
 namespace Wexample\SymfonyHelpers\Routing;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use Wexample\SymfonyHelpers\Attribute\SimpleRoutesController;
+use Wexample\SymfonyHelpers\Controller\Traits\HasSimpleRoutesControllerTrait;
 use Wexample\SymfonyHelpers\Routing\Traits\RoutePathBuilderTrait;
 
 class SimpleRoutesRouteLoader extends AbstractRouteLoader
 {
     use RoutePathBuilderTrait;
-    
-    public function __construct(
-        protected RewindableGenerator $taggedControllers,
-        string $env = null
-    ) {
-        parent::__construct($env);
-    }
 
-    protected function getAllControllersClasses(): array
+    protected function isValidSimpleRoutesController(\ReflectionClass $reflectionClass): bool
     {
-        $controllers = [];
+        $routeAttributes = $reflectionClass->getAttributes(\Symfony\Component\Routing\Annotation\Route::class);
 
-        $serviceIds = $this->container->getServiceIds();
-
-        foreach ($serviceIds as $serviceId) {
-            if (str_contains($serviceId, 'Controller') && class_exists($serviceId)) {
-                $controllers[] = new \ReflectionClass($serviceId);
-            }
-        }
-
-        return $controllers;
+        return !empty($routeAttributes) &&
+            method_exists($reflectionClass->getName(), 'getSimpleRoutes');
     }
 
+    /**
+     * @param mixed $resource
+     * @param string|null $type
+     * @return RouteCollection
+     */
     protected function loadOnce(
         $resource,
         string $type = null
-    ): RouteCollection {
+    ): RouteCollection
+    {
         $collection = new RouteCollection();
 
-        foreach ($this->taggedControllers as $controller) {
-            $reflectionClass = new \ReflectionClass($controller);
-            $routeAttributes = $reflectionClass->getAttributes(\Symfony\Component\Routing\Annotation\Route::class);
+        foreach ($this->getAllControllersClassesWithAttribute(SimpleRoutesController::class) as $controllerName => $data) {
+            $reflectionClass = $data['reflection'];
 
-            if (!empty($routeAttributes) && method_exists($controller, 'getSimpleRoutes')) {
+            if (!$this->isValidSimpleRoutesController($reflectionClass)) {
+                continue;
+            }
+
+            if ($controller = $this->container->get($controllerName)) {
                 /** @var HasSimpleRoutesControllerTrait $controller */
                 $routes = $controller::getSimpleRoutes();
 
@@ -52,7 +49,7 @@ class SimpleRoutesRouteLoader extends AbstractRouteLoader
 
                     if ($fullPath && $fullRouteName) {
                         $route = new Route($fullPath, [
-                            '_controller' => $reflectionClass->getName().'::resolveSimpleRoute',
+                            '_controller' => $reflectionClass->getName() . '::resolveSimpleRoute',
                             'routeName' => $routeName
                         ]);
 
