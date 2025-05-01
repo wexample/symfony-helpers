@@ -22,7 +22,7 @@ services:
 
     Wexample\SymfonyHelpers\Routing\SimpleRoutesRouteLoader:
         arguments:
-            $taggedControllers: !tagged_iterator 'has_simple_routes'
+            $container: '@service_container'
         tags:
             - { name: 'routing.loader' }
 
