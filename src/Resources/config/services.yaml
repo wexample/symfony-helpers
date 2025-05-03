@@ -6,7 +6,7 @@ services:
 
     # Ensure is loaded as a service.
     Wexample\SymfonyHelpers\:
-        resource: '../../{Routing,Service}'
+        resource: '../../{Routing,Service,Twig}'
         tags: ['controller.service_arguments']
 
     Wexample\SymfonyHelpers\Form\EntityType:
