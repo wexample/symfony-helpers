@@ -42,7 +42,7 @@ trait HasFormatTrait
      * @param mixed $format
      * @throws InvalidArgumentException If the format is not allowed.
      */
-    public function setFormat(string $format): void
+    public function setFormat(?string $format): void
     {
         $this->checkAllowedOrFail(
             $format,

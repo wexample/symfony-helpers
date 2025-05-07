@@ -15,7 +15,7 @@ trait HasContentTypeTrait
         return $this->contentType;
     }
 
-    public function setContentType(string $contentType): self
+    public function setContentType(?string $contentType): self
     {
         $this->contentType = $contentType;
         return $this;
