@@ -3,6 +3,7 @@
 namespace Wexample\SymfonyHelpers\Entity\Traits;
 
 use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\TextHelper;
 
 /**
  * Class TraitEntityStatus.
@@ -21,8 +22,13 @@ trait BaseEntityTrait
         $this->id = $id;
     }
 
-    public function getTableizedName(): string
+    public static function getTableizedName(): string
     {
-        return ClassHelper::getTableizedName($this);
+        return ClassHelper::getTableizedName(static::class);
+    }
+
+    public static function getCamelName(): string
+    {
+        return TextHelper::toCamel(static::class);
     }
 }
