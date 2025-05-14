@@ -29,7 +29,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
     ): array|string|int|float|bool|null|ArrayObject
     {
         return [
-            $this->buildIdKey() => $this->buildIdValue($object),
+            $this->buildIdKey() => $this->buildIdValue($object, $context),
         ];
     }
 
@@ -38,7 +38,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
         return VariableHelper::ID;
     }
 
-    protected function buildIdValue(AbstractEntity $object): string|int
+    protected function buildIdValue(AbstractEntity $object, array $context = []): string|int
     {
         return $object->getId();
     }
