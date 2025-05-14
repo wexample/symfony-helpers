@@ -29,6 +29,6 @@ trait BaseEntityTrait
 
     public static function getCamelName(): string
     {
-        return TextHelper::toCamel(static::class);
+        return TextHelper::toCamel(ClassHelper::getShortName(static::class));
     }
 }

@@ -2,16 +2,46 @@
 
 namespace Wexample\SymfonyHelpers\Normalizer;
 
+use ArrayObject;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\DateHelper;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 abstract class AbstractEntityNormalizer extends AbstractNormalizer
 {
     use EntityManipulatorTrait;
 
     public bool $isEntrypoint = True;
+
+    /**
+     * @param AbstractEntity $object
+     * @param string|null $format
+     * @param array $context
+     * @return array|string|int|float|bool|ArrayObject|null
+     */
+    public function normalize(
+        mixed $object,
+        ?string $format = null,
+        array $context = []
+    ): array|string|int|float|bool|null|ArrayObject
+    {
+        return [
+            $this->buildIdKey() => $this->buildIdValue($object),
+        ];
+    }
+
+    protected function buildIdKey(): string
+    {
+        return VariableHelper::ID;
+    }
+
+    protected function buildIdValue(AbstractEntity $object): string|int
+    {
+        return $object->getId();
+    }
 
     public function getSupportedTypes(?string $format): array
     {
