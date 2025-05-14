@@ -6,6 +6,7 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\Collection;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
@@ -97,7 +98,7 @@ class EntityHelper
     }
 
     public static function createRegistry(
-        array $entities,
+        array|Collection $entities,
         array &$output = []
     ): array
     {
