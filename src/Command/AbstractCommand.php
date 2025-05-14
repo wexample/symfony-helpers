@@ -78,10 +78,15 @@ abstract class AbstractCommand extends Command
     ): int
     {
         $io = new SymfonyStyle($input, $output);
+
         try {
             return $callback($input, $output, $io);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $io->error($e->getMessage());
+            $io->error($e->getFile() . ':' . $e->getLine());
+            $io->section('Trace');
+            $io->comment($e->getTraceAsString());
+
             return Command::FAILURE;
         }
     }
