@@ -22,7 +22,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
 
     #[Id]
     #[Column(type: Types::INTEGER)]
-    #[GeneratedValue]
+    #[GeneratedValue(strategy: "SEQUENCE")]
     protected $id;
 
     public static function buildEntityPath(
