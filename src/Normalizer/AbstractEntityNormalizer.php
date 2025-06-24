@@ -3,11 +3,13 @@
 namespace Wexample\SymfonyHelpers\Normalizer;
 
 use ArrayObject;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\DateHelper;
+use Wexample\SymfonyHelpers\Helper\EntityHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 abstract class AbstractEntityNormalizer extends AbstractNormalizer
@@ -38,7 +40,10 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
         return VariableHelper::ID;
     }
 
-    protected function buildIdValue(AbstractEntity $object, array $context = []): string|int
+    protected function buildIdValue(
+        AbstractEntity $object,
+        array $context = []
+    ): string|int
     {
         return $object->getId();
     }
@@ -83,5 +88,25 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
     {
         // Use this popular format for apis.
         return DateHelper::DATE_PATTERN_TIME_ZULU;
+    }
+
+    /**
+     * @param array<AbstractEntity>|Collection<AbstractEntity> $entities
+     * @param string|null $format
+     * @param array $context
+     * @return array
+     */
+    public function normalizeEntitiesCollection(
+        array|Collection $entities,
+        ?string $format = null,
+        array $context = []
+    ): array
+    {
+        return $this->normalizeCollection(
+        // Sort entities to maintain a constant order across exports.
+            EntityHelper::sortById($entities),
+            $format,
+            $context
+        );
     }
 }

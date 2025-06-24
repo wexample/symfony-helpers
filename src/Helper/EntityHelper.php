@@ -7,6 +7,8 @@ use DatePeriod;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
@@ -59,6 +61,28 @@ class EntityHelper
                 ClassHelper::getTableizedName($className) . Translator::DOMAIN_SEPARATOR,
             ]
         );
+    }
+
+    /**
+     * @param array<AbstractEntity>|Collection<int, AbstractEntity> $entities
+     * @return array<AbstractEntity>|Collection<int, AbstractEntity>
+     */
+    public static function sortById(iterable $entities): iterable
+    {
+        $comparator = static fn(
+            AbstractEntity $a,
+            AbstractEntity $b
+        ): int => $a->getId() <=> $b->getId();
+
+        if ($entities instanceof Collection) {
+            return $entities->matching(
+                Criteria::create()->orderBy([VariableHelper::ID => Order::Ascending])
+            );
+        }
+
+        $array = \is_array($entities) ? $entities : \iterator_to_array($entities, false);
+        \usort($array, $comparator);
+        return $array;
     }
 
     public static function sortMonthly(
