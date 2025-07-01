@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\SymfonyApi\Helper\DebugHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
@@ -380,9 +381,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
         QueryBuilder $builder = null
     ): QueryBuilder
     {
+        $key = $targetEntityClassName::getEntityKeyName();
         $this->createOrGetQueryBuilder($builder)->join(
-            $this->getEntityName()::getEntityKeyName() . '.' . $targetEntityClassName::getEntityKeyName(),
-            $targetEntityClassName::getEntityKeyName()
+            $this->getEntityName()::getEntityKeyName() . '.' . $key,
+            $key
         );
 
         return $builder;
