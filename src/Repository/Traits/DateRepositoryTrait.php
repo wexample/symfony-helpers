@@ -205,6 +205,22 @@ trait DateRepositoryTrait
         );
     }
 
+    public function queryLastByDateField(
+        string $field,
+        QueryBuilder $builder = null
+    ):QueryBuilder
+    {
+        $this->orderByDateField(
+            field: $field,
+            builder: $builder,
+            order: AbstractRepository::SORT_DESC
+        );
+
+        $builder->setMaxResults(1);
+
+        return $builder;
+    }
+
     /**
      * By default on postgres, when a date field can be null, the null values is ordered **before** the most recent date.
      * Use this method to put the null dates **after** the older date.
