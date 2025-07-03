@@ -10,7 +10,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
-use Wexample\SymfonyApi\Helper\DebugHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
