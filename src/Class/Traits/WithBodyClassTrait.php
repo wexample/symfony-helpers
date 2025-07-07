@@ -4,7 +4,7 @@ namespace Wexample\SymfonyHelpers\Class\Traits;
 
 trait WithBodyClassTrait
 {
-    private ?string $body;
+    protected ?string $body;
 
     public function getBody(): ?string
     {
