@@ -8,8 +8,8 @@ trait HasPositionsXYTrait
     use HasPositionYTrait;
 
     public function setPositionXY(
-        int $positionX,
-        int $positionY
+        ?int $positionX,
+        ?int $positionY
     )
     {
         $this->setPositionX($positionX);
