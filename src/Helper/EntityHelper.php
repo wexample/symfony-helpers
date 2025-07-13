@@ -145,6 +145,23 @@ class EntityHelper
 
     public static function getId(AbstractEntity|int|null $entity): ?int
     {
-        return ClassHelper::isClassPath($entity, Product::class) ? $entity->getId() : $entity;
+        return ClassHelper::isClassPath($entity, AbstractEntity::class) ? $entity->getId() : $entity;
+    }
+
+    public static function getEntityWithSmallestId(array $users): ?AbstractEntity
+    {
+        if ($users === []) {
+            return null;
+        }
+
+        return array_reduce($users, function (
+            ?AbstractEntity $carry,
+            AbstractEntity $current
+        ): AbstractEntity {
+            if ($carry === null || $current->getId() < $carry->getId()) {
+                return $current;
+            }
+            return $carry;
+        });
     }
 }
