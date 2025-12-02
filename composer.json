@@ -23,6 +23,6 @@
     "doctrine/common": "^3.4",
     "doctrine/orm": "^3.3",
     "doctrine/doctrine-bundle": "^2.9",
-    "wexample/php-helpers": "1.0.69"
+    "wexample/php-helpers": "1.0.70"
   }
 }
