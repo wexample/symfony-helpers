@@ -43,8 +43,9 @@ trait EntityManipulationCommandTrait
     protected function validateAndGetEntityClass(string $entityName, SymfonyStyle $io): ?string
     {
         $entityClass = $this->findEntityClass($entityName);
-        if (!$entityClass) {
+        if (! $entityClass) {
             $io->error(sprintf('Entity "%s" not found', $entityName));
+
             return null;
         }
 

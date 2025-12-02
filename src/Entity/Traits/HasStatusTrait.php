@@ -3,9 +3,11 @@
 namespace Wexample\SymfonyHelpers\Entity\Traits;
 
 use Doctrine\ORM\Mapping\Column;
+
+use function in_array;
+
 use JetBrains\PhpStorm\Pure;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
-use function in_array;
 
 trait HasStatusTrait
 {

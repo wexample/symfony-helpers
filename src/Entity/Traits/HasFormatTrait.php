@@ -10,7 +10,7 @@ use Wexample\SymfonyHelpers\Helper\VariableHelper;
 trait HasFormatTrait
 {
     use HasLimitedValuesPropertyTrait;
-    
+
     #[Column(type: VariableHelper::VARIABLE_TYPE_STRING, length: 120)]
     protected ?string $format = null;
 

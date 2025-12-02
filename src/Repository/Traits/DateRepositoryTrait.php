@@ -27,8 +27,7 @@ trait DateRepositoryTrait
         DateTimeInterface $dateMonth,
         QueryBuilder $builder = null,
         string $whereQuery = ''
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         return $this->queryDateRange(
             $fields,
             DateHelper::startOfMonth($dateMonth),
@@ -42,8 +41,7 @@ trait DateRepositoryTrait
         string $field,
         DateTimeInterface $date,
         QueryBuilder $builder = null
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         return $this->queryDateBoundary(
             $field,
             $date,
@@ -59,8 +57,7 @@ trait DateRepositoryTrait
         string $parameterSuffix,
         string $operator,
         QueryBuilder $builder = null
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 
         $fieldFull = $this->queryField($field);
@@ -83,8 +80,7 @@ trait DateRepositoryTrait
         string $field,
         DateTimeInterface $date,
         QueryBuilder $builder = null
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         return $this->queryDateBoundary(
             $field,
             $date,
@@ -100,11 +96,10 @@ trait DateRepositoryTrait
         DateTimeInterface $dateLast,
         QueryBuilder $builder = null,
         string $whereQuery = ''
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 
-        if (!$whereQuery) {
+        if (! $whereQuery) {
             if (is_string($fields)) {
                 $fields = [$fields];
             }
@@ -153,8 +148,7 @@ trait DateRepositoryTrait
 
     public function findOneByYear(
         DateTimeInterface $dateAccounting
-    ): ?AbstractEntity
-    {
+    ): ?AbstractEntity {
         return $this->findOneBy([
             VariableHelper::YEAR => ((int) $dateAccounting->format(DateHelper::DATE_PATTERN_PART_YEAR_FULL)),
         ]);
@@ -166,8 +160,7 @@ trait DateRepositoryTrait
         bool $ordered = true,
         string $whereQuery = '',
         QueryBuilder $builder = null
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $builder = $this->queryDateRange(
             $fields,
             DateHelper::startOfYear($dateYear),
@@ -194,8 +187,7 @@ trait DateRepositoryTrait
         string $field,
         QueryBuilder $builder = null,
         string $order = AbstractRepository::SORT_ASC
-    ): void
-    {
+    ): void {
         $builder = $this->createOrGetQueryBuilder($builder);
 
         $builder->orderBy(
@@ -208,8 +200,7 @@ trait DateRepositoryTrait
     public function queryLastByDateField(
         string $field,
         QueryBuilder $builder = null
-    ):QueryBuilder
-    {
+    ): QueryBuilder {
         $this->orderByDateField(
             field: $field,
             builder: $builder,
@@ -232,8 +223,7 @@ trait DateRepositoryTrait
     public function queryOrderByDateAndNull(
         string $fieldName,
         QueryBuilder $builder = null,
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 
         $builder->orderBy(

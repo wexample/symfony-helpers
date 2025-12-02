@@ -13,11 +13,11 @@ class DateQueryStringConstraintValidator extends ConstraintValidator
         $value,
         Constraint $constraint
     ): void {
-        if (!$constraint instanceof DateQueryStringConstraint) {
+        if (! $constraint instanceof DateQueryStringConstraint) {
             throw new UnexpectedTypeException($constraint, DateQueryStringConstraint::class);
         }
 
-        if (!DateHelper::buildFromQueryStringDate($value)) {
+        if (! DateHelper::buildFromQueryStringDate($value)) {
             $this->context->buildViolation('Invalid date format.')
                 ->atPath('date')
                 ->addViolation();

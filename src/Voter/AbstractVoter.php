@@ -11,7 +11,7 @@ abstract class AbstractVoter extends Voter
         mixed $subject
     ): bool {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, $this->getAllowedAttributes())) {
+        if (! in_array($attribute, $this->getAllowedAttributes())) {
             return false;
         }
 

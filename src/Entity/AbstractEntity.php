@@ -6,9 +6,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Entity\Traits\BaseEntityTrait;
-use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 abstract class AbstractEntity implements AbstractEntityInterface

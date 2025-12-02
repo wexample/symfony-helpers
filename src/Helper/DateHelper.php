@@ -213,7 +213,7 @@ class DateHelper
                 if (false !== $dateTime
                     && $dateTime->format($format) == $value) {
                     // Check if day is missing
-                    if (!str_contains($format, self::DATE_PATTERN_PART_DAY_FULL)) {
+                    if (! str_contains($format, self::DATE_PATTERN_PART_DAY_FULL)) {
                         $dateTime->setDate(
                             $dateTime->format(self::DATE_PATTERN_PART_YEAR_FULL),
                             $dateTime->format(self::DATE_PATTERN_PART_MONTH_FULL),
@@ -221,7 +221,7 @@ class DateHelper
                         );
                     }
                     // Check if month is missing
-                    if (!str_contains($format, self::DATE_PATTERN_PART_MONTH_FULL)) {
+                    if (! str_contains($format, self::DATE_PATTERN_PART_MONTH_FULL)) {
                         $dateTime->setDate(
                             $dateTime->format(self::DATE_PATTERN_PART_YEAR_FULL),
                             1,
@@ -229,15 +229,15 @@ class DateHelper
                         );
                     }
                     // Check if time is missing
-                    if (!str_contains($format, self::DATE_PATTERN_PART_HOURS_FULL)) {
+                    if (! str_contains($format, self::DATE_PATTERN_PART_HOURS_FULL)) {
                         $dateTime->setTime(0, 0);
-                    } elseif (!str_contains($format, self::DATE_PATTERN_PART_MINUTES_FULL)) {
+                    } elseif (! str_contains($format, self::DATE_PATTERN_PART_MINUTES_FULL)) {
                         // if the format contains hour but not minutes
                         $dateTime->setTime(
                             $dateTime->format(self::DATE_PATTERN_PART_HOURS_FULL),
                             0
                         );
-                    } elseif (!str_contains($format, self::DATE_PATTERN_PART_SECONDS_FULL)) {
+                    } elseif (! str_contains($format, self::DATE_PATTERN_PART_SECONDS_FULL)) {
                         // if the format contains hour and minutes but not seconds
                         $dateTime->setTime(
                             $dateTime->format(self::DATE_PATTERN_PART_HOURS_FULL),

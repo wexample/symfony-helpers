@@ -17,7 +17,7 @@ abstract class AbstractLoggedUserEntityVoter extends AbstractEntityVoter
     ): bool {
         $user = $token->getUser();
 
-        if (!$user instanceof AbstractUser) {
+        if (! $user instanceof AbstractUser) {
             // the user must be logged in; if not, deny access
             return false;
         }

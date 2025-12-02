@@ -11,22 +11,20 @@ class RouteHelper
 {
     public static function buildRoutePrefixFromControllerClass(
         AbstractController|string $controllerClass
-    ): string
-    {
+    ): string {
         return TextHelper::toSnake(
-                AbstractController::removeSuffix(
-                    ClassHelper::getShortName(
-                        $controllerClass
-                    )
+            AbstractController::removeSuffix(
+                ClassHelper::getShortName(
+                    $controllerClass
                 )
-            ) . '_';
+            )
+        ) . '_';
     }
 
     public static function filterRouteByController(
         RouteCollection $allRoutes,
         string $controllerClass
-    ): array
-    {
+    ): array {
         $routes = [];
 
         foreach ($allRoutes as $name => $route) {

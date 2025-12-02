@@ -2,11 +2,12 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
-use Wexample\Helpers\Helper\TextHelper;
 use function array_keys;
 use function current;
 use function is_null;
 use function max;
+
+use Wexample\Helpers\Helper\TextHelper;
 
 class ArrayHelper
 {
@@ -44,7 +45,7 @@ class ArrayHelper
     {
         $output = '';
 
-        if (!empty($data)) {
+        if (! empty($data)) {
             $keys = array_keys(current($data));
 
             $output .= '<thead><tr>';
@@ -81,7 +82,7 @@ class ArrayHelper
         $found = false;
 
         foreach ($array as $key => $item) {
-            if ($item === $itemSearch && (!$found || $multiple)) {
+            if ($item === $itemSearch && (! $found || $multiple)) {
                 $found = true;
             } else {
                 $output[$key] = $item;
@@ -129,9 +130,9 @@ class ArrayHelper
 
         // Keep only combinations under array total size.
         return ArrayHelper::truncateChildrenArrayByLength(
-        // Bigger length first.
+            // Bigger length first.
             ArrayHelper::sortOnChildrenArrayLength(
-            // Every possible fields combinations.
+                // Every possible fields combinations.
                 ArrayHelper::generateAllCombinations($array)
             ),
             0,
@@ -159,7 +160,7 @@ class ArrayHelper
 
     public static function sortOnChildrenArrayLength(array $array): array
     {
-        uasort($array, fn(
+        uasort($array, fn (
             $a,
             $b
         ) => count($b) - count($a));
@@ -187,9 +188,11 @@ class ArrayHelper
         int $search,
     ): array {
         return array_values(
-            array_filter($array, fn(
-                $result
-            ) => isset($result[$key])
+            array_filter(
+                $array,
+                fn (
+                    $result
+                ) => isset($result[$key])
                 && is_numeric($result[$key])
                 && (int) $result[$key] === $search
             )
@@ -200,7 +203,7 @@ class ArrayHelper
         array $array,
         string|int $key
     ): array {
-        usort($array, fn(
+        usort($array, fn (
             $a,
             $b
         ) => $a[$key] <=> $b[$key]);
@@ -220,7 +223,7 @@ class ArrayHelper
         }
 
         // Items keys should be consistent
-        if (!self::hasTableStructure($array)) {
+        if (! self::hasTableStructure($array)) {
             // If not, returns a one-line array
             return [$array];
         }
@@ -251,23 +254,23 @@ class ArrayHelper
 
         // First item should be an array to allow getting base keys.
         $first = current($array);
-        if (!is_array($first)) {
+        if (! is_array($first)) {
             return false;
         }
 
         $baseKeys = array_keys($first);
         foreach ($array as $item) {
-            if (!is_array($item)) {
+            if (! is_array($item)) {
                 return false;
             }
 
             $itemKeys = array_keys($item);
 
-            if (!$acceptMissing && count($baseKeys) !== count($itemKeys)) {
+            if (! $acceptMissing && count($baseKeys) !== count($itemKeys)) {
                 return false;
             }
 
-            if (!empty(array_diff($baseKeys, $itemKeys))) {
+            if (! empty(array_diff($baseKeys, $itemKeys))) {
                 return false;
             }
         }
@@ -286,7 +289,7 @@ class ArrayHelper
         string $newKey,
         mixed $newValue = true,
     ): array {
-        if (!array_key_exists($key, $array)) {
+        if (! array_key_exists($key, $array)) {
             return $array;
         }
 
@@ -299,7 +302,7 @@ class ArrayHelper
         $inserted = false;
         foreach ($array as $k => $value) {
             $newArray[$k] = $value;
-            if ($k === $key && !$inserted) {
+            if ($k === $key && ! $inserted) {
                 $newArray[$newKey] = $newValue;
                 $inserted = true;
             }

@@ -2,8 +2,8 @@
 
 namespace Wexample\SymfonyHelpers\Class\ResponseRenderProcessor;
 
-use Wexample\SymfonyHelpers\Class\RenderableResponse;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Class\RenderableResponse;
 
 class ListResponseRenderProcessor extends AbstractResponseRenderProcessor
 {

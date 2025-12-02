@@ -18,8 +18,7 @@ abstract class AbstractCommand extends Command
 
     public function __construct(
         string $name = null,
-    )
-    {
+    ) {
         parent::__construct($name ?: $this->buildDefaultName());
     }
 
@@ -52,8 +51,7 @@ abstract class AbstractCommand extends Command
     protected function execCommand(
         string $command,
         OutputInterface $output
-    ): void
-    {
+    ): void {
         if (is_subclass_of(
             $command,
             AbstractBundleCommand::class
@@ -75,8 +73,7 @@ abstract class AbstractCommand extends Command
         InputInterface $input,
         OutputInterface $output,
         callable $callback
-    ): int
-    {
+    ): int {
         $io = new SymfonyStyle($input, $output);
 
         try {

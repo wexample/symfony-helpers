@@ -4,16 +4,19 @@ namespace Wexample\SymfonyHelpers\Service;
 
 use App\Entity\SearchResult;
 use App\Wex\BaseBundle\Service\Search\SearchEntityService;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
-use Wexample\SymfonyHelpers\Entity\AbstractEntity;
-use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
-use Wexample\Helpers\Helper\ClassHelper;
-use Wexample\SymfonyHelpers\Helper\EntityHelper;
+
 use function array_merge;
 use function array_splice;
+
+use Doctrine\ORM\EntityManagerInterface;
+
 use function trim;
 use function uasort;
+
+use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\SymfonyHelpers\Entity\AbstractEntity;
+use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
+use Wexample\SymfonyHelpers\Helper\EntityHelper;
 
 abstract class AbstractEntitySearchService
 {
@@ -43,7 +46,7 @@ abstract class AbstractEntitySearchService
         $string = trim($string);
 
         // Anonymous search is not allowed.
-        if ('' === $string || !$this->security->getUser()) {
+        if ('' === $string || ! $this->security->getUser()) {
             return [];
         }
 
@@ -65,7 +68,7 @@ abstract class AbstractEntitySearchService
 
         $results = [];
 
-        if (!$string) {
+        if (! $string) {
             return $results;
         }
 
@@ -153,7 +156,7 @@ abstract class AbstractEntitySearchService
     {
         uasort(
             $results,
-            fn($a, $b): int => $a->score < $b->score
+            fn ($a, $b): int => $a->score < $b->score
         );
     }
 }

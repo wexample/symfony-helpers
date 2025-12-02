@@ -31,12 +31,11 @@ trait EnvironmentSpecificCommandTrait
     protected function isEnvironmentAllowed(
         InputInterface $input,
         OutputInterface $output
-    ): bool
-    {
+    ): bool {
         $currentEnv = $this->parameterBag->get('kernel.environment');
         $allowedEnvs = $this->getSupportedEnvExecution();
 
-        if (!in_array($currentEnv, $allowedEnvs)) {
+        if (! in_array($currentEnv, $allowedEnvs)) {
             $io = new SymfonyStyle($input, $output);
             $io->error(sprintf(
                 'This command can only be executed in the following environments: %s',
@@ -46,6 +45,7 @@ trait EnvironmentSpecificCommandTrait
                 'Current environment is: %s',
                 $currentEnv
             ));
+
             return false;
         }
 

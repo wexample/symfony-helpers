@@ -50,7 +50,7 @@ class DurationsHelper
         $duration = preg_replace('/^[^0-9]*/', '', $duration);
 
         // Handle if no more chars.
-        if (!$duration) {
+        if (! $duration) {
             $duration = 0;
         }
 
@@ -62,7 +62,7 @@ class DurationsHelper
 
         // We have a "h" but no m,
         if (str_contains($duration, 'h')
-            && !str_contains($duration, 'm')
+            && ! str_contains($duration, 'm')
             // There is some chars after the "h"
             && strpos($duration, 'h') + 1 !== strlen($duration)
             // the extra chars are numbers.

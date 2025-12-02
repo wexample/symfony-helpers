@@ -81,7 +81,7 @@ class RenderableResponse
      */
     public function setOutputType(string $outputType): void
     {
-        if (!in_array($outputType, $this->getOutputsTypes())) {
+        if (! in_array($outputType, $this->getOutputsTypes())) {
             throw new Exception('Unable to set undefined output type '.$outputType);
         }
 
@@ -140,11 +140,11 @@ class RenderableResponse
      */
     public function render(): array|string
     {
-        if (!$format = $this->mapOutputFormats()[$this->outputType] ?? null) {
+        if (! $format = $this->mapOutputFormats()[$this->outputType] ?? null) {
             throw new Exception('Unable to find output format for type '.$this->outputType);
         }
 
-        if (!$processorType = $this->getResponseProcessors()[$format] ?? null) {
+        if (! $processorType = $this->getResponseProcessors()[$format] ?? null) {
             throw new Exception('Unable to find output processor for format '.$format);
         }
 

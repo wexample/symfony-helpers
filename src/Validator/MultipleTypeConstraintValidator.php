@@ -12,7 +12,7 @@ class MultipleTypeConstraintValidator extends ConstraintValidator
         $value,
         Constraint $constraint
     ): void {
-        if (!$constraint instanceof MultipleTypeConstraint) {
+        if (! $constraint instanceof MultipleTypeConstraint) {
             throw new UnexpectedTypeException($constraint, MultipleTypeConstraint::class);
         }
 

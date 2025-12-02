@@ -2,7 +2,6 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
-
 class CodeHelper
 {
     public static function removeIndentation(string $text): string

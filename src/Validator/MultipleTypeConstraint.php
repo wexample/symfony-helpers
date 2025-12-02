@@ -2,8 +2,9 @@
 
 namespace Wexample\SymfonyHelpers\Validator;
 
-use Symfony\Component\Validator\Constraint;
 use function get_class;
+
+use Symfony\Component\Validator\Constraint;
 
 class MultipleTypeConstraint extends Constraint
 {

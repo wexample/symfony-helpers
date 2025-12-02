@@ -9,8 +9,7 @@ class JsonResponseRenderProcessor extends AbstractResponseRenderProcessor
     public function renderResponseData(
         array $data,
         RenderableResponse $response
-    ): string
-    {
+    ): string {
         return json_encode(
             $data
         );

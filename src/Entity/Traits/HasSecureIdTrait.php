@@ -24,6 +24,7 @@ trait HasSecureIdTrait
     public function setSecureId(string $secureId): self
     {
         $this->secureId = $secureId;
+
         return $this;
     }
 
@@ -44,6 +45,7 @@ trait HasSecureIdTrait
     public function setGeneratedSecureId(): self
     {
         $this->secureId = static::buildSecureId();
+
         return $this;
     }
 }

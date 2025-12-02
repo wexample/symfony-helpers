@@ -89,7 +89,7 @@ trait SearchableRepositoryTrait
 
         $builder->orWhere($orX);
 
-        if (!empty($fields)) {
+        if (! empty($fields)) {
             $builder->setParameter($parameterName, $value);
         }
     }

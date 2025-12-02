@@ -65,7 +65,7 @@ trait WithMessageEntityServiceTrait
         string $level = null
     ): array {
         // May be used by default.
-        if (!$level) {
+        if (! $level) {
             return $messages;
         }
 

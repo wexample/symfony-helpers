@@ -4,8 +4,8 @@ namespace Wexample\SymfonyHelpers\Service\Syntax;
 
 use App\Kernel;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Wexample\SymfonyHelpers\Helper\BundleHelper;
 use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\SymfonyHelpers\Helper\BundleHelper;
 use Wexample\SymfonyHelpers\Helper\FileHelper;
 use Wexample\SymfonyHelpers\Helper\RoleHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
@@ -38,10 +38,9 @@ class RoleSyntaxService
             foreach ($controllerDirs as $subDir) {
                 FileHelper::forEachValidFile(
                     $this->controllerSyntaxService->buildControllerPath($subDir),
-                    function(
+                    function (
                         string $classFilePath
-                    ) use
-                    (
+                    ) use (
                         $roleClass,
                         $subDir
                     ) {

@@ -14,7 +14,7 @@ class GitHelper
 
         $repoGit = realpath($repo).'/.git/';
 
-        if (!is_dir($repoGit)) {
+        if (! is_dir($repoGit)) {
             return [];
         }
 
@@ -48,7 +48,7 @@ class GitHelper
         $count = 0;
         foreach ($exec as $line) {
             if (str_starts_with($line, 'commit')) {
-                if (!empty($commit)) {
+                if (! empty($commit)) {
                     $history[] = (object) $commit;
 
                     if (is_int($limit) && ++$count >= $limit) {

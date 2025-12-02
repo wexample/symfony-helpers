@@ -6,7 +6,8 @@ class SystemHelper
 {
     public static function getFileOwner(string $path): string
     {
-        return SystemHelper::exec([
+        return SystemHelper::exec(
+            [
                 'ls',
                 '-ld',
                 $path,

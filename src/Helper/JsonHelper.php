@@ -43,10 +43,10 @@ class JsonHelper
     {
         return json_validate($string);
     }
-    
+
     /**
      * Read a JSON file and decode its contents, returning null if any error occurs
-     * 
+     *
      * This function is designed to be used in contexts where you want to avoid
      * try/catch blocks for handling file reading or JSON decoding errors.
      *
@@ -60,20 +60,20 @@ class JsonHelper
         bool $associative = null,
         int $flags = 0
     ): array|object|null {
-        if (!is_file($path) || !is_readable($path)) {
+        if (! is_file($path) || ! is_readable($path)) {
             return null;
         }
-        
+
         $content = @file_get_contents($path);
         if ($content === false) {
             return null;
         }
-        
+
         $data = json_decode($content, $associative, 512, $flags);
         if (json_last_error() !== JSON_ERROR_NONE) {
             return null;
         }
-        
+
         return $data;
     }
 }

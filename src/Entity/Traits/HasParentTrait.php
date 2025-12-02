@@ -45,7 +45,7 @@ trait HasParentTrait
 
     public function addChild(self $child): static
     {
-        if (!$this->children->contains($child)) {
+        if (! $this->children->contains($child)) {
             $this->children->add($child);
             $child->setParent($this);
         }

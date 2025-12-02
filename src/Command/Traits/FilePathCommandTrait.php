@@ -6,7 +6,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 trait FilePathCommandTrait
 {
-
     protected KernelInterface $kernel;
 
     /**

@@ -4,10 +4,10 @@ namespace Wexample\SymfonyHelpers\Service\Syntax;
 
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Environment;
-use Wexample\SymfonyHelpers\Helper\BundleHelper;
 use Wexample\Helpers\Helper\ClassHelper;
-use Wexample\SymfonyHelpers\Helper\FileHelper;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Helper\BundleHelper;
+use Wexample\SymfonyHelpers\Helper\FileHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 abstract class AbstractSyntaxService
@@ -76,7 +76,7 @@ abstract class AbstractSyntaxService
                 || (ClassHelper::CLASS_TYPE_TRAIT === $this->getClassType() && trait_exists($classPath))
             )
             // Destination does not exist, can be any type of object.
-            && (!trait_exists($cousinClassPath) || !class_exists($cousinClassPath))) {
+            && (! trait_exists($cousinClassPath) || ! class_exists($cousinClassPath))) {
             $classShortName = ClassHelper::getShortName($classPath);
 
             $relativeClassPath = TextHelper::trimString(

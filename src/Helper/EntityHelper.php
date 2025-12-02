@@ -9,13 +9,15 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Order;
+
+use function implode;
+
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Entity\Traits\BaseEntityTrait;
 use Wexample\SymfonyTranslations\Translation\Translator;
-use function implode;
 
 class EntityHelper
 {
@@ -39,21 +41,19 @@ class EntityHelper
         $className,
         string $field,
         string $transGroup = 'property'
-    ): string
-    {
+    ): string {
         return static::getEntityTransDomain($className) . implode(
-                '.',
-                [
+            '.',
+            [
                     $transGroup,
                     TextHelper::toSnake($field),
                 ]
-            );
+        );
     }
 
     public static function getEntityTransDomain(
         $className
-    ): string
-    {
+    ): string {
         return implode(
             '.',
             [
@@ -69,7 +69,7 @@ class EntityHelper
      */
     public static function sortById(iterable $entities): iterable
     {
-        $comparator = static fn(
+        $comparator = static fn (
             AbstractEntity $a,
             AbstractEntity $b
         ): int => $a->getId() <=> $b->getId();
@@ -82,6 +82,7 @@ class EntityHelper
 
         $array = \is_array($entities) ? $entities : \iterator_to_array($entities, false);
         \usort($array, $comparator);
+
         return $array;
     }
 
@@ -90,8 +91,7 @@ class EntityHelper
         string $dateFieldName,
         DateTimeInterface $start,
         $end = null
-    ): array
-    {
+    ): array {
         // First sort.
         $monthly = [];
         foreach ($entities as $entity) {
@@ -124,8 +124,7 @@ class EntityHelper
     public static function createRegistry(
         array|Collection $entities,
         array &$output = []
-    ): array
-    {
+    ): array {
         /** @var BaseEntityTrait $entity */
         foreach ($entities as $entity) {
             $output[$entity->getId()] = $entity;
@@ -137,8 +136,7 @@ class EntityHelper
     public static function areSame(
         AbstractEntityInterface|string $entity,
         AbstractEntityInterface|string $entityB
-    ): bool
-    {
+    ): bool {
         return ClassHelper::getRealClassPath($entity) === ClassHelper::getRealClassPath($entityB)
             && $entity->getId() === $entityB->getId();
     }
@@ -161,6 +159,7 @@ class EntityHelper
             if ($carry === null || $current->getId() < $carry->getId()) {
                 return $current;
             }
+
             return $carry;
         });
     }

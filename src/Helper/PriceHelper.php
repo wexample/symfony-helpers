@@ -2,8 +2,9 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
-use Wexample\Helpers\Helper\TextHelper;
 use function round;
+
+use Wexample\Helpers\Helper\TextHelper;
 
 class PriceHelper
 {
@@ -154,7 +155,7 @@ class PriceHelper
         int|null $price,
         $currency = '€'
     ): ?string {
-        return !is_null($price) ? self::price($price, $currency) : $price;
+        return ! is_null($price) ? self::price($price, $currency) : $price;
     }
 
     public static function price(

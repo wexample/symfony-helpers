@@ -3,10 +3,8 @@
 namespace Wexample\SymfonyHelpers\Repository;
 
 use App\Entity\User;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 
 abstract class AbstractUserRepository extends AbstractRepository
 {
@@ -15,7 +13,7 @@ abstract class AbstractUserRepository extends AbstractRepository
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
 

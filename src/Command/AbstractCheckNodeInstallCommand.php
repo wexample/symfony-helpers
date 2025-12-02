@@ -37,7 +37,7 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
         $io = new SymfonyStyle($input, $output);
 
         $packageJsonPath = $this->kernel->getProjectDir().'/package.json';
-        if (!file_exists($packageJsonPath)) {
+        if (! file_exists($packageJsonPath)) {
             $io->error('No package.json file found in '.$packageJsonPath);
 
             return Command::FAILURE;
@@ -52,7 +52,7 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
 
         $dependencyFile = $bundleRootPath.'assets/package.json';
 
-        if (!is_file($dependencyFile)) {
+        if (! is_file($dependencyFile)) {
             $io->error('Missing file : '.$dependencyFile);
 
             return Command::FAILURE;
@@ -71,12 +71,12 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
 
         foreach ($dependencies as $dependency => $version) {
             $io->info('Checking '.$dependency.':'.$version);
-            if (!isset($packageJsonData['dependencies'][$dependency]) && !isset($packageJsonData['devDependencies'][$dependency])) {
+            if (! isset($packageJsonData['dependencies'][$dependency]) && ! isset($packageJsonData['devDependencies'][$dependency])) {
                 $missingDependencies[] = $dependency;
             }
         }
 
-        if (!empty($missingDependencies)) {
+        if (! empty($missingDependencies)) {
             $missingDependenciesString = implode(' ', $missingDependencies);
             $io->error("Missing node modules: '{$missingDependenciesString}'. Run `npm install {$missingDependenciesString}` or `yarn add {$missingDependenciesString}`.");
 

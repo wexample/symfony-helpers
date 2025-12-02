@@ -2,12 +2,13 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
-use Wexample\Helpers\Helper\TextHelper;
 use function htmlspecialchars;
 use function implode;
 use function is_array;
 use function is_float;
 use function str_replace;
+
+use Wexample\Helpers\Helper\TextHelper;
 
 class DomHelper
 {

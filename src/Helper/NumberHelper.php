@@ -14,7 +14,7 @@ class NumberHelper
 {
     public static function numberToRoman(float $number): string
     {
-        if (!static::isWholeNumber($number)) {
+        if (! static::isWholeNumber($number)) {
             return static::floatToRoman($number);
         }
 
@@ -70,6 +70,7 @@ class NumberHelper
                 if ($number >= $int) {
                     $number -= $int;
                     $returnValue .= $roman;
+
                     break;
                 }
             }

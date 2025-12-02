@@ -19,7 +19,7 @@ trait HasEnvKeysTrait
             $this->getExpectedEnvKeys()
         );
 
-        if (!empty($missingKeys)) {
+        if (! empty($missingKeys)) {
             throw new MissingRequiredEnvVarError($missingKeys);
         }
     }

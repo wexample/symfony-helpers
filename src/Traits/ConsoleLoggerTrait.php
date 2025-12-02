@@ -2,9 +2,9 @@
 
 namespace Wexample\SymfonyHelpers\Traits;
 
-use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 
 trait ConsoleLoggerTrait
 {
@@ -133,14 +133,14 @@ trait ConsoleLoggerTrait
         string $color = TextHelper::ASCII_DARK_COLOR_GRAY,
         int $indent = null
     ): string {
-        if (!is_string($message)) {
+        if (! is_string($message)) {
             $message = json_encode($message);
         }
 
         return str_repeat(
-                '  ',
-                is_null($indent) ? $this->logIndentCursor : $indent
-            ).
+            '  ',
+            is_null($indent) ? $this->logIndentCursor : $indent
+        ).
             ($color ? TextHelper::asciiColorWrap($message, $color) : $message);
     }
 }

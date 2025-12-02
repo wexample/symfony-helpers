@@ -42,8 +42,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function __call(
         string $method,
         array $arguments
-    ): mixed
-    {
+    ): mixed {
         if (str_starts_with($method, 'hasSome')) {
             return $this->findHasSome(
                 $this->resolveMagicQueryCall(
@@ -82,11 +81,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function resolveMagicQueryCall(
         $method,
         $arguments
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $fieldName = lcfirst(substr($method, 7));
 
-        if (!($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
+        if (! ($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
             throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->_entityName, $fieldName, $method);
         }
 
@@ -112,8 +110,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function resolveMagicCreateNewCall(
         $method,
         $arguments
-    ): AbstractEntity
-    {
+    ): AbstractEntity {
         $entityShortName = TextHelper::removePrefix($method, 'saveNew');
         $expectedEntityShortName = ClassHelper::getShortName(static::getEntityClassName());
 
@@ -123,7 +120,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         $createNewMethod = 'createNew' . $entityShortName;
 
-        if (!method_exists($this, $createNewMethod)) {
+        if (! method_exists($this, $createNewMethod)) {
             throw new \Exception('Creation method "' . $createNewMethod . '" not found on repository "' . static::class . '".');
         }
 
@@ -142,14 +139,13 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function resolveMagicSaveNewCall(
         $method,
         $arguments
-    ): AbstractEntity
-    {
+    ): AbstractEntity {
         $entity = $this->resolveMagicCreateNewCall(
             $method,
             $arguments
         );
 
-        $this->save($entity, flush: True);
+        $this->save($entity, flush: true);
 
         return $entity;
     }
@@ -160,20 +156,19 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function resolveMagicPluckCall(
         string $method,
         array $arguments
-    ): array
-    {
+    ): array {
         $targetValueName = TextHelper::removePrefix($method, 'pluck');
         $getterMethod = 'get' . $targetValueName;
         $entities = $arguments[0] ?? [];
 
-        if (!is_array($entities)) {
+        if (! is_array($entities)) {
             throw new InvalidMagicMethodCall("Expected an array of entities for plucking.");
         }
 
         $output = [];
 
         foreach ($entities as $entity) {
-            if (!method_exists($entity, $getterMethod)) {
+            if (! method_exists($entity, $getterMethod)) {
                 throw new InvalidMagicMethodCall("Method {$getterMethod} not found in " . get_class($entity));
             }
             $output[] = $entity->$getterMethod();
@@ -189,11 +184,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function resolveMagicRemoveCall(
         string $method,
         array $arguments
-    ): void
-    {
+    ): void {
         $fieldName = lcfirst(substr($method, 8));
 
-        if (!($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
+        if (! ($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
             throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->_entityName, $fieldName, $method);
         }
 
@@ -215,10 +209,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function orderByDefaultPagination(
         string $order = self::SORT_ASC,
         QueryBuilder $builder = null
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder(
-            $builder);
+            $builder
+        );
 
         $builder->orderBy(
             sort: $this->queryField(VariableHelper::ID),
@@ -232,8 +226,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         int $page,
         ?int $length = null,
         QueryBuilder $builder = null
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
         if ($length and $length > 0) {
             $builder->setMaxResults($length);
@@ -249,8 +242,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function findPaginated(
         int $page,
         ?int $length,
-    ): array
-    {
+    ): array {
         return $this->queryPaginated($page, $length)
             ->getQuery()
             ->execute();
@@ -261,8 +253,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $value,
         ?string $entityName = null,
         QueryBuilder $builder = null
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 
         $builder->andWhere(
@@ -279,8 +270,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function createOrGetQueryBuilder(
         QueryBuilder $builder = null,
         ?string $aliasSuffix = null
-    ): ?QueryBuilder
-    {
+    ): ?QueryBuilder {
         // Search for interesting invoices.
         return $builder ?: $this->createQueryBuilder(
             $this->getEntityQueryAlias(aliasSuffix: $aliasSuffix)
@@ -290,8 +280,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function getEntityQueryAlias(
         ?string $entityName = null,
         ?string $aliasSuffix = null
-    ): string
-    {
+    ): string {
         $remove = 'app_entity_';
 
         $alias = self::createQueryAlias($entityName ?: $this->getEntityName());
@@ -316,8 +305,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function findHasSome(
         array $criteria,
         QueryBuilder $builder = null
-    ): bool
-    {
+    ): bool {
         $builder = $this->querySelectCount($builder);
         $builder->setMaxResults(1);
 
@@ -340,8 +328,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function querySelectCount(
         QueryBuilder $builder = null
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 
         $builder->select(
@@ -354,8 +341,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function removeAll(
         array|Collection $entities,
         bool $flush = true
-    ): void
-    {
+    ): void {
         /** @var AbstractEntity $entry */
         foreach ($entities as $entry) {
             $this->remove($entry);
@@ -370,16 +356,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
         string $fieldName,
         ?string $entityName = null,
         ?string $aliasSuffix = null
-    ): string
-    {
+    ): string {
         return $this->getEntityQueryAlias(entityName: $entityName, aliasSuffix: $aliasSuffix) . '.' . $fieldName;
     }
 
     public function queryJoinEntity(
         string $targetEntityClassName,
         QueryBuilder $builder = null
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $key = $targetEntityClassName::getEntityKeyName();
         $this->createOrGetQueryBuilder($builder)->join(
             $this->getEntityName()::getEntityKeyName() . '.' . $key,
@@ -394,8 +378,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         string $fieldName,
         $value,
         QueryBuilder $builder = null
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $builder = $this->queryJoinEntity(
             targetEntityClassName: $targetEntityClassName,
             builder: $builder
@@ -415,9 +398,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function add(
         AbstractEntity $entity,
         bool $flush = true
-    ): AbstractEntity
-    {
-        if (!class_parents($entity, $this->getEntityName())) {
+    ): AbstractEntity {
+        if (! class_parents($entity, $this->getEntityName())) {
             throw new Exception('Entity of type ' . $entity::class . ' should be of type ' . $this->getEntityName() . ' in add() method');
         }
 
@@ -433,8 +415,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function save(
         AbstractEntity $entity,
         bool $flush = true
-    ): void
-    {
+    ): void {
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {
@@ -445,8 +426,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function remove(
         AbstractEntity $entity,
         bool $flush = true
-    ): bool
-    {
+    ): bool {
         $this->getEntityManager()->remove($entity);
 
         if ($flush) {
@@ -458,8 +438,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function findAllSorted(
         string $order = self::SORT_ASC
-    ): array
-    {
+    ): array {
         return $this->orderByDefaultPagination($order)
             ->getQuery()
             ->getResult();
@@ -468,12 +447,12 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected function findRelatedEntity(
         string $entityClass,
         int $entityId
-    ): ?AbstractEntity
-    {
+    ): ?AbstractEntity {
         $repository = $this->getEntityManager()->getRepository($entityClass);
         if ($entity = $repository->find($entityId)) {
             return $entity;
         }
+
         return null;
     }
 
@@ -485,7 +464,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function findOneByDefaultIdentifier(string|int $identifier): ?AbstractEntity
     {
         return $this->findOneBy([
-            $this->getDefaultIdentifierName() => $identifier
+            $this->getDefaultIdentifierName() => $identifier,
         ]);
     }
 }

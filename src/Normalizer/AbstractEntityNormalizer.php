@@ -16,7 +16,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
 {
     use EntityManipulatorTrait;
 
-    public bool $isEntrypoint = True;
+    public bool $isEntrypoint = true;
 
     /**
      * @param AbstractEntity $object
@@ -28,8 +28,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
         mixed $object,
         ?string $format = null,
         array $context = []
-    ): array|string|int|float|bool|null|ArrayObject
-    {
+    ): array|string|int|float|bool|null|ArrayObject {
         return [
             $this->buildIdKey() => $this->buildIdValue($object, $context),
         ];
@@ -43,8 +42,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
     protected function buildIdValue(
         AbstractEntity $object,
         array $context = []
-    ): string|int
-    {
+    ): string|int {
         return $object->getId();
     }
 
@@ -59,24 +57,21 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
         mixed $data,
         ?string $format = null,
         array $context = []
-    ): bool
-    {
+    ): bool {
         return $this->isEntrypoint && ClassHelper::isClassPath($data, static::getEntityClassName());
     }
 
     protected function normalizeDateTimeOrNull(
         \DateTimeInterface|null $dateTime,
         array $context = []
-    ): ?string
-    {
+    ): ?string {
         return $dateTime ? $this->normalizeDateTime($dateTime, $context) : null;
     }
 
     protected function normalizeDateTime(
         \DateTimeInterface $dateTime,
         array $context = []
-    ): string
-    {
+    ): string {
         if ($dateTimeFormat = $this->getDefaultDateTimeSerializationFormat()) {
             $context[DateTimeNormalizer::FORMAT_KEY] = $dateTimeFormat;
         }
@@ -100,10 +95,9 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
         array|Collection $entities,
         ?string $format = null,
         array $context = []
-    ): array
-    {
+    ): array {
         return $this->normalizeCollection(
-        // Sort entities to maintain a constant order across exports.
+            // Sort entities to maintain a constant order across exports.
             EntityHelper::sortById($entities),
             $format,
             $context

@@ -12,6 +12,7 @@ class VectorType extends Type
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         $dimension = $column['options']['dimension'] ?? 1536;
+
         return "vector($dimension)";
     }
 
@@ -31,6 +32,7 @@ class VectorType extends Type
         }
 
         $value = trim($value, '[]');
+
         return array_map('floatval', explode(',', $value));
     }
 

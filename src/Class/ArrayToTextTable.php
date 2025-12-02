@@ -47,8 +47,9 @@ class ArrayToTextTable
 
     public function getTable($data = null): string
     {
-        if (!is_null($data))
+        if (! is_null($data)) {
             $this->setData($data);
+        }
 
         $data = $this->prepare();
         $i = $this->indentation;
@@ -57,26 +58,30 @@ class ArrayToTextTable
         $displayKeys = $this->displayKeys;
         if ($displayKeys === 'auto') {
             $displayKeys = false;
-            foreach ($this->keys as $key)
-                if (!is_int($key)) {
+            foreach ($this->keys as $key) {
+                if (! is_int($key)) {
                     $displayKeys = true;
+
                     break;
                 }
+            }
         }
 
         $table = $i.$this->line($d->getTopLeft(), $d->getHorizontal(), $d->getHorizontalDown(), $d->getTopRight()).PHP_EOL;
 
         if ($displayKeys) {
             $keysRow = array_combine($this->keys, $this->keys);
-            if ($this->upperKeys)
+            if ($this->upperKeys) {
                 $keysRow = array_map('mb_strtoupper', $keysRow);
+            }
             $table .= $i.implode(PHP_EOL, $this->row($keysRow, $this->keysAlignment)).PHP_EOL;
 
             $table .= $i.$this->line($d->getVerticalRight(), $d->getHorizontal(), $d->getCross(), $d->getVerticalLeft()).PHP_EOL;
         }
 
-        foreach ($data as $row)
+        foreach ($data as $row) {
             $table .= $i.implode(PHP_EOL, $this->row($row, $this->valuesAlignment)).PHP_EOL;
+        }
 
         return $table . ($i.$this->line($d->getBottomLeft(), $d->getHorizontal(), $d->getHorizontalUp(), $d->getBottomRight()).PHP_EOL);
     }
@@ -123,60 +128,70 @@ class ArrayToTextTable
 
     public function setData(?array $data): static
     {
-        if (!is_array($data))
+        if (! is_array($data)) {
             $data = [];
+        }
 
         $arrayData = [];
         foreach ($data as $row) {
-            if (is_array($row))
+            if (is_array($row)) {
                 $arrayData[] = $row;
-            else if (is_object($row))
+            } elseif (is_object($row)) {
                 $arrayData[] = get_object_vars($row);
+            }
         }
 
         $this->data = $arrayData;
+
         return $this;
     }
 
     public function setDecorator(Unicode $decorator): static
     {
         $this->decorator = $decorator;
+
         return $this;
     }
 
     public function setIndentation(string $indentation): static
     {
         $this->indentation = $indentation;
+
         return $this;
     }
 
     public function setDisplayKeys(string $displayKeys): static
     {
         $this->displayKeys = $displayKeys;
+
         return $this;
     }
 
     public function setUpperKeys(bool $upperKeys): static
     {
         $this->upperKeys = $upperKeys;
+
         return $this;
     }
 
     public function setKeysAlignment(int $keysAlignment): static
     {
         $this->keysAlignment = $keysAlignment;
+
         return $this;
     }
 
     public function setValuesAlignment(int $valuesAlignment): static
     {
         $this->valuesAlignment = $valuesAlignment;
+
         return $this;
     }
 
     public function setFormatter(?callable $formatter): static
     {
         $this->formatter = $formatter;
+
         return $this;
     }
 
@@ -187,11 +202,13 @@ class ArrayToTextTable
         $right
     ): string {
         $line = $left;
-        foreach ($this->keys as $key)
+        foreach ($this->keys as $key) {
             $line .= str_repeat($horizontal, $this->widths[$key] + 2).$link;
+        }
 
-        if (mb_strlen($line) > mb_strlen($left))
+        if (mb_strlen($line) > mb_strlen($left)) {
             $line = mb_substr($line, 0, -mb_strlen($horizontal));
+        }
 
         return $line.$right;
     }
@@ -210,8 +227,9 @@ class ArrayToTextTable
         $rowLines = [];
         for ($i = 0; $i < $height; $i++) {
             $rowLine = [];
-            foreach ($data as $key => $value)
+            foreach ($data as $key => $value) {
                 $rowLine[$key] = $value[$i] ?? '';
+            }
             $rowLines[] = $this->rowLine($rowLine, $alignment);
         }
 
@@ -224,11 +242,13 @@ class ArrayToTextTable
     ): false|string {
         $line = $this->decorator->getVertical();
 
-        foreach ($row as $key => $value)
+        foreach ($row as $key => $value) {
             $line .= ' '.static::mb_str_pad($value, $this->widths[$key], ' ', $alignment).' '.$this->decorator->getVertical();
+        }
 
-        if (empty($row))
+        if (empty($row)) {
             $line .= $this->decorator->getVertical();
+        }
 
         return $line;
     }
@@ -241,21 +261,26 @@ class ArrayToTextTable
         $data = $this->data;
 
         if ($this->formatter instanceof \Closure) {
-            foreach ($data as &$row)
+            foreach ($data as &$row) {
                 array_walk($row, $this->formatter, $this);
+            }
             unset($row);
         }
 
-        foreach ($data as $row)
+        foreach ($data as $row) {
             $this->keys = array_merge($this->keys, array_keys($row));
+        }
         $this->keys = array_unique($this->keys);
 
-        foreach ($this->keys as $key)
+        foreach ($this->keys as $key) {
             $this->setWidth($key, $key);
+        }
 
-        foreach ($data as $row)
-            foreach ($row as $columnKey => $columnValue)
+        foreach ($data as $row) {
+            foreach ($row as $columnKey => $columnValue) {
                 $this->setWidth($columnKey, $columnValue);
+            }
+        }
 
         return $data;
     }
@@ -269,13 +294,15 @@ class ArrayToTextTable
         $key,
         $value
     ): void {
-        if (!isset($this->widths[$key]))
+        if (! isset($this->widths[$key])) {
             $this->widths[$key] = 0;
+        }
 
         foreach (static::valueToLines($value) as $line) {
             $width = mb_strlen($line) + self::countCJK($line);
-            if ($width > $this->widths[$key])
+            if ($width > $this->widths[$key]) {
                 $this->widths[$key] = $width;
+            }
         }
     }
 

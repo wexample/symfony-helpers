@@ -13,7 +13,7 @@ trait ServiceSelectorTrait
         string $service,
         $group = VariableHelper::DEFAULT
     ): ?object {
-        if (!isset($this->servicesSelections[$group])) {
+        if (! isset($this->servicesSelections[$group])) {
             return null;
         }
 
@@ -35,7 +35,7 @@ trait ServiceSelectorTrait
         array|object $services,
         $group = VariableHelper::DEFAULT
     ): void {
-        if (!is_array($services)) {
+        if (! is_array($services)) {
             $services = [$services];
         }
 

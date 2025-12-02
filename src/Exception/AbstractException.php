@@ -40,8 +40,7 @@ abstract class AbstractException extends \Exception
         ?string $internalCodeSuffix = null,
         array $context = [],
         \Throwable $previous = null
-    )
-    {
+    ) {
         $this->context = $context;
         $this->internalCodeSuffix = $internalCodeSuffix;
 
@@ -50,7 +49,7 @@ abstract class AbstractException extends \Exception
 
     abstract public function getInternalCodeParts(): array;
 
-    function getInternalCode(): string
+    public function getInternalCode(): string
     {
         return implode('-', [...$this->getInternalCodeParts(), $this->getInternalCodeSuffix()]);
     }

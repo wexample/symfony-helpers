@@ -20,8 +20,7 @@ trait NotAllowedItemExceptionTrait
         string $itemType,
         string $itemValue,
         array $allowedValues
-    ): string
-    {
+    ): string {
         $output = sprintf(
             "The %s '%s' is not allowed.",
             $itemType,

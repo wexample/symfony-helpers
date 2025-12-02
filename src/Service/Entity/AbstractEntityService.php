@@ -2,12 +2,13 @@
 
 namespace Wexample\SymfonyHelpers\Service\Entity;
 
-use Exception;
-use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
-use Wexample\Helpers\Helper\ClassHelper;
-use Wexample\SymfonyHelpers\Repository\AbstractRepository;
-use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use function call_user_func_array;
+
+use Exception;
+use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
+use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
+use Wexample\SymfonyHelpers\Repository\AbstractRepository;
 
 abstract class AbstractEntityService extends EntityNeutralService
 {

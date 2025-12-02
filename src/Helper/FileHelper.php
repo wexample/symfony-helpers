@@ -3,10 +3,12 @@
 namespace Wexample\SymfonyHelpers\Helper;
 
 use FilesystemIterator;
+
+use function is_dir;
+
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Wexample\Helpers\Helper\TextHelper;
-use function is_dir;
 
 class FileHelper
 {
@@ -62,8 +64,8 @@ class FileHelper
     ): void {
         FileHelper::createDirIfMissing(dirname($path));
 
-        if (!file_exists($path)) {
-            if (!is_null($content)) {
+        if (! file_exists($path)) {
+            if (! is_null($content)) {
                 file_put_contents($path, $content);
             } else {
                 touch($path);
@@ -73,7 +75,7 @@ class FileHelper
 
     public static function createDirIfMissing(string $path): void
     {
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             mkdir(
                 $path,
                 0755,
@@ -113,7 +115,7 @@ class FileHelper
     {
         return '' === $path
             || '/' === $path
-            || !is_dir($path);
+            || ! is_dir($path);
     }
 
     public static function removeExtension(
@@ -147,7 +149,7 @@ class FileHelper
     ): void {
         $dir = dirname($fileName);
 
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
 
@@ -158,7 +160,7 @@ class FileHelper
         string $dir,
         callable $callback
     ): void {
-        $dir .= !str_ends_with($dir, FileHelper::FOLDER_SEPARATOR)
+        $dir .= ! str_ends_with($dir, FileHelper::FOLDER_SEPARATOR)
             ? FileHelper::FOLDER_SEPARATOR : '';
         $items = scandir($dir);
 
@@ -203,6 +205,7 @@ class FileHelper
     ): ?string {
         if (str_starts_with($filePath, $relativeTo)) {
             $relativePath = substr($filePath, strlen($relativeTo));
+
             // Ensure the relative path does not start with a '/'
             return ltrim($relativePath, '/');
         } else {
@@ -218,7 +221,7 @@ class FileHelper
 
         $size = trim(strtoupper($size));
 
-        if (!preg_match('/^(\d+(?:\.\d+)?)\s*([KMGTP]?B?|[KMGTP]O)?$/i', $size, $matches)) {
+        if (! preg_match('/^(\d+(?:\.\d+)?)\s*([KMGTP]?B?|[KMGTP]O)?$/i', $size, $matches)) {
             return null;
         }
 

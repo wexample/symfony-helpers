@@ -70,7 +70,7 @@ abstract class AbstractRouteLoader extends Loader
         foreach ($this->getAllControllersClasses() as $reflectionClass) {
             $attributes = $reflectionClass->getAttributes($attributeClass);
 
-            if (!empty($attributes)) {
+            if (! empty($attributes)) {
                 $controllersWithAttribute[$reflectionClass->getName()] = [
                     'reflection' => $reflectionClass,
                     'attribute' => $attributes[0]->newInstance(),

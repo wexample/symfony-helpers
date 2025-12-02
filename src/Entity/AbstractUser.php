@@ -2,10 +2,10 @@
 
 namespace Wexample\SymfonyHelpers\Entity;
 
-use Wexample\SymfonyHelpers\Entity\Interfaces\UserEntityInterface;
-use Wexample\SymfonyHelpers\Entity\Traits\UserEntityTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Wexample\SymfonyHelpers\Entity\Interfaces\UserEntityInterface;
+use Wexample\SymfonyHelpers\Entity\Traits\UserEntityTrait;
 
 abstract class AbstractUser extends AbstractEntity implements UserEntityInterface
 {

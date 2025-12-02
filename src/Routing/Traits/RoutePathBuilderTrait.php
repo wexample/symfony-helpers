@@ -30,16 +30,16 @@ trait RoutePathBuilderTrait
 
         $routeAttribute = $routeAttributes[0]->newInstance();
         $basePath = $routeAttribute->getPath();
-        
+
         // Convert route name part to kebab-case for URL path
         $routePathPart = TextHelper::toKebab($routeNamePart);
-        
+
         // Combine base path with route path part
         $fullPath = rtrim($basePath, '/') . '/' . $routePathPart;
-        
+
         return $fullPath;
     }
-    
+
     /**
      * Build a route name by combining the base name from the controller's Route attribute
      * with a route name part.
@@ -59,7 +59,7 @@ trait RoutePathBuilderTrait
 
         $routeAttribute = $routeAttributes[0]->newInstance();
         $baseName = $routeAttribute->getName();
-        
+
         // Combine base name with route name part
         return $baseName . $routeNamePart;
     }

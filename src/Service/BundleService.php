@@ -23,7 +23,7 @@ class BundleService
         $output = [];
 
         foreach ($paths as $path) {
-            if (!PackageHelper::lastCommitHasVersionTag($path)) {
+            if (! PackageHelper::lastCommitHasVersionTag($path)) {
                 $output[PackageHelper::getPackageComposerConfiguration($path)->name] = $this->versionBuild($path);
             }
         }
@@ -40,7 +40,7 @@ class BundleService
     ): string {
         $config = PackageHelper::getPackageComposerConfiguration($packagePath);
 
-        if (!$version) {
+        if (! $version) {
             $version = $config->version;
         }
 

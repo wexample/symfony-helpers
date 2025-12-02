@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: root
@@ -14,10 +15,12 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use JetBrains\PhpStorm\Pure;
 use Stringable;
+
+use function substr;
+
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Type;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
-use function substr;
 
 class Organization extends AbstractEntity implements Stringable
 {

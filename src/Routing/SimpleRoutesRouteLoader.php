@@ -17,7 +17,7 @@ class SimpleRoutesRouteLoader extends AbstractRouteLoader
     {
         $routeAttributes = $reflectionClass->getAttributes(\Symfony\Component\Routing\Annotation\Route::class);
 
-        return !empty($routeAttributes) &&
+        return ! empty($routeAttributes) &&
             method_exists($reflectionClass->getName(), 'getSimpleRoutes');
     }
 
@@ -29,14 +29,13 @@ class SimpleRoutesRouteLoader extends AbstractRouteLoader
     protected function loadOnce(
         $resource,
         string $type = null
-    ): RouteCollection
-    {
+    ): RouteCollection {
         $collection = new RouteCollection();
 
         foreach ($this->getAllControllersClassesWithAttribute(SimpleRoutesController::class) as $controllerName => $data) {
             $reflectionClass = $data['reflection'];
 
-            if (!$this->isValidSimpleRoutesController($reflectionClass)) {
+            if (! $this->isValidSimpleRoutesController($reflectionClass)) {
                 continue;
             }
 
@@ -52,7 +51,7 @@ class SimpleRoutesRouteLoader extends AbstractRouteLoader
                     if ($fullPath && $fullRouteName) {
                         $route = new Route($fullPath, [
                             '_controller' => $reflectionClass->getName() . '::resolveSimpleRoute',
-                            'routeName' => $routeName
+                            'routeName' => $routeName,
                         ]);
 
                         $collection->add($fullRouteName, $route);

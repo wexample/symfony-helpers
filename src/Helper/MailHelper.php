@@ -19,7 +19,7 @@ class MailHelper
             PREG_SET_ORDER
         ) > 0) {
             foreach ($matches as $m) {
-                if (!empty($m[2])) {
+                if (! empty($m[2])) {
                     $names[trim($m[2], '<>')] = $m[1];
                 } else {
                     $names[$m[1]] = $m[1];

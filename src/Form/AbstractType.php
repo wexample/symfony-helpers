@@ -69,6 +69,7 @@ abstract class AbstractType extends \Symfony\Component\Form\AbstractType
     protected function resolveTypeClass(string $className): string
     {
         $map = $this->getFormTypeClassesMap();
+
         return $map[$className] ?? $className;
     }
 

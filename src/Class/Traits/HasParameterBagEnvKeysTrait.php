@@ -27,7 +27,7 @@ trait HasParameterBagEnvKeysTrait
 
         foreach ($expectedEnvKeys as $key) {
             // Check if the environment variable exists in the Symfony parameter bag
-            if (!$this->parameterBag->has($key)) {
+            if (! $this->parameterBag->has($key)) {
                 $missingKeys[] = $key;
             }
         }
@@ -37,7 +37,7 @@ trait HasParameterBagEnvKeysTrait
 
     public function getEnvParameter(string $key): mixed
     {
-        if (!$this->parameterBag->has($key)) {
+        if (! $this->parameterBag->has($key)) {
             throw new \InvalidArgumentException(sprintf('Environment parameter "%s" is not defined.', $key));
         }
 

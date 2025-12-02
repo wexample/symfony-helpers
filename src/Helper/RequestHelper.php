@@ -19,7 +19,7 @@ class RequestHelper
 
     public static function buildQueryStringPartIfNotEmpty(array $parameters): string
     {
-        if (!empty($parameters)) {
+        if (! empty($parameters)) {
             return '?'.RequestHelper::buildQueryString($parameters);
         }
 
@@ -77,6 +77,7 @@ class RequestHelper
 
         if ($className) {
             $className = explode(ClassHelper::METHOD_SEPARATOR, $className)[0];
+
             return is_subclass_of($className, $controllerClassName);
         }
 

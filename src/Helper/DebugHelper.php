@@ -78,8 +78,10 @@ class DebugHelper
             if (str_contains($var, "\n")) {
                 $indent = str_repeat(self::INDENT, $depth);
                 $lines = explode("\n", $var);
+
                 return "\"\n".$indent.self::INDENT.implode("\n".$indent.self::INDENT, $lines)."\n".$indent."\"";
             }
+
             return "\"".$var."\"";
         }
 
@@ -100,7 +102,7 @@ class DebugHelper
      */
     /**
      * Format a complete exception with all nested exceptions and their traces
-     * 
+     *
      * @param \Throwable $exception The exception to format
      * @param bool $ignoreArgs If true, function arguments will not be included in the output
      * @param int $maxFrames Maximum number of frames to display per trace (0 = all)
@@ -112,13 +114,13 @@ class DebugHelper
         $result = '';
         $depth = 0;
         $currentException = $exception;
-        
+
         while ($currentException && $depth < $maxDepth) {
             // Add separator for nested exceptions
             if ($depth > 0) {
                 $result .= "\n\nCaused by:\n";
             }
-            
+
             // Add exception class, code, message and file location
             $result .= sprintf(
                 "%s [%s]: %s\nin %s:%d\n",
@@ -128,24 +130,24 @@ class DebugHelper
                 $currentException->getFile(),
                 $currentException->getLine()
             );
-            
+
             // Add the trace for this exception
             $trace = $currentException->getTrace();
             $result .= "\nStack trace:\n" . self::formatTrace($trace, $ignoreArgs, $maxFrames);
-            
+
             // Move to the previous exception in the chain
             $currentException = $currentException->getPrevious();
             $depth++;
         }
-        
+
         // Indicate if we reached the maximum depth
         if ($currentException && $depth >= $maxDepth) {
             $result .= "\n\n(Maximum exception depth of {$maxDepth} reached)";
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Format an exception trace array into a readable string
      *
@@ -171,7 +173,7 @@ class DebugHelper
             $result .= sprintf("#%d %s:%d %s%s%s(", $i, $file, $line, $class, $type, $function);
 
             // Add function arguments if requested
-            if (!$ignoreArgs && isset($frame['args']) && is_array($frame['args'])) {
+            if (! $ignoreArgs && isset($frame['args']) && is_array($frame['args'])) {
                 $argsStr = [];
                 foreach ($frame['args'] as $arg) {
                     if (is_object($arg)) {
@@ -192,7 +194,7 @@ class DebugHelper
                     }
                 }
                 $result .= implode(', ', $argsStr);
-            } else if (!$ignoreArgs) {
+            } elseif (! $ignoreArgs) {
                 $result .= '...';
             }
 
