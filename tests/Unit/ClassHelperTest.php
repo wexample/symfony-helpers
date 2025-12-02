@@ -2,10 +2,10 @@
 
 namespace Wexample\SymfonyHelpers\Tests\Unit\Helper;
 
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Wexample\Helpers\Helper\ClassHelper;
-use Wexample\SymfonyTesting\Tests\AbstractApplicationTestCase;
 
-class ClassHelperTest extends AbstractApplicationTestCase
+class ClassHelperTest extends WebTestCase
 {
     public function testHelper()
     {

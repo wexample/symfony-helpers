@@ -17,7 +17,6 @@ use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Entity\Traits\BaseEntityTrait;
-use Wexample\SymfonyTranslations\Translation\Translator;
 
 class EntityHelper
 {
@@ -58,7 +57,8 @@ class EntityHelper
             '.',
             [
                 'entity',
-                ClassHelper::getTableizedName($className) . Translator::DOMAIN_SEPARATOR,
+                # Don't use translator class constant to avoid dependency to package.
+                ClassHelper::getTableizedName($className) . ClassHelper::METHOD_SEPARATOR,
             ]
         );
     }
