@@ -1,6 +1,6 @@
 # wexample/symfony-helpers
 
-Version: 1.0.69
+Version: 1.0.70
 
 Helpers for symfony development : constants dictionary, helpers, etc.
 
@@ -113,7 +113,7 @@ Free to use in both personal and commercial projects.
 
 ## Integration in the Suite
 
-This package is part of the **Wexample Suite** — a collection of high-quality Python packages designed to work seamlessly together.
+This package is part of the Wexample Suite — a collection of high-quality, modular tools designed to work seamlessly together across multiple languages and environments.
 
 ### Related Packages
 
@@ -136,7 +136,7 @@ Refer to each package's documentation for specific version compatibility require
 - doctrine/common: ^3.4
 - doctrine/orm: ^3.3
 - doctrine/doctrine-bundle: ^2.9
-- wexample/php-helpers: 1.0.71
+- wexample/php-helpers: ==1.0.74
 
 
 # About us
