@@ -1,11 +1,11 @@
 <?php
 
-namespace Wexample\SymfonyApi\Tests\Unit\Helper;
+namespace Wexample\SymfonyHelpers\Tests\Unit\Helper;
 
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Wexample\Helpers\Helper\TextHelper;
-use Wexample\SymfonyTesting\Tests\AbstractApplicationTestCase;
 
-class TextHelperTest extends AbstractApplicationTestCase
+class TextHelperTest extends WebTestCase
 {
     public function testHelper()
     {

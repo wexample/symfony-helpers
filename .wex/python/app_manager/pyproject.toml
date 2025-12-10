@@ -4,8 +4,6 @@ version = "0.0.1"
 description = "App manager entrypoint"
 requires-python = ">=3.10"
 dependencies = [
-    "jinja2",
-    "wexample-wex-addon-app==0.0.53",
     "wexample-wex-addon-dev-php==0.0.17",
 ]
 
