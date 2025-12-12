@@ -43,10 +43,10 @@ class BundleHelper
     ];
     final public const VERSION_PRE_BUILD_NUMBER = 0;
 
-    public static function getRelatedBundle(\stdClass|string $class): ?string
+    public static function getRelatedBundle(string|object $class): ?string
     {
         if (ClassHelper::classUsesTrait($class, BundleClassTrait::class)) {
-            return static::getControllerBundle();
+            return $class::getBundleClassName();
         }
         return null;
     }
