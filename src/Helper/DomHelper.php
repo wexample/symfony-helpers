@@ -6,7 +6,10 @@ use function htmlspecialchars;
 use function implode;
 use function is_array;
 use function is_float;
+use function is_null;
+use function preg_replace;
 use function str_replace;
+use function trim;
 
 use Wexample\Helpers\Helper\TextHelper;
 
@@ -20,13 +23,44 @@ class DomHelper
 
     final public const CSS_RULE_FONT_SIZE = 'font-size';
 
+    final public const TAG_DIV = 'div';
+
+    final public const TAG_SPAN = 'span';
+
+    final public const TAG_LINK = 'link';
+
+    final public const TAG_ALLOWS_AUTO_CLOSING = [
+        self::TAG_DIV => false,
+        self::TAG_SPAN => false,
+    ];
+
     public static function buildTag(
         string $tagName,
-        array $attributes
+        array $attributes = [],
+        string $body = '',
+        bool $allowSingleTag = null
     ): string {
-        return '<'.$tagName.' '.
-            self::arrayToAttributes($attributes).'>'.
-            '</'.$tagName.'>';
+        $output = '<'.$tagName;
+
+        $outputAttributes = static::buildTagAttributes($attributes);
+        if ('' !== $outputAttributes) {
+            $output .= ' '.$outputAttributes;
+        }
+
+        if (is_null($allowSingleTag)) {
+            $allowSingleTag = static::TAG_ALLOWS_AUTO_CLOSING[$tagName] ?? false;
+        }
+
+        if ($allowSingleTag && '' === $body) {
+            return $output.'/>';
+        }
+
+        return $output.'>'.$body.'</'.$tagName.'>';
+    }
+
+    public static function buildTagAttributes(array $attributes): string
+    {
+        return self::arrayToAttributes($attributes ?: []);
     }
 
     public static function arrayToAttributes(array $array): string
@@ -58,5 +92,25 @@ class DomHelper
         }
 
         return implode(' ', $output);
+    }
+
+    public static function buildStringIdentifier(string $string): string
+    {
+        return trim(
+            // Replace double dash.
+            preg_replace(
+                '/-+/',
+                '-',
+                // Keep valid chars.
+                TextHelper::toKebab(
+                    preg_replace(
+                        '/[^a-zA-Z0-9-]/',
+                        '-',
+                        $string
+                    )
+                )
+            ),
+            '-'
+        );
     }
 }
