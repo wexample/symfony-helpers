@@ -2,8 +2,8 @@
 
 namespace Wexample\SymfonyHelpers\Service\Syntax;
 
-use App\Kernel;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Helper\BundleHelper;
 use Wexample\SymfonyHelpers\Helper\FileHelper;
@@ -17,7 +17,7 @@ class RoleSyntaxService
     public function __construct(
         ParameterBagInterface $parameterBag,
         private readonly ControllerSyntaxService $controllerSyntaxService,
-        private readonly Kernel $kernel
+        private readonly KernelInterface $kernel
     ) {
         $this->roles = RoleHelper::flattenRolesConfig(
             $parameterBag->get('security.role_hierarchy.roles')

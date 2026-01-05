@@ -6,6 +6,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Traits\BundleClassTrait;
 
 class BundleHelper
 {
@@ -41,6 +42,15 @@ class BundleHelper
         self::UPGRADE_TYPE_SNAPSHOT,
     ];
     final public const VERSION_PRE_BUILD_NUMBER = 0;
+
+    public static function getRelatedBundle(string|object $class): ?string
+    {
+        if (ClassHelper::classUsesTrait($class, BundleClassTrait::class)) {
+            return $class::getBundleClassName();
+        }
+
+        return null;
+    }
 
     /**
      * PHP port of wex script python version.
