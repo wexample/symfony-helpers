@@ -48,6 +48,7 @@ class BundleHelper
         if (ClassHelper::classUsesTrait($class, BundleClassTrait::class)) {
             return $class::getBundleClassName();
         }
+
         return null;
     }
 

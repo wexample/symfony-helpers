@@ -2,7 +2,6 @@
 
 namespace Wexample\SymfonyHelpers\Service\Syntax;
 
-use App\Kernel;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Wexample\Helpers\Helper\ClassHelper;
