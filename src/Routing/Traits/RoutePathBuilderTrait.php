@@ -5,6 +5,7 @@ namespace Wexample\SymfonyHelpers\Routing\Traits;
 use ReflectionClass;
 use Symfony\Component\Routing\Attribute\Route;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Helper\RouteHelper;
 
 /**
  * Trait providing common route path building functionality for route loaders.
@@ -69,15 +70,6 @@ trait RoutePathBuilderTrait
      */
     protected function buildRouteNameFromPath(string $fullPath): string
     {
-        $trimmedPath = trim($fullPath, '/');
-
-        if ($trimmedPath === '') {
-            return 'index';
-        }
-
-        $routeName = str_replace(['/', '-'], '_', $trimmedPath);
-        $routeName = TextHelper::toSnake($routeName);
-
-        return preg_replace('/_+/', '_', $routeName);
+        return RouteHelper::buildRouteNameFromPath($fullPath);
     }
 }
