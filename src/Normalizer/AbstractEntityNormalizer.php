@@ -19,24 +19,24 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
     public bool $isEntrypoint = true;
 
     public function normalize(
-        mixed $object,
+        mixed $data,
         ?string $format = null,
         array $context = []
     ): array|string|int|float|bool|ArrayObject|null
     {
         return [
             'entity' => $this->normalizeEntity(
-                entity: $object,
+                entity: $data,
                 format: $format,
                 context: $context
             ),
             'metadata' => $this->normalizeMetadata(
-                entity: $object,
+                entity: $data,
                 format: $format,
                 context: $context
             ),
             'relationships' => $this->normalizeRelationships(
-                entity: $object,
+                entity: $data,
                 format: $format,
                 context: $context
             )
