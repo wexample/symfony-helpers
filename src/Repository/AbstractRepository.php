@@ -86,20 +86,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $method,
         $arguments
     ): QueryBuilder {
-        $fieldName = lcfirst(substr($method, 7));
-
-        if (! ($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
-            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->getEntityName(), $fieldName, $method);
-        }
-
-        // Allow both named argument or second position argument as builder.
-        $builder = null;
-        if (isset($arguments['builder'])) {
-            $builder = $arguments['builder'];
-        } elseif (isset($arguments[1])) {
-            $builder = $arguments[1];
-        }
-        $builder = $builder instanceof QueryBuilder ? $builder : null;
+        $fieldName = $this->resolveMagicFieldName($method, 7);
+        $builder = $this->resolveMagicBuilder($arguments);
 
         return $this->queryByField(
             fieldName: $fieldName,
@@ -188,20 +176,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
         string $method,
         array $arguments
     ): int {
-        $fieldName = lcfirst(substr($method, 7));
-
-        if (! ($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
-            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->getEntityName(), $fieldName, $method);
-        }
-
-        // Allow both named argument or second position argument as builder.
-        $builder = null;
-        if (isset($arguments['builder'])) {
-            $builder = $arguments['builder'];
-        } elseif (isset($arguments[1])) {
-            $builder = $arguments[1];
-        }
-        $builder = $builder instanceof QueryBuilder ? $builder : null;
+        $fieldName = $this->resolveMagicFieldName($method, 7);
+        $builder = $this->resolveMagicBuilder($arguments);
 
         $builder = $this->querySelectCount($builder);
         $this->queryByField(
@@ -217,6 +193,33 @@ abstract class AbstractRepository extends ServiceEntityRepository
         } catch (Exception) {
             return 0;
         }
+    }
+
+    /**
+     * @throws InvalidMagicMethodCall
+     */
+    protected function resolveMagicFieldName(string $method, int $prefixLength): string
+    {
+        $fieldName = lcfirst(substr($method, $prefixLength));
+
+        if (! ($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
+            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->getEntityName(), $fieldName, $method);
+        }
+
+        return $fieldName;
+    }
+
+    protected function resolveMagicBuilder(array $arguments): ?QueryBuilder
+    {
+        // Allow both named argument or second position argument as builder.
+        $builder = null;
+        if (isset($arguments['builder'])) {
+            $builder = $arguments['builder'];
+        } elseif (isset($arguments[1])) {
+            $builder = $arguments[1];
+        }
+
+        return $builder instanceof QueryBuilder ? $builder : null;
     }
 
     /**
@@ -354,7 +357,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $this->queryByField(
                 $fieldName,
                 $value,
-                $builder
+                builder: $builder
             );
         }
 
