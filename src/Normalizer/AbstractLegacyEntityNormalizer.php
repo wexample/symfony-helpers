@@ -12,28 +12,14 @@ use Wexample\SymfonyHelpers\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
-abstract class AbstractEntityNormalizer extends AbstractNormalizer
+/**
+ * @deprecated Use the new \Wexample\SymfonyHelpers\Normalizer\AbstractEntityNormalizer
+ */
+abstract class AbstractLegacyEntityNormalizer extends AbstractNormalizer
 {
     use EntityManipulatorTrait;
 
     public bool $isEntrypoint = true;
-
-    public function normalize(
-        mixed $object,
-        ?string $format = null,
-        array $context = []
-    ): array|string|int|float|bool|ArrayObject|null
-    {
-        return [
-            'entity' => $this->normalizeEntity(
-                entity: $object,
-                format: $format,
-                context: $context
-            ),
-            'metadata' => [],
-            'relationships' => []
-        ];
-    }
 
     /**
      * @param AbstractEntity $object
@@ -41,14 +27,13 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
      * @param array $context
      * @return array|string|int|float|bool|ArrayObject|null
      */
-    protected function normalizeEntity(
-        AbstractEntity $entity,
+    public function normalize(
+        mixed $object,
         ?string $format = null,
         array $context = []
-    ): array|string|int|float|bool|ArrayObject|null
-    {
+    ): array|string|int|float|bool|null|ArrayObject {
         return [
-            $this->buildIdKey() => $this->buildIdValue($entity, $context),
+            $this->buildIdKey() => $this->buildIdValue($object, $context),
         ];
     }
 
