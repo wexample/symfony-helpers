@@ -30,17 +30,37 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
                 format: $format,
                 context: $context
             ),
-            'metadata' => [],
-            'relationships' => []
+            'metadata' => $this->normalizeMetadata(
+                entity: $object,
+                format: $format,
+                context: $context
+            ),
+            'relationships' => $this->normalizeRelationships(
+                entity: $object,
+                format: $format,
+                context: $context
+            )
         ];
     }
 
-    /**
-     * @param AbstractEntity $object
-     * @param string|null $format
-     * @param array $context
-     * @return array|string|int|float|bool|ArrayObject|null
-     */
+    protected function normalizeRelationships(
+        AbstractEntity $entity,
+        ?string $format = null,
+        array $context = []
+    ): array|string|int|float|bool|ArrayObject|null
+    {
+        return [];
+    }
+
+    protected function normalizeMetadata(
+        AbstractEntity $entity,
+        ?string $format = null,
+        array $context = []
+    ): array|string|int|float|bool|ArrayObject|null
+    {
+        return [];
+    }
+
     protected function normalizeEntity(
         AbstractEntity $entity,
         ?string $format = null,
