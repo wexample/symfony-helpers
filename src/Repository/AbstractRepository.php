@@ -89,7 +89,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $fieldName = lcfirst(substr($method, 7));
 
         if (! ($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
-            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->_entityName, $fieldName, $method);
+            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->getEntityName(), $fieldName, $method);
         }
 
         // Allow both named argument or second position argument as builder.
@@ -191,7 +191,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $fieldName = lcfirst(substr($method, 7));
 
         if (! ($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
-            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->_entityName, $fieldName, $method);
+            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->getEntityName(), $fieldName, $method);
         }
 
         // Allow both named argument or second position argument as builder.
@@ -229,7 +229,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $fieldName = lcfirst(substr($method, 8));
 
         if (! ($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
-            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->_entityName, $fieldName, $method);
+            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->getEntityName(), $fieldName, $method);
         }
 
         $entitiesToRemove = $this->findBy([$fieldName => $arguments[0]]);
