@@ -9,6 +9,89 @@ use Wexample\SymfonyHelpers\Controller\AbstractController;
 
 class RouteHelper
 {
+    public static function getRouteAttributePath(object $routeAttribute): array|string|null
+    {
+        if (! property_exists($routeAttribute, 'path')) {
+            return null;
+        }
+
+        try {
+            $property = new \ReflectionProperty($routeAttribute, 'path');
+        } catch (\ReflectionException) {
+            return null;
+        }
+
+        if (! $property->isPublic()) {
+            $property->setAccessible(true);
+        }
+
+        return $property->getValue($routeAttribute);
+    }
+
+    public static function getRouteAttributeName(object $routeAttribute): ?string
+    {
+        if (! property_exists($routeAttribute, 'name')) {
+            return null;
+        }
+
+        try {
+            $property = new \ReflectionProperty($routeAttribute, 'name');
+        } catch (\ReflectionException) {
+            return null;
+        }
+
+        if (! $property->isPublic()) {
+            $property->setAccessible(true);
+        }
+
+        return $property->getValue($routeAttribute);
+    }
+
+    public static function buildRouteNameFromParts(array $parts, string $filename): string
+    {
+        $parts = array_values(array_filter(
+            [
+                ...$parts,
+                $filename,
+            ],
+            static fn($part) => $part !== null && $part !== ''
+        ));
+
+        $routeName = TextHelper::toSnake(implode('_', $parts));
+
+        return preg_replace('/_+/', '_', $routeName);
+    }
+
+    public static function buildRoutePathFromParts(
+        array $parts,
+        string $filename,
+        ?string $basePath = null
+    ): string {
+        $pathParts = array_values(array_filter(
+            $parts,
+            static fn($part) => $part !== null && $part !== ''
+        ));
+
+        $pathParts = array_map([TextHelper::class, 'toKebab'], $pathParts);
+        $suffixPath = implode('/', $pathParts);
+
+        if ($basePath === null) {
+            $path = $suffixPath === '' ? '/' : '/' . $suffixPath;
+        } else {
+            $path = self::normalizeRoutePath($basePath);
+
+            if ($suffixPath !== '') {
+                $path = self::combineRoutePaths($path, $suffixPath);
+            }
+        }
+
+        if ($filename !== AbstractController::DEFAULT_ROUTE_NAME_INDEX) {
+            $path = self::combineRoutePaths($path, TextHelper::toKebab($filename));
+        }
+
+        return self::normalizeRoutePath($path);
+    }
+
     public static function buildRouteNameFromPath(string $fullPath): string
     {
         $trimmedPath = trim($fullPath, '/');
