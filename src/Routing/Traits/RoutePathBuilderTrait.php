@@ -3,7 +3,7 @@
 namespace Wexample\SymfonyHelpers\Routing\Traits;
 
 use ReflectionClass;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Wexample\Helpers\Helper\TextHelper;
 
 /**
