@@ -63,4 +63,21 @@ trait RoutePathBuilderTrait
         // Combine base name with route name part
         return $baseName . $routeNamePart;
     }
+
+    /**
+     * Build a route name based on the computed full path.
+     */
+    protected function buildRouteNameFromPath(string $fullPath): string
+    {
+        $trimmedPath = trim($fullPath, '/');
+
+        if ($trimmedPath === '') {
+            return 'index';
+        }
+
+        $routeName = str_replace(['/', '-'], '_', $trimmedPath);
+        $routeName = TextHelper::toSnake($routeName);
+
+        return preg_replace('/_+/', '_', $routeName);
+    }
 }
