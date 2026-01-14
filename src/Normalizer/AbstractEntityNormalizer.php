@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
+use Wexample\SymfonyHelpers\Entity\Traits\HasSecureIdTrait;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
@@ -74,14 +75,19 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
 
     protected function buildIdKey(): string
     {
-        return VariableHelper::ID;
+        return 'secureId';
     }
 
+    /**
+     * @param AbstractEntity|HasSecureIdTrait $object
+     * @param array $context
+     * @return string|int
+     */
     protected function buildIdValue(
         AbstractEntity $object,
         array $context = []
     ): string|int {
-        return $object->getId();
+        return $object->getSecureId();
     }
 
     public function getSupportedTypes(?string $format): array
