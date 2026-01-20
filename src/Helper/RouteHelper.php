@@ -150,8 +150,7 @@ class RouteHelper
             if (isset($defaults['_controller'])) {
                 // Extract the controller class name from _controller
                 // Typical format: 'App\Controller\MyController::myMethod'
-                $parts = explode('::', $defaults['_controller']);
-                $routeControllerClass = $parts[0];
+                $routeControllerClass = ClassHelper::getClassPath($defaults['_controller']);
 
                 if ($routeControllerClass === $controllerClass) {
                     $routes[$name] = $route;
