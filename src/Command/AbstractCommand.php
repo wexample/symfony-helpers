@@ -50,7 +50,8 @@ abstract class AbstractCommand extends Command
      */
     protected function execCommand(
         string $command,
-        OutputInterface $output
+        OutputInterface $output,
+        array $arguments = []
     ): void {
         if (is_subclass_of(
             $command,
@@ -64,7 +65,7 @@ abstract class AbstractCommand extends Command
             ->getApplication()
             ->find($command)
             ->run(
-                new ArrayInput([]),
+                new ArrayInput($arguments),
                 $output,
             );
     }
