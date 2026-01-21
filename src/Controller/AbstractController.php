@@ -5,7 +5,7 @@ namespace Wexample\SymfonyHelpers\Controller;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
