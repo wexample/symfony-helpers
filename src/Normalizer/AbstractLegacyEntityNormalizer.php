@@ -7,82 +7,46 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
-use Wexample\SymfonyHelpers\Entity\Traits\HasSecureIdTrait;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
-abstract class AbstractEntityNormalizer extends AbstractNormalizer
+/**
+ * @deprecated Use the new \Wexample\SymfonyHelpers\Normalizer\AbstractEntityNormalizer
+ */
+abstract class AbstractLegacyEntityNormalizer extends AbstractNormalizer
 {
     use EntityManipulatorTrait;
 
     public bool $isEntrypoint = true;
 
+    /**
+     * @param AbstractEntity $object
+     * @param string|null $format
+     * @param array $context
+     * @return array|string|int|float|bool|ArrayObject|null
+     */
     public function normalize(
-        mixed $data,
+        mixed $object,
         ?string $format = null,
         array $context = []
-    ): array|string|int|float|bool|ArrayObject|null {
+    ): array|string|int|float|bool|null|ArrayObject {
         return [
-            'entity' => $this->normalizeEntity(
-                entity: $data,
-                format: $format,
-                context: $context
-            ),
-            'metadata' => $this->normalizeMetadata(
-                entity: $data,
-                format: $format,
-                context: $context
-            ),
-            'relationships' => $this->normalizeRelationships(
-                entity: $data,
-                format: $format,
-                context: $context
-            ),
-        ];
-    }
-
-    protected function normalizeRelationships(
-        AbstractEntity $entity,
-        ?string $format = null,
-        array $context = []
-    ): array|string|int|float|bool|ArrayObject|null {
-        return [];
-    }
-
-    protected function normalizeMetadata(
-        AbstractEntity $entity,
-        ?string $format = null,
-        array $context = []
-    ): array|string|int|float|bool|ArrayObject|null {
-        return [];
-    }
-
-    protected function normalizeEntity(
-        AbstractEntity $entity,
-        ?string $format = null,
-        array $context = []
-    ): array|string|int|float|bool|ArrayObject|null {
-        return [
-            $this->buildIdKey() => $this->buildIdValue($entity, $context),
+            $this->buildIdKey() => $this->buildIdValue($object, $context),
         ];
     }
 
     protected function buildIdKey(): string
     {
-        return 'secureId';
+        return VariableHelper::ID;
     }
 
-    /**
-     * @param AbstractEntity|HasSecureIdTrait $object
-     * @param array $context
-     * @return string|int
-     */
     protected function buildIdValue(
         AbstractEntity $object,
         array $context = []
     ): string|int {
-        return $object->getSecureId();
+        return $object->getId();
     }
 
     public function getSupportedTypes(?string $format): array

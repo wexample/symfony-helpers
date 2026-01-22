@@ -68,6 +68,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
             return $this->resolveMagicPluckCall($method, $arguments);
         }
 
+        if (str_starts_with($method, 'countBy')) {
+            return $this->resolveMagicCountByCall($method, $arguments);
+        }
+
         if (str_starts_with($method, 'removeBy')) {
             return $this->resolveMagicRemoveCall($method, $arguments);
         }
@@ -82,20 +86,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $method,
         $arguments
     ): QueryBuilder {
-        $fieldName = lcfirst(substr($method, 7));
-
-        if (! ($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
-            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->_entityName, $fieldName, $method);
-        }
-
-        // Allow both named argument or second position argument as builder.
-        $builder = null;
-        if (isset($arguments['builder'])) {
-            $builder = $arguments['builder'];
-        } elseif (isset($arguments[1])) {
-            $builder = $arguments[1];
-        }
-        $builder = $builder instanceof QueryBuilder ? $builder : null;
+        $fieldName = $this->resolveMagicFieldName($method, 7);
+        $builder = $this->resolveMagicBuilder($arguments);
 
         return $this->queryByField(
             fieldName: $fieldName,
@@ -177,6 +169,58 @@ abstract class AbstractRepository extends ServiceEntityRepository
         return $output;
     }
 
+    /**
+     * @throws InvalidMagicMethodCall
+     */
+    protected function resolveMagicCountByCall(
+        string $method,
+        array $arguments
+    ): int {
+        $fieldName = $this->resolveMagicFieldName($method, 7);
+        $builder = $this->resolveMagicBuilder($arguments);
+
+        $builder = $this->querySelectCount($builder);
+        $this->queryByField(
+            fieldName: $fieldName,
+            value: $arguments[0],
+            builder: $builder
+        );
+
+        try {
+            return (int) $builder
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (Exception) {
+            return 0;
+        }
+    }
+
+    /**
+     * @throws InvalidMagicMethodCall
+     */
+    protected function resolveMagicFieldName(string $method, int $prefixLength): string
+    {
+        $fieldName = lcfirst(substr($method, $prefixLength));
+
+        if (! ($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
+            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->getEntityName(), $fieldName, $method);
+        }
+
+        return $fieldName;
+    }
+
+    protected function resolveMagicBuilder(array $arguments): ?QueryBuilder
+    {
+        // Allow both named argument or second position argument as builder.
+        $builder = null;
+        if (isset($arguments['builder'])) {
+            $builder = $arguments['builder'];
+        } elseif (isset($arguments[1])) {
+            $builder = $arguments[1];
+        }
+
+        return $builder instanceof QueryBuilder ? $builder : null;
+    }
 
     /**
      * @throws InvalidMagicMethodCall
@@ -188,7 +232,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $fieldName = lcfirst(substr($method, 8));
 
         if (! ($this->getClassMetadata()->hasField($fieldName) || $this->getClassMetadata()->hasAssociation($fieldName))) {
-            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->_entityName, $fieldName, $method);
+            throw InvalidMagicMethodCall::becauseFieldNotFoundIn($this->getEntityName(), $fieldName, $method);
         }
 
         $entitiesToRemove = $this->findBy([$fieldName => $arguments[0]]);
@@ -313,7 +357,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $this->queryByField(
                 $fieldName,
                 $value,
-                $builder
+                builder: $builder
             );
         }
 

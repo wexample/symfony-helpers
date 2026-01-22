@@ -76,7 +76,7 @@ class RequestHelper
         $className = $request->attributes->get('_controller');
 
         if ($className) {
-            $className = explode(ClassHelper::METHOD_SEPARATOR, $className)[0];
+            $className = ClassHelper::getClassPath($className);
 
             return is_subclass_of($className, $controllerClassName);
         }

@@ -3,8 +3,9 @@
 namespace Wexample\SymfonyHelpers\Routing\Traits;
 
 use ReflectionClass;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Helper\RouteHelper;
 
 /**
  * Trait providing common route path building functionality for route loaders.
@@ -62,5 +63,13 @@ trait RoutePathBuilderTrait
 
         // Combine base name with route name part
         return $baseName . $routeNamePart;
+    }
+
+    /**
+     * Build a route name based on the computed full path.
+     */
+    protected function buildRouteNameFromPath(string $fullPath): string
+    {
+        return RouteHelper::buildRouteNameFromPath($fullPath);
     }
 }
