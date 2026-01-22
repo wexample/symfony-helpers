@@ -11,7 +11,6 @@ use Wexample\SymfonyHelpers\Entity\Traits\HasSecureIdTrait;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
-use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 abstract class AbstractEntityNormalizer extends AbstractNormalizer
 {
@@ -23,8 +22,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
         mixed $data,
         ?string $format = null,
         array $context = []
-    ): array|string|int|float|bool|ArrayObject|null
-    {
+    ): array|string|int|float|bool|ArrayObject|null {
         return [
             'entity' => $this->normalizeEntity(
                 entity: $data,
@@ -40,7 +38,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
                 entity: $data,
                 format: $format,
                 context: $context
-            )
+            ),
         ];
     }
 
@@ -48,8 +46,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
         AbstractEntity $entity,
         ?string $format = null,
         array $context = []
-    ): array|string|int|float|bool|ArrayObject|null
-    {
+    ): array|string|int|float|bool|ArrayObject|null {
         return [];
     }
 
@@ -57,8 +54,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
         AbstractEntity $entity,
         ?string $format = null,
         array $context = []
-    ): array|string|int|float|bool|ArrayObject|null
-    {
+    ): array|string|int|float|bool|ArrayObject|null {
         return [];
     }
 
@@ -66,8 +62,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
         AbstractEntity $entity,
         ?string $format = null,
         array $context = []
-    ): array|string|int|float|bool|ArrayObject|null
-    {
+    ): array|string|int|float|bool|ArrayObject|null {
         return [
             $this->buildIdKey() => $this->buildIdValue($entity, $context),
         ];

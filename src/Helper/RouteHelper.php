@@ -54,7 +54,7 @@ class RouteHelper
                 ...$parts,
                 $filename,
             ],
-            static fn($part) => $part !== null && $part !== ''
+            static fn ($part) => $part !== null && $part !== ''
         ));
 
         $routeName = TextHelper::toSnake(implode('_', $parts));
@@ -69,7 +69,7 @@ class RouteHelper
     ): string {
         $pathParts = array_values(array_filter(
             $parts,
-            static fn($part) => $part !== null && $part !== ''
+            static fn ($part) => $part !== null && $part !== ''
         ));
 
         $pathParts = array_map([TextHelper::class, 'toKebab'], $pathParts);
