@@ -17,6 +17,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
 
     final public const DEFAULT_ROUTE_NAME_INDEX = 'index';
     final public const DEFAULT_ROUTE_NAME_CREATE = 'create';
+    final public const DEFAULT_ROUTE_NAME_EDIT = 'edit';
     final public const DEFAULT_ROUTE_NAME_DELETE = 'delete';
     final public const DEFAULT_ROUTE_NAME_DETAIL = 'detail';
     final public const DEFAULT_ROUTE_NAME_LIST = VariableHelper::LIST;

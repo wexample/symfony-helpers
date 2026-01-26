@@ -14,16 +14,21 @@ abstract class AbstractLoggedUserEntityVoter extends AbstractEntityVoter
         string $attribute,
         mixed $subject,
         TokenInterface $token
-    ): bool {
+    ): bool
+    {
         $user = $token->getUser();
 
-        if (! $user instanceof AbstractUser) {
+        if (!$user instanceof AbstractUser) {
             // the user must be logged in; if not, deny access
             return false;
         }
 
         // Check if user has any of the allowed roles
-        foreach ($this->getAllowedRoles() as $allowedRole) {
+        foreach ($this->getAllowedRoles(
+            attribute: $attribute,
+            subject: $subject,
+            token: $token,
+        ) as $allowedRole) {
             if (in_array($allowedRole, $user->getRoles(), true)) {
                 return true;
             }
@@ -33,7 +38,11 @@ abstract class AbstractLoggedUserEntityVoter extends AbstractEntityVoter
         return false;
     }
 
-    protected function getAllowedRoles(): array
+    protected function getAllowedRoles(
+        string $attribute,
+        mixed $subject,
+        TokenInterface $token
+    ): array
     {
         if ($this->onlyAdmin) {
             return [RoleHelper::ROLE_ADMIN];
