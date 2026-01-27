@@ -83,4 +83,16 @@ class RequestHelper
 
         return false;
     }
+
+    public static function isJsonRequest(Request $request): bool
+    {
+        if ($request->isXmlHttpRequest()) {
+            return true;
+        }
+
+        $accept = $request->headers->get('Accept');
+
+        return is_string($accept)
+            && str_contains($accept, 'application/json');
+    }
 }
