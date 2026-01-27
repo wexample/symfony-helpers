@@ -14,11 +14,10 @@ abstract class AbstractLoggedUserEntityVoter extends AbstractEntityVoter
         string $attribute,
         mixed $subject,
         TokenInterface $token
-    ): bool
-    {
+    ): bool {
         $user = $token->getUser();
 
-        if (!$user instanceof AbstractUser) {
+        if (! $user instanceof AbstractUser) {
             // the user must be logged in; if not, deny access
             return false;
         }
@@ -42,8 +41,7 @@ abstract class AbstractLoggedUserEntityVoter extends AbstractEntityVoter
         string $attribute,
         mixed $subject,
         TokenInterface $token
-    ): array
-    {
+    ): array {
         if ($this->onlyAdmin) {
             return [RoleHelper::ROLE_ADMIN];
         }
