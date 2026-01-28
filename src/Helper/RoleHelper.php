@@ -30,6 +30,11 @@ class RoleHelper
      */
     public const ROLE_USER = 'ROLE_USER';
 
+    /**
+     * string.
+     */
+    public const PUBLIC_ACCESS = 'PUBLIC_ACCESS';
+
     public static function getRoles(): array
     {
         return [
