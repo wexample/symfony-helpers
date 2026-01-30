@@ -96,4 +96,31 @@ class NumberHelper
     {
         return $int / 100;
     }
+
+    public static function isIntegerLike(mixed $value, bool $allowSign = true): bool
+    {
+        if (is_int($value)) {
+            return true;
+        }
+
+        if (is_string($value)) {
+            $value = trim($value);
+            if ($value === '') {
+                return false;
+            }
+
+            if ($allowSign && ($value[0] === '+' || $value[0] === '-')) {
+                return $value !== '+' && $value !== '-' && ctype_digit(substr($value, 1));
+            }
+
+            return ctype_digit($value);
+        }
+
+        // Optional: accept numeric types that are whole numbers (e.g. 244.0)
+        if (is_float($value)) {
+            return is_finite($value) && floor($value) === $value;
+        }
+
+        return false;
+    }
 }
