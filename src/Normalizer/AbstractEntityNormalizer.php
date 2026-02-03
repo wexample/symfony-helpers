@@ -5,6 +5,8 @@ namespace Wexample\SymfonyHelpers\Normalizer;
 use ArrayObject;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\HasSecureIdTrait;
@@ -12,9 +14,10 @@ use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
 
-abstract class AbstractEntityNormalizer extends AbstractNormalizer
+abstract class AbstractEntityNormalizer extends AbstractNormalizer implements NormalizerAwareInterface
 {
     use EntityManipulatorTrait;
+    use NormalizerAwareTrait;
 
     public bool $isEntrypoint = true;
 
@@ -23,22 +26,40 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
         ?string $format = null,
         array $context = []
     ): array|string|int|float|bool|ArrayObject|null {
+        $entity = $this->normalizeEntity(
+            entity: $data,
+            format: $format,
+            context: $context
+        );
+
+        $relationships = $this->normalizeRelationships(
+            entity: $data,
+            format: $format,
+            context: $context
+        );
+
+        if (
+            $this->shouldAutoRelationships($context)
+            && is_array($entity)
+            && isset($this->normalizer)
+        ) {
+            $autoRelationships = $this->collectRelationshipsFromEntityData(
+                $entity,
+                $format,
+                $context
+            );
+
+            $relationships = $relationships + $autoRelationships;
+        }
+
         return [
-            'entity' => $this->normalizeEntity(
-                entity: $data,
-                format: $format,
-                context: $context
-            ),
+            'entity' => $entity,
             'metadata' => $this->normalizeMetadata(
                 entity: $data,
                 format: $format,
                 context: $context
             ),
-            'relationships' => $this->normalizeRelationships(
-                entity: $data,
-                format: $format,
-                context: $context
-            ),
+            'relationships' => $relationships,
         ];
     }
 
@@ -66,6 +87,78 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer
         return [
             $this->buildIdKey() => $this->buildIdValue($entity, $context),
         ];
+    }
+
+    protected function shouldAutoRelationships(array $context = []): bool
+    {
+        return ($context['auto_relationships'] ?? true) === true;
+    }
+
+    protected function collectRelationshipsFromEntityData(
+        array &$entityData,
+        ?string $format = null,
+        array $context = []
+    ): array {
+        $relationships = [];
+        $context['auto_relationships'] = false;
+
+        foreach ($entityData as $key => $value) {
+            $entityData[$key] = $this->extractRelationshipsFromValue(
+                $value,
+                $relationships,
+                $format,
+                $context
+            );
+        }
+
+        return $relationships;
+    }
+
+    protected function extractRelationshipsFromValue(
+        mixed $value,
+        array &$relationships,
+        ?string $format = null,
+        array $context = []
+    ): mixed {
+        if ($value instanceof AbstractEntity) {
+            $secureId = $value->getSecureId();
+            $relationships[$secureId] = $this->normalizer->normalize(
+                $value,
+                $format,
+                $context
+            );
+
+            return $secureId;
+        }
+
+        if ($value instanceof Collection) {
+            $normalized = [];
+            foreach ($value as $item) {
+                $normalized[] = $this->extractRelationshipsFromValue(
+                    $item,
+                    $relationships,
+                    $format,
+                    $context
+                );
+            }
+
+            return $normalized;
+        }
+
+        if (is_array($value)) {
+            foreach ($value as $index => $item) {
+                $value[$index] = $this->extractRelationshipsFromValue(
+                    $item,
+                    $relationships,
+                    $format,
+                    $context
+                );
+            }
+
+            return $value;
+        }
+
+        return $value;
     }
 
     protected function buildIdKey(): string
