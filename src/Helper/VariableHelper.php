@@ -135,6 +135,7 @@ class VariableHelper
     final public const USER = 'user';
     final public const USER_NAME = 'user_name';
     final public const USERNAME = 'username';
+    final public const VALUE = 'value';
     final public const VARIABLE_TYPE_ARRAY = 'array';
     final public const VARIABLE_TYPE_BLOB = 'blob';
     final public const VARIABLE_TYPE_BOOLEAN = 'boolean';
