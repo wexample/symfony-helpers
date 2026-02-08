@@ -14,8 +14,7 @@ trait AccessControlledRepositoryTrait
         QueryBuilder $builder = null
     ): QueryBuilder
     {
-        $builder = $this->createOrGetQueryBuilder($builder);
-        $builder = $this->applyAccessFilter($builder, $user);
+        $builder = $this->queryAccessFilter($user, $builder);
 
         return $this->queryPaginated($page, $length, $builder);
     }
@@ -31,8 +30,8 @@ trait AccessControlledRepositoryTrait
             ->execute();
     }
 
-    abstract protected function applyAccessFilter(
-        QueryBuilder $builder,
-        $user
+    abstract protected function queryAccessFilter(
+        AbstractUser $user,
+        QueryBuilder $builder = null
     ): QueryBuilder;
 }
