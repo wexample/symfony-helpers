@@ -93,24 +93,4 @@ class DomHelper
 
         return implode(' ', $output);
     }
-
-    public static function buildStringIdentifier(string $string): string
-    {
-        return trim(
-            // Replace double dash.
-            preg_replace(
-                '/-+/',
-                '-',
-                // Keep valid chars.
-                TextHelper::toKebab(
-                    preg_replace(
-                        '/[^a-zA-Z0-9-]/',
-                        '-',
-                        $string
-                    )
-                )
-            ),
-            '-'
-        );
-    }
 }
