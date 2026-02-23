@@ -4,6 +4,52 @@ namespace Wexample\SymfonyHelpers\Helper;
 
 class JsonHelper
 {
+    /**
+     * Resolve and filter JSON file paths from a path, directory, glob, or list of them.
+     *
+     * @param string|array<int, string> $pathOrPaths
+     * @return array<int, string>
+     */
+    public static function filterValidJson(string|array $pathOrPaths): array
+    {
+        $inputs = is_array($pathOrPaths) ? $pathOrPaths : [$pathOrPaths];
+        $paths = [];
+
+        foreach ($inputs as $input) {
+            if ($input === '') {
+                continue;
+            }
+
+            if (is_dir($input)) {
+                foreach (glob(rtrim($input, '/') . '/*.json') ?: [] as $file) {
+                    if (is_file($file) && is_readable($file)) {
+                        $paths[] = $file;
+                    }
+                }
+                continue;
+            }
+
+            $hasGlob = preg_match('/[*?\\[\\]{}]/', $input) === 1;
+            if ($hasGlob) {
+                foreach (glob($input) ?: [] as $file) {
+                    if (is_file($file) && str_ends_with(strtolower($file), '.json') && is_readable($file)) {
+                        $paths[] = $file;
+                    }
+                }
+                continue;
+            }
+
+            if (is_file($input) && str_ends_with(strtolower($input), '.json') && is_readable($input)) {
+                $paths[] = $input;
+            }
+        }
+
+        $paths = array_values(array_unique($paths));
+        sort($paths);
+
+        return $paths;
+    }
+
     public static function read(
         string $path,
         bool $associative = null,
