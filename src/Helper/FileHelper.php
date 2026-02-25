@@ -196,6 +196,20 @@ class FileHelper
         );
     }
 
+    public static function normalizeDirectoryPath(
+        string $path
+    ): string {
+        $normalized = str_replace('\\', FileHelper::FOLDER_SEPARATOR, $path);
+        $normalized = preg_replace(
+            '#/+#',
+            FileHelper::FOLDER_SEPARATOR,
+            $normalized
+        );
+
+        return rtrim($normalized, FileHelper::FOLDER_SEPARATOR)
+            . FileHelper::FOLDER_SEPARATOR;
+    }
+
     /**
      * @deprecated Use \Wexample\SymfonyHelpers\Helper\FileHelper::buildRelativePath() instead.
      */
