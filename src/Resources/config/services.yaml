@@ -37,6 +37,10 @@ services:
         tags:
             - { name: 'wexample.rectify.rule', priority: 150 }
 
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\EntityManipulatorTraitRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 140 }
+
     Wexample\SymfonyHelpers\Service\Rectify\Rule\RemoveDefaultIdBlockRule:
         tags:
             - { name: 'wexample.rectify.rule', priority: 100 }
