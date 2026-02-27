@@ -37,9 +37,21 @@ services:
         tags:
             - { name: 'wexample.rectify.rule', priority: 150 }
 
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\RepositoryCreateNewMethodRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 145 }
+
     Wexample\SymfonyHelpers\Service\Rectify\Rule\EntityManipulatorTraitRule:
         tags:
             - { name: 'wexample.rectify.rule', priority: 140 }
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\HasSecureIdTraitRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 130 }
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\LinkedToEntityTraitRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 120 }
 
     Wexample\SymfonyHelpers\Service\Rectify\Rule\RemoveDefaultIdBlockRule:
         tags:
