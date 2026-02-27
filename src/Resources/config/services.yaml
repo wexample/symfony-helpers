@@ -29,4 +29,16 @@ services:
     Wexample\SymfonyHelpers\Service\ReversedRoleHierarchy:
         arguments: ['%security.role_hierarchy.roles%']
 
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\EntityExtendRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 200 }
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\RepositoryRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 150 }
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\RemoveDefaultIdBlockRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 100 }
+
     Wexample\SymfonyHelpers\Command\RectifyCommand: ~
