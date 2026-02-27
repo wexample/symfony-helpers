@@ -8,6 +8,7 @@ use Attribute;
 class RectifiableEntity
 {
     public function __construct(
+        public readonly bool $api = false,
         public readonly array $config = []
     ) {
     }
