@@ -57,6 +57,10 @@ services:
         tags:
             - { name: 'wexample.rectify.rule', priority: 110 }
 
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\ImportDtoRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 105 }
+
     Wexample\SymfonyHelpers\Service\Rectify\Rule\RemoveDefaultIdBlockRule:
         tags:
             - { name: 'wexample.rectify.rule', priority: 100 }
