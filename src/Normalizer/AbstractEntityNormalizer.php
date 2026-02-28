@@ -38,27 +38,41 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
             context: $context
         );
 
+        $metadata = $this->normalizeMetadata(
+            entity: $data,
+            format: $format,
+            context: $context
+        );
+
         if (
             $this->shouldAutoRelationships($context)
-            && is_array($entity)
             && isset($this->normalizer)
         ) {
-            $autoRelationships = $this->collectRelationshipsFromEntityData(
-                $entity,
-                $format,
-                $context
-            );
+            $autoRelationships = [];
+
+            if (is_array($entity)) {
+                $autoRelationships = $this->collectRelationshipsFromEntityData(
+                    $entity,
+                    $format,
+                    $context
+                );
+            }
+
+            if (is_array($metadata)) {
+                $autoRelationships = $autoRelationships + $this->collectRelationshipsFromEntityData(
+                    $metadata,
+                    $format,
+                    $context
+                );
+            }
 
             $relationships = $relationships + $autoRelationships;
         }
 
         return [
+            'type' => $this->buildTypeValue($data, $context),
             'entity' => $entity,
-            'metadata' => $this->normalizeMetadata(
-                entity: $data,
-                format: $format,
-                context: $context
-            ),
+            'metadata' => $metadata,
             'relationships' => $relationships,
         ];
     }
@@ -164,6 +178,13 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
     protected function buildIdKey(): string
     {
         return 'secureId';
+    }
+
+    protected function buildTypeValue(
+        AbstractEntity $object,
+        array $context = []
+    ): string {
+        return ClassHelper::getFieldName($object);
     }
 
     /**
