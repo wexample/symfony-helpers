@@ -8,6 +8,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\HasSecureIdTrait;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
@@ -184,7 +185,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
         AbstractEntity $object,
         array $context = []
     ): string {
-        return ClassHelper::getFieldName($object);
+        return TextHelper::toSnake(ClassHelper::getFieldName($object));
     }
 
     /**
