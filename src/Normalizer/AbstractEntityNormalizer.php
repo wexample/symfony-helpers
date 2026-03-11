@@ -77,7 +77,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
         }
 
         return [
-            'type' => $data->getEntityShortName(),
+            'type' => ClassHelper::getFieldName($data),
             'entity' => $entity,
             'metadata' => $metadata,
             'relationships' => $relationships,
