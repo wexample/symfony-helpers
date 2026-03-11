@@ -22,6 +22,12 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
 
     public bool $isEntrypoint = true;
 
+    /**
+     * @param AbstractEntity $data
+     * @param string|null $format
+     * @param array $context
+     * @return array|string|int|float|bool|ArrayObject|null
+     */
     public function normalize(
         mixed $data,
         ?string $format = null,
@@ -71,7 +77,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
         }
 
         return [
-            'type' => $this->buildTypeValue($data, $context),
+            'type' => $data->getEntityShortName(),
             'entity' => $entity,
             'metadata' => $metadata,
             'relationships' => $relationships,
@@ -179,13 +185,6 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
     protected function buildIdKey(): string
     {
         return 'secureId';
-    }
-
-    protected function buildTypeValue(
-        AbstractEntity $object,
-        array $context = []
-    ): string {
-        return TextHelper::toSnake(ClassHelper::getFieldName($object));
     }
 
     /**
