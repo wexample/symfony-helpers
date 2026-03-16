@@ -11,6 +11,7 @@ abstract class AbstractEntityVoter extends AbstractVoter
 
     final public const string EDIT = VariableHelper::EDIT;
     final public const string VIEW = VariableHelper::VIEW;
+    final public const string DELETE = VariableHelper::DELETE;
 
     protected function supports(
         string $attribute,
