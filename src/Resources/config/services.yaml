@@ -53,10 +53,6 @@ services:
         tags:
             - { name: 'wexample.rectify.rule', priority: 120 }
 
-    Wexample\SymfonyHelpers\Service\Rectify\Rule\ApiNormalizerRule:
-        tags:
-            - { name: 'wexample.rectify.rule', priority: 110 }
-
     Wexample\SymfonyHelpers\Service\Rectify\Rule\ImportDtoRule:
         tags:
             - { name: 'wexample.rectify.rule', priority: 105 }
