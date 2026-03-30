@@ -12,8 +12,7 @@ trait AccessControlledRepositoryTrait
         ?int $length,
         AbstractUser $user,
         QueryBuilder $builder = null
-    ): QueryBuilder
-    {
+    ): QueryBuilder {
         $builder = $this->queryAccessFilter($user, $builder);
 
         return $this->queryPaginated($page, $length, $builder);
@@ -23,8 +22,7 @@ trait AccessControlledRepositoryTrait
         int $page,
         ?int $length,
         $user
-    ): array
-    {
+    ): array {
         return $this->queryPaginatedForUser($page, $length, $user)
             ->getQuery()
             ->execute();
