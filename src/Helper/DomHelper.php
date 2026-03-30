@@ -7,9 +7,7 @@ use function implode;
 use function is_array;
 use function is_float;
 use function is_null;
-use function preg_replace;
 use function str_replace;
-use function trim;
 
 use Wexample\Helpers\Helper\TextHelper;
 

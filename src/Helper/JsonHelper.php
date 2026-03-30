@@ -26,6 +26,7 @@ class JsonHelper
                         $paths[] = $file;
                     }
                 }
+
                 continue;
             }
 
@@ -36,6 +37,7 @@ class JsonHelper
                         $paths[] = $file;
                     }
                 }
+
                 continue;
             }
 

@@ -167,12 +167,12 @@ class RouteHelper
         Request $request
     ): ?ReflectionMethod {
         $controller = $request->attributes->get('_controller');
-        if (!is_string($controller) || !str_contains($controller, '::')) {
+        if (! is_string($controller) || ! str_contains($controller, '::')) {
             return null;
         }
 
         [$class, $method] = explode('::', $controller, 2);
-        if (!class_exists($class) || !method_exists($class, $method)) {
+        if (! class_exists($class) || ! method_exists($class, $method)) {
             return null;
         }
 
