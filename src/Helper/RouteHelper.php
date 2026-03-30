@@ -2,6 +2,8 @@
 
 namespace Wexample\SymfonyHelpers\Helper;
 
+use ReflectionMethod;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouteCollection;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
@@ -159,5 +161,21 @@ class RouteHelper
         }
 
         return $routes;
+    }
+
+    public static function resolveControllerMethodReflection(
+        Request $request
+    ): ?ReflectionMethod {
+        $controller = $request->attributes->get('_controller');
+        if (!is_string($controller) || !str_contains($controller, '::')) {
+            return null;
+        }
+
+        [$class, $method] = explode('::', $controller, 2);
+        if (!class_exists($class) || !method_exists($class, $method)) {
+            return null;
+        }
+
+        return new ReflectionMethod($class, $method);
     }
 }

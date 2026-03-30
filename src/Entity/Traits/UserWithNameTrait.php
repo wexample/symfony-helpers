@@ -15,33 +15,33 @@ trait UserWithNameTrait
     #[Type(type: VariableHelper::VARIABLE_TYPE_STRING)]
     #[Length(max: 100)]
     #[Column(type: VariableHelper::VARIABLE_TYPE_STRING, length: 100, nullable: true)]
-    private ?string $first_name = null;
+    private ?string $firstName = null;
 
     #[Type(type: VariableHelper::VARIABLE_TYPE_STRING)]
     #[Length(max: 100)]
     #[Column(type: VariableHelper::VARIABLE_TYPE_STRING, length: 100, nullable: true)]
-    private ?string $last_name = null;
+    private ?string $lastName = null;
 
     public function getFirstName(): ?string
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
-    public function setFirstName(?string $first_name): self
+    public function setFirstName(?string $firstName): self
     {
-        $this->first_name = $first_name;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
     public function getLastName(): ?string
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 
-    public function setLastName(?string $last_name): self
+    public function setLastName(?string $lastName): self
     {
-        $this->last_name = $last_name;
+        $this->lastName = $lastName;
 
         return $this;
     }

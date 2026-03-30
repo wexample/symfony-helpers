@@ -28,3 +28,37 @@ services:
 
     Wexample\SymfonyHelpers\Service\ReversedRoleHierarchy:
         arguments: ['%security.role_hierarchy.roles%']
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\EntityExtendRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 200 }
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\RepositoryRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 150 }
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\RepositoryCreateNewMethodRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 145 }
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\EntityManipulatorTraitRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 140 }
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\HasSecureIdTraitRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 130 }
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\LinkedToEntityTraitRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 120 }
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\ImportDtoRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 105 }
+
+    Wexample\SymfonyHelpers\Service\Rectify\Rule\RemoveDefaultIdBlockRule:
+        tags:
+            - { name: 'wexample.rectify.rule', priority: 100 }
+
+    Wexample\SymfonyHelpers\Command\RectifyCommand: ~
