@@ -1,3 +1,7 @@
+docker:
+  db: {}
+domains: []
 global:
   name: symfony_helpers
-  version: 1.0.92
+  type: app
+  version: 6.0.19
