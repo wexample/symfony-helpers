@@ -4,4 +4,8 @@ domains: []
 global:
   name: symfony_helpers
   type: app
-  version: 6.0.19
+  version: 1.0.92
+wex:
+  version: 6.0.89
+git:
+  publication_strategy: main_push
