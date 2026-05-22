@@ -56,9 +56,8 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     protected function getParameterOrDefault(
         string $name,
         array|bool|float|int|null|string $default
-    )
-    {
-        if (!$this->container->get('parameter_bag')->has($name)) {
+    ) {
+        if (! $this->container->get('parameter_bag')->has($name)) {
             return $default;
         }
 

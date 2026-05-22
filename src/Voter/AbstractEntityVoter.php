@@ -18,7 +18,7 @@ abstract class AbstractEntityVoter extends AbstractVoter
         mixed $subject
     ): bool {
         if (parent::supports($attribute, $subject)) {
-            if (!$this->manipulatesEntity($subject)) {
+            if (! $this->manipulatesEntity($subject)) {
                 return false;
             }
 
