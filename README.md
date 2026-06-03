@@ -1,6 +1,6 @@
 # symfony_helpers
 
-Version: 1.0.93
+Version: 2.0.0
 
 Helpers for symfony development : constants dictionary, helpers, etc.
 
@@ -34,7 +34,7 @@ Visit the [Wexample Suite documentation](https://docs.wexample.com) for the comp
 - doctrine/common: ^3.4
 - doctrine/orm: ^3.3
 - doctrine/doctrine-bundle: ^2.9
-- wexample/php-helpers: >=1.1.0
+- wexample/php-helpers: *
 
 ## Versioning & Compatibility Policy
 
