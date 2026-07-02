@@ -42,3 +42,13 @@ coverage*.lcov
 .php-cs-fixer.cache
 .scannerwork
 /vendor
+/logs/
+/log/
+/.cache/
+/cache/
+/tmp/
+/temp/
+/build/
+/dist/
+/out/
+/coverage/
