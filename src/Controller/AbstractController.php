@@ -91,7 +91,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
             $defaults = $route->getDefaults();
             $controller = ClassHelper::getClassPath($defaults['_controller'] ?? '');
 
-            if (!$controller || !str_starts_with($controller, $prefix)) {
+            if (!$controller || !ClassHelper::classPathMatchesPrefix($controller, $prefix)) {
                 continue;
             }
 
