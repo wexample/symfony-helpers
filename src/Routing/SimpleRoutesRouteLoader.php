@@ -15,7 +15,7 @@ class SimpleRoutesRouteLoader extends AbstractRouteLoader
 
     protected function isValidSimpleRoutesController(\ReflectionClass $reflectionClass): bool
     {
-        $routeAttributes = $reflectionClass->getAttributes(\Symfony\Component\Routing\Annotation\Route::class);
+        $routeAttributes = $reflectionClass->getAttributes(\Symfony\Component\Routing\Attribute\Route::class);
 
         return ! empty($routeAttributes) &&
             method_exists($reflectionClass->getName(), 'getSimpleRoutes');
