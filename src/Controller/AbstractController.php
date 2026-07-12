@@ -6,6 +6,7 @@ use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\RouterInterface;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
@@ -79,6 +80,34 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         }
 
         return $suffix;
+    }
+
+    public static function findIndexRoute(RouterInterface $router, string $namespace): ?string
+    {
+        $prefix = ClassHelper::normalizeNamespacePrefix($namespace);
+        $firstEntry = null;
+
+        foreach ($router->getRouteCollection() as $name => $route) {
+            $defaults = $route->getDefaults();
+            $controller = ClassHelper::getClassPath($defaults['_controller'] ?? '');
+
+            if (!$controller || !str_starts_with($controller, $prefix)) {
+                continue;
+            }
+
+            $depth = ClassHelper::getNamespaceDepth($controller, $prefix);
+            $isIndex = str_ends_with($name, '_'.self::DEFAULT_ROUTE_NAME_INDEX);
+
+            if ($depth === 0 && $isIndex) {
+                return $name;
+            }
+
+            if ($firstEntry === null && $isIndex) {
+                $firstEntry = $name;
+            }
+        }
+
+        return $firstEntry;
     }
 
     public static function removeSuffix(string $className): string
