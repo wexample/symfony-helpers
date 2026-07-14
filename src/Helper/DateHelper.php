@@ -7,48 +7,11 @@ use DatePeriod;
 use DateTime;
 use DateTimeInterface;
 use IntlDateFormatter;
+use Wexample\Helpers\Helper\DateHelper as BaseDateHelper;
 
-class DateHelper
+// Date pattern constants live in the framework-agnostic base class (wexample/php-helpers).
+class DateHelper extends BaseDateHelper
 {
-    final public const DATE_PATTERN_PART_YEAR_FULL = 'Y';
-    final public const DATE_PATTERN_PART_MONTH_FULL = 'm';
-    final public const DATE_PATTERN_PART_DAY_FULL = 'd';
-    final public const DATE_PATTERN_PART_HOURS_FULL = 'H';
-    final public const DATE_PATTERN_PART_MINUTES_FULL = 'i';
-    final public const DATE_PATTERN_PART_SECONDS_FULL = 's';
-    final public const DATE_PATTERN_DAY_DEFAULT =
-        self::DATE_PATTERN_PART_YEAR_FULL.'-'.
-        self::DATE_PATTERN_PART_MONTH_FULL.'-'.
-        self::DATE_PATTERN_PART_DAY_FULL;
-    final public const DATE_PATTERN_DAY_REVERTED =
-        self::DATE_PATTERN_PART_YEAR_FULL.'-'.
-        self::DATE_PATTERN_PART_DAY_FULL.'-'.
-        self::DATE_PATTERN_PART_MONTH_FULL;
-    final public const DATE_PATTERN_YMD_FR =
-        self::DATE_PATTERN_PART_DAY_FULL.'/'.
-        self::DATE_PATTERN_PART_MONTH_FULL.'/'.
-        self::DATE_PATTERN_PART_YEAR_FULL;
-    final public const DATE_PATTERN_MICROTIME_DEFAULT = self::DATE_PATTERN_TIME_DEFAULT.'.u';
-    final public const TIME_PATTERN_SECOND_DEFAULT = self::DATE_PATTERN_PART_HOURS_FULL.':'.self::DATE_PATTERN_PART_MINUTES_FULL.':'.self::DATE_PATTERN_PART_SECONDS_FULL;
-    final public const DATE_PATTERN_TIME_ZULU = self::DATE_PATTERN_DAY_DEFAULT.'\T'.self::TIME_PATTERN_SECOND_DEFAULT.'p';
-    final public const DATE_PATTERN_TIME_DEFAULT = self::DATE_PATTERN_DAY_DEFAULT.' '.self::TIME_PATTERN_SECOND_DEFAULT;
-    final public const DATE_PATTERN_TIME_REVERTED = self::DATE_PATTERN_DAY_REVERTED.' '.self::TIME_PATTERN_SECOND_DEFAULT;
-    final public const DATE_PATTERN_ISO08601 = self::DATE_PATTERN_DAY_DEFAULT.'\T'.self::TIME_PATTERN_SECOND_DEFAULT;
-    // @see https://unicode-org.github.io/icu/userguide/format_parse/datetime/
-    final public const INTL_DATE_FORMATTER_MONTH_FULL = 'MMMM';
-    final public const INTL_DATE_FORMATTER_YEAR_FULL = 'YYYY';
-    final public const INTL_DATE_PATTERN_MONTH_AND_YEAR_FULL =
-        self::INTL_DATE_FORMATTER_MONTH_FULL
-        .' '.self::INTL_DATE_FORMATTER_YEAR_FULL;
-    final public const QUERY_STRING_DATE_FORMATS = [
-        self::DATE_PATTERN_TIME_DEFAULT,
-        'Y-m-d H:i',
-        'Y-m-d H',
-        'Y-m-d',
-        'Y-m',
-        self::DATE_PATTERN_PART_YEAR_FULL,
-    ];
-
     public static function generateFromTimestamp(int $timestamp): DateTimeInterface
     {
         $date = new DateTime();
