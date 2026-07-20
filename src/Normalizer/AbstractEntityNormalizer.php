@@ -50,30 +50,25 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
             context: $context
         );
 
-        if (
-            $this->shouldAutoRelationships($context)
-            && isset($this->normalizer)
-        ) {
-            $autoRelationships = [];
+        $autoRelationships = [];
 
-            if (is_array($entity)) {
-                $autoRelationships = $this->collectRelationshipsFromEntityData(
-                    $entity,
-                    $format,
-                    $context
-                );
-            }
-
-            if (is_array($metadata)) {
-                $autoRelationships = $autoRelationships + $this->collectRelationshipsFromEntityData(
-                    $metadata,
-                    $format,
-                    $context
-                );
-            }
-
-            $relationships = $relationships + $autoRelationships;
+        if (is_array($entity)) {
+            $autoRelationships = $this->collectRelationshipsFromEntityData(
+                $entity,
+                $format,
+                $context
+            );
         }
+
+        if (is_array($metadata)) {
+            $autoRelationships = $autoRelationships + $this->collectRelationshipsFromEntityData(
+                $metadata,
+                $format,
+                $context
+            );
+        }
+
+        $relationships = $relationships + $autoRelationships;
 
         return [
             'type' => ClassHelper::getFieldName($data),
@@ -114,13 +109,19 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
         return ($context['auto_relationships'] ?? true) === true;
     }
 
+    /**
+     * Replaces every related entity found in $entityData by its secure id.
+     *
+     * The related items themselves are collected only for the entrypoint item:
+     * nested items reference their own relations by secure id only, so a single
+     * response never cascades through the whole entity graph.
+     */
     protected function collectRelationshipsFromEntityData(
         array &$entityData,
         ?string $format = null,
         array $context = []
     ): array {
         $relationships = [];
-        $context['auto_relationships'] = false;
 
         foreach ($entityData as $key => $value) {
             $entityData[$key] = $this->extractRelationshipsFromValue(
@@ -142,11 +143,17 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
     ): mixed {
         if ($value instanceof AbstractEntity) {
             $secureId = $value->getSecureId();
-            $relationships[$secureId] = $this->normalizer->normalize(
-                $value,
-                $format,
-                $context
-            );
+
+            if ($this->shouldAutoRelationships($context) && isset($this->normalizer)) {
+                $nestedContext = $context;
+                $nestedContext['auto_relationships'] = false;
+
+                $relationships[$secureId] = $this->normalizer->normalize(
+                    $value,
+                    $format,
+                    $nestedContext
+                );
+            }
 
             return $secureId;
         }
