@@ -13,6 +13,7 @@ use Wexample\SymfonyHelpers\Entity\Traits\HasSecureIdTrait;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
+use Wexample\SymfonyHelpers\Interface\NormalizableDataInterface;
 
 abstract class AbstractEntityNormalizer extends AbstractNormalizer implements NormalizerAwareInterface
 {
@@ -37,6 +38,10 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
             format: $format,
             context: $context
         );
+
+        if ($entity instanceof NormalizableDataInterface) {
+            $entity = $entity->toArray();
+        }
 
         $relationships = $this->normalizeRelationships(
             entity: $data,
@@ -98,7 +103,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
         AbstractEntity $entity,
         ?string $format = null,
         array $context = []
-    ): array|string|int|float|bool|ArrayObject|null {
+    ): array|string|int|float|bool|ArrayObject|NormalizableDataInterface|null {
         return [
             $this->buildIdKey() => $this->buildIdValue($entity, $context),
         ];

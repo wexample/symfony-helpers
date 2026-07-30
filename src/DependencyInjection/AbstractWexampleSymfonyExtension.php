@@ -2,6 +2,7 @@
 
 namespace Wexample\SymfonyHelpers\DependencyInjection;
 
+use ReflectionClass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -13,11 +14,14 @@ abstract class AbstractWexampleSymfonyExtension extends Extension implements Pre
 {
     public function prepend(ContainerBuilder $container): void
     {
-        $entityDir = __DIR__ . '/../Entity';
+        // Resolve against the concrete extension file, not this abstract parent.
+        $entityDir = dirname((new ReflectionClass(static::class))->getFileName()).'/../Entity';
 
         if (!is_dir($entityDir)) {
             return;
         }
+
+        $entityDir = realpath($entityDir);
 
         $alias = str_replace('Extension', '', ClassHelper::getShortName(static::class));
         $entityNamespace = str_replace(
