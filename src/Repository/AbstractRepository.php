@@ -272,13 +272,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
         QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
-        if ($length and $length > 0) {
-            $builder->setMaxResults($length);
-        }
 
         $builder = $this->orderByDefaultPagination(builder: $builder);
 
-        $builder->setFirstResult($page * $length);
+        if ($length and $length > 0) {
+            $builder
+                ->setMaxResults($length)
+                ->setFirstResult($page * $length);
+        }
 
         return $builder;
     }
@@ -286,10 +287,35 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function findPaginated(
         int $page,
         ?int $length,
+        QueryBuilder $builder = null,
     ): array {
-        return $this->queryPaginated($page, $length)
+        return $this->queryPaginated($page, $length, $builder)
             ->getQuery()
             ->execute();
+    }
+
+    /**
+     * Counts the rows a builder would match, ignoring its paginated window.
+     */
+    public function countAll(
+        QueryBuilder $builder = null
+    ): int {
+        $builder = $this->querySelectCount(
+            $builder ? clone $builder : null
+        );
+
+        $builder
+            ->resetDQLPart('orderBy')
+            ->setFirstResult(null)
+            ->setMaxResults(null);
+
+        try {
+            return (int) $builder
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (Exception) {
+            return 0;
+        }
     }
 
     public function queryByField(
