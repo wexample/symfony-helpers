@@ -9,17 +9,6 @@ services:
         resource: '../../{Routing,Service,Twig}'
         tags: ['controller.service_arguments']
 
-    Wexample\SymfonyHelpers\Form\EntityType:
-        class: Wexample\SymfonyHelpers\Form\EntityType
-        arguments: ["@doctrine"]
-        tags:
-            - { name: form.type }
-
-    Wexample\SymfonyHelpers\Form\EntitySearchType:
-        class: Wexample\SymfonyHelpers\Form\EntitySearchType
-        tags:
-            - { name: form.type }
-
     Wexample\SymfonyHelpers\Routing\SimpleRoutesRouteLoader:
         arguments:
             $container: '@service_container'
