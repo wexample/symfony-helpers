@@ -17,7 +17,7 @@ abstract class AbstractWexampleSymfonyExtension extends Extension implements Pre
         // Resolve against the concrete extension file, not this abstract parent.
         $entityDir = dirname((new ReflectionClass(static::class))->getFileName()).'/../Entity';
 
-        if (!is_dir($entityDir)) {
+        if (! is_dir($entityDir)) {
             return;
         }
 
@@ -34,10 +34,10 @@ abstract class AbstractWexampleSymfonyExtension extends Extension implements Pre
             'orm' => [
                 'mappings' => [
                     $alias => [
-                        'type'      => 'attribute',
-                        'dir'       => $entityDir,
-                        'prefix'    => $entityNamespace,
-                        'alias'     => $alias,
+                        'type' => 'attribute',
+                        'dir' => $entityDir,
+                        'prefix' => $entityNamespace,
+                        'alias' => $alias,
                         'is_bundle' => false,
                     ],
                 ],

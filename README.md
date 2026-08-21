@@ -2,18 +2,136 @@
 
 Version: 4.0.0
 
-Helpers for symfony development : constants dictionary, helpers, etc.
+`wexample/symfony-helpers` is a Symfony bundle that supplies reusable building blocks for application development: static constant dictionaries across more than twenty helper classes (environment names, Doctrine column types, security roles, status values, HTML, routing, and more), composable Doctrine entity traits (`HasEmailTrait`, `HasStatusTrait`, `HasDateCreatedTrait`, and others), and abstract base classes for controllers, console commands, Twig extensions, and entity services. It targets Symfony developers — particularly those working within the Wexample package ecosystem — who want shared, stable conventions rather than re-implementing the same patterns across projects.
 
 ## Table of Contents
 
-- [Suite Integration](#suite-integration)
+- [Architecture](#architecture)
+- [Integration in the Suite](#integration-in-the-suite)
 - [Dependencies](#dependencies)
-- [Versioning](#versioning)
+- [Versioning & Compatibility Policy](#versioning--compatibility-policy)
 - [License](#license)
-- [Suite Integration](#suite-integration)
-- [Suite Signature](#suite-signature)
-- [Introduction](#introduction)
+- [About us](#about-us)
 - [Migration Notes](#migration-notes)
+
+## Architecture
+
+The bundle is a standard Symfony extension package: one entry class, a DI extension that loads `services.yaml`, and a set of namespaces that each own a single responsibility. Nothing calls across layers in unusual directions — controllers call services, services use repositories, repositories speak to Doctrine.
+
+### Bundle entry and DI registration
+
+src/WexampleSymfonyHelpersBundle.php extends src/Class/AbstractBundle.php, which adds two static helpers: `getAlias()` (short class name) and `getTemplatePath()` (prefixed bundle template path). The bundle itself has no logic.
+
+src/DependencyInjection/WexampleSymfonyHelpersExtension.php delegates entirely to src/DependencyInjection/AbstractWexampleSymfonyExtension.php, which does two things at container build time:
+
+- `prepend()` — detects whether an `Entity/` directory sits next to the extension file and, if so, registers its attribute mappings with Doctrine ORM automatically. This means any bundle that extends `AbstractWexampleSymfonyExtension` gets its entities picked up without touching `config/packages/doctrine.yaml`.
+- `loadConfig()` — loads src/Resources/config/services.yaml, which auto-wires everything under `Routing/`, `Service/`, and `Twig/`, registers `SimpleRoutesRouteLoader` as a `routing.loader`, and tags each rectify rule with `wexample.rectify.rule`.
+
+### Helpers
+
+`src/Helper/` is a flat collection of static classes that carry only constants and pure functions. None of them require a service container. Representative members:
+
+- `EnvironmentHelper` — `DEV`, `LOCAL`, `PROD`, `STAGING`, `TEST` constants plus grouped lists (`LIST_LOW_SECURITY`) and `getMissingEnvKeys()`.
+- `RoleHelper` — `ROLE_USER`, `ROLE_ADMIN`, `ROLE_SUPER_ADMIN`, `PUBLIC_ACCESS` plus utility methods for transforming role strings (kebab, class name, name part).
+- `StatusHelper` — `PENDING`, `PROCESSING`, `COMPLETE`, `ERROR`, `ARCHIVED`.
+- `TypesHelper` — every Doctrine DBAL column type as a constant.
+- `RouteHelper` — builds and normalises route names and paths from parts, resolves `#[Route]` reflection attributes, and filters a `RouteCollection` by controller class.
+
+Because helpers are static, they are the expected first stop when you need a shared constant or a string transformation that has no external dependency.
+
+### Entity layer
+
+`src/Entity/` holds abstract base classes, two concrete shipped entities, and the traits.
+
+`AbstractEntity` (the base) adds a typed `$id` property and the `BaseEntityTrait`. `AbstractUser` extends it and implements `UserEntityInterface` with a unique `$username` and a no-op `eraseCredentials()`. `SystemParameter` stores a named string value (key–value application config) and is itself abstract so host apps can extend and map it.
+
+**Traits** (`src/Entity/Traits/`) are composable columns. Each trait owns exactly one concern: `HasEmailTrait`, `HasDateCreatedTrait`, `HasPositionTrait`, `HasJsonDataTrait`, `HasEmbeddingTrait`, and about twenty others. You add them to an entity class by declaring `use HasEmailTrait;`; no service is involved.
+
+**Manipulator traits** (`src/Entity/Traits/Manipulator/`) complement those by adding factory/fill methods. `EntityManipulatorTrait` is used by both `AbstractEntityService` and `AbstractRepository` so the same creation logic is available from service or repository context.
+
+**Interfaces** (`src/Entity/Interfaces/`) define contracts: `AbstractEntityInterface`, `UserEntityInterface`, `WithUserEntityInterface`, `LinkedToAnyEntityInterface`.
+
+The `#[RectifiableEntity]` attribute (src/Attribute/RectifiableEntity.php) marks an entity for automated structural checks. Its parameters (`api`, `import`, `config`) hint at what cousins are expected to exist.
+
+### Repository layer
+
+src/Repository/AbstractRepository.php extends `ServiceEntityRepository` and is the only repository base any host application should extend. It provides:
+
+- **Magic method dispatch** via `__call`: `queryBy*` builds a `QueryBuilder`; `countBy*` runs a scalar count; `hasSome*` returns a boolean; `pluck*` extracts a getter value from an array of entities; `createNew*` delegates to a concrete `createNew…()` method on the repository; `saveNew*` does the same then flushes; `removeBy*` deletes matching rows.
+- **Pagination**: `queryPaginated()` orders by id and applies offset/limit; `findPaginated()` executes it; `countAll()` counts without the window.
+- **Query building**: `queryField()`, `createOrGetQueryBuilder()`, `queryByField()`, `queryJoinEntity()`, and `queryRelatedToEntityHavingFieldValue()`.
+- **Persistence shortcuts**: `add()`, `save()`, `remove()`, `removeAll()`, `findAllSorted()`.
+
+`SearchableRepositoryTrait` adds LIKE/equal/number search methods to any repository that needs full-text style filtering.
+
+### Service layer
+
+Services are the main extension point for host applications.
+
+**`EntityNeutralService`** wraps `EntityManagerInterface` and is the root of the entity service hierarchy. It is useful when you need the entity manager without binding to an entity type.
+
+**`AbstractEntityService`** extends it and adds `EntityManipulatorTrait` plus magic `create*()` dispatch: a call to `createFoo($arg)` instantiates an entity of the class the service manages and forwards to `fillFoo($entity, $arg)`. Host applications sub-class this to get a typed entity service with a conventional creation API. `SystemParameterEntityService` ships as a concrete sub-class that adds/gets `SystemParameter` rows.
+
+**`BundleService`** manages local Composer packages: version increment, dependency version sync across a `vendor-local/` workspace. It is used by bundle-scoped commands.
+
+**`ReversedRoleHierarchy`** inverts the `security.role_hierarchy.roles` parameter so you can ask "what roles imply this role" rather than the Symfony default of "what roles does this role grant".
+
+**Syntax services** (`src/Service/Syntax/`) are code-generation utilities. src/Service/Syntax/AbstractSyntaxService.php defines the concept of a "cousin": given a source class path, a cousin is a related class (test, API controller, manipulator trait) whose path is derived by substituting a namespace prefix and adding a suffix. `writeCousinIfMissing()` uses Twig to render a PHP template to disk when the cousin file does not exist yet. `EntitySyntaxService` and `ControllerSyntaxService` each declare their own cousin maps.
+
+**Rectify system** — `RectifyService` (src/Service/RectifyService.php) scans `src/Entity/` for classes carrying `#[RectifiableEntity]`, then runs every service tagged `wexample.rectify.rule` against each one. Each rule implements `AbstractRectifyRule::apply(ReflectionClass): string[]` and returns violation messages; some rules also auto-fix the file (e.g., `EntityExtendRule` inserts the `extends AbstractEntity` declaration if missing). The `wexample.rectify.rule` tag carries a `priority` that controls the order rules run.
+
+### Routing
+
+src/Routing/AbstractRouteLoader.php is a one-shot Symfony `Loader`: it refuses to load twice and delegates to `loadOnce()`. src/Routing/SimpleRoutesRouteLoader.php extends it. When the router boots, it:
+
+1. Iterates all services whose class name contains `Controller` and that carry `#[SimpleRoutesController]` (src/Attribute/SimpleRoutesController.php).
+2. Calls `getSimpleRoutes()` on each to get a list of route names (`index`, `create`, `edit`, …).
+3. For each name, builds the route path and name from the controller class using `RoutePathBuilderTrait`, and registers a `Route` that points to `ControllerClass::resolveSimpleRoute` with a `routeName` parameter.
+
+This lets a controller declare its routes as a plain array rather than per-action `#[Route]` attributes, while still producing a normal `RouteCollection`.
+
+### Controller layer
+
+src/Controller/AbstractController.php extends Symfony's own `AbstractController` and adds:
+
+- Route name constants (`DEFAULT_ROUTE_NAME_INDEX`, `DEFAULT_ROUTE_NAME_CREATE`, etc.) and HTTP method constant arrays (`ROUTE_OPTIONS_METHOD_ONLY_GET`, etc.) used for `#[Route]` attribute shorthand.
+- `buildRouteName(string $suffix)` — reads the `#[Route(name: …)]` attribute on the concrete controller class and appends `$suffix`.
+- `findIndexRoute(RouterInterface, string $namespace)` — scans the route collection for the index route of a given controller namespace.
+- `getParameterOrDefault()` — safe parameter bag access that returns a default when the key is absent.
+
+src/Controller/AbstractEntityController.php adds `EntityControllerTrait` on top.
+
+### Commands
+
+src/Command/AbstractCommand.php auto-derives the Symfony console name from `getCommandPrefixGroup()` (default `app`) and the kebab form of the class name with `Command` stripped. It provides `execCommand()` (finds a command by class or name and runs it) and `executeAndCatchErrors()` (wraps execution in a try/catch that formats exceptions with `SymfonyStyle`).
+
+`AbstractBundleCommand` extends it and injects `BundleService`, overriding `getCommandPrefixGroup()` to derive the prefix from the bundle class name.
+
+src/Command/RectifyCommand.php is the only shipped concrete command. It calls `RectifyService::validateRectifiableEntities()` and prints violations or a success message.
+
+Command traits add narrow concerns: `FilePathCommandTrait`, `JsonArgumentCommandTrait`, `EnvironmentSpecificCommandTrait`, `EntityManipulationCommandTrait`, and `CommandLoggerTrait` (colorised `writeln` with optional indent).
+
+### Twig
+
+src/Twig/AbstractExtension.php re-exports three option key constants as class constants (`FUNCTION_OPTION_IS_SAFE`, `FUNCTION_OPTION_NEEDS_CONTEXT`, `FUNCTION_OPTION_NEEDS_ENVIRONMENT`) so extension subclasses do not repeat string literals. A `LoremIpsumExtension` is also shipped.
+
+### Doctrine extras
+
+src/Doctrine/Type/VectorType.php registers a custom `vector` DBAL type that serialises a PHP float array to and from the `vector(N)` SQL column type used by pgvector and similar. The default dimension is 1536.
+
+src/Migration/Traits/WithDataMigrationTrait.php is a Doctrine migration helper that resolves a JSON or SQL companion file from `migrations/` (named after the migration class) and loads it inside `up()`.
+
+### RenderableResponse
+
+src/Class/RenderableResponse.php separates the concern of formatting output from the logic that produces data. A subclass sets an output type (`api`, `cli`, `default`), which is mapped to a format (`array`, `cli`, `json`, `yaml`). Calling `render()` picks the matching `AbstractResponseRenderProcessor` and delegates to its `renderResponseData()`. The CLI processor formats for terminal output; the others serialise to the expected wire format.
+
+### Validator
+
+`src/Validator/` holds two custom constraints: `DateQueryStringConstraint` (validates a date given as a query string parameter) and `MultipleTypeConstraint` (validates that a value matches one of several allowed types). A custom `File` constraint and its validator also live here.
+
+### Normalizer
+
+src/Normalizer/AbstractNormalizer.php implements `NormalizerInterface` and adds a `normalizeCollection()` method that iterates an array or Doctrine `Collection` and calls `normalize()` on each item.
 
 ## Integration in the Suite
 
@@ -52,31 +170,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Free to use in both personal and commercial projects.
 
-## Integration in the Suite
-
-This package is part of the Wexample Suite — a collection of high-quality, modular tools designed to work seamlessly together across multiple languages and environments.
-
-### Related Packages
-
-The suite includes packages for configuration management, file handling, prompts, and more. Each package can be used independently or as part of the integrated suite.
-
-Visit the [Wexample Suite documentation](https://docs.wexample.com) for the complete package ecosystem.
-
-# About us
+## About us
 
 [Wexample](https://wexample.com) stands as a cornerstone of the digital ecosystem — a collective of seasoned engineers, researchers, and creators driven by a relentless pursuit of technological excellence. More than a media platform, it has grown into a vibrant community where innovation meets craftsmanship, and where every line of code reflects a commitment to clarity, durability, and shared intelligence.
 
 This packages suite embodies this spirit. Trusted by professionals and enthusiasts alike, it delivers a consistent, high-quality foundation for modern development — open, elegant, and battle-tested. Its reputation is built on years of collaboration, refinement, and rigorous attention to detail, making it a natural choice for those who demand both robustness and beauty in their tools.
 
 Wexample cultivates a culture of mastery. Each package, each contribution carries the mark of a community that values precision, ethics, and innovation — a community proud to shape the future of digital craftsmanship.
-
-# wexample/symfony-helpers
-
-Version: 1.0.92
-
-Helpers for symfony development : constants dictionary, helpers, etc.
-
-## Table of Contents
 
 ## Migration Notes
 
