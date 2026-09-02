@@ -4,11 +4,11 @@ namespace Wexample\SymfonyHelpers\Service\Entity;
 
 use function call_user_func_array;
 
+use Doctrine\Persistence\ObjectRepository;
 use Exception;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
-use Wexample\SymfonyHelpers\Repository\AbstractRepository;
 
 abstract class AbstractEntityService extends EntityNeutralService
 {
@@ -49,13 +49,10 @@ abstract class AbstractEntityService extends EntityNeutralService
         return new $className();
     }
 
-    public function getEntityRepository(): AbstractRepository
+    public function getEntityRepository(): ObjectRepository
     {
-        /** @var AbstractRepository $repo */
-        $repo = $this->getEntityManager()->getRepository(
+        return $this->getEntityManager()->getRepository(
             $this->getEntityClassName()
         );
-
-        return $repo;
     }
 }

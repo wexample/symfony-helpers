@@ -7,6 +7,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use JetBrains\PhpStorm\ArrayShape;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
+use Wexample\SymfonyHelpers\Repository\AbstractRepository;
 
 trait WithMessageEntityServiceTrait
 {
@@ -48,6 +49,7 @@ trait WithMessageEntityServiceTrait
             }
         }
 
+        /** @var AbstractRepository $repo */
         $repo = $this->getEntityRepository();
 
         return $repo->queryForEntitiesIds($ids, $builder);
