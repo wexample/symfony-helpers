@@ -70,10 +70,7 @@ class RepositoryCreateNewMethodRule extends AbstractRectifyRule
 
     public function {$methodName}(): {$entityShortName}
     {
-        \$entity = new {$entityShortName}();
-        \$entity->setGeneratedSecureId();
-
-        return \$entity;
+        return new {$entityShortName}();
     }
 PHP;
 

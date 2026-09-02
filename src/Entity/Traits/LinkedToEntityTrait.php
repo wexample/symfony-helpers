@@ -5,6 +5,8 @@ namespace Wexample\SymfonyHelpers\Entity\Traits;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping\Column;
 use JetBrains\PhpStorm\Pure;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
@@ -13,8 +15,8 @@ trait LinkedToEntityTrait
     #[Column(type: VariableHelper::VARIABLE_TYPE_STRING, length: 255, nullable: true)]
     private ?string $entityType = null;
 
-    #[Column(type: VariableHelper::VARIABLE_TYPE_INTEGER, nullable: true)]
-    private ?int $entityId = null;
+    #[Column(type: UuidType::NAME, nullable: true)]
+    private ?Uuid $entityId = null;
 
     public function getEntityType(): ?string
     {
@@ -28,12 +30,12 @@ trait LinkedToEntityTrait
         return $this;
     }
 
-    public function getEntityId(): ?int
+    public function getEntityId(): ?Uuid
     {
         return $this->entityId;
     }
 
-    public function setEntityId(?int $entityId): self
+    public function setEntityId(?Uuid $entityId): self
     {
         $this->entityId = $entityId;
 

@@ -45,8 +45,8 @@ abstract class AbstractLegacyEntityNormalizer extends AbstractNormalizer
     protected function buildIdValue(
         AbstractEntity $object,
         array $context = []
-    ): string|int {
-        return $object->getId();
+    ): string {
+        return (string) $object->getId();
     }
 
     public function getSupportedTypes(?string $format): array

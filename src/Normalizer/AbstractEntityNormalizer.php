@@ -9,10 +9,10 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
-use Wexample\SymfonyHelpers\Entity\Traits\HasSecureIdTrait;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
+use Wexample\SymfonyHelpers\Helper\VariableHelper;
 use Wexample\SymfonyHelpers\Interface\NormalizableDataInterface;
 
 abstract class AbstractEntityNormalizer extends AbstractNormalizer implements NormalizerAwareInterface
@@ -115,10 +115,10 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
     }
 
     /**
-     * Replaces every related entity found in $entityData by its secure id.
+     * Replaces every related entity found in $entityData by its id.
      *
      * The related items themselves are collected only for the entrypoint item:
-     * nested items reference their own relations by secure id only, so a single
+     * nested items reference their own relations by id only, so a single
      * response never cascades through the whole entity graph.
      */
     protected function collectRelationshipsFromEntityData(
@@ -147,20 +147,20 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
         array $context = []
     ): mixed {
         if ($value instanceof AbstractEntity) {
-            $secureId = $value->getSecureId();
+            $id = (string) $value->getId();
 
             if ($this->shouldAutoRelationships($context) && isset($this->normalizer)) {
                 $nestedContext = $context;
                 $nestedContext['auto_relationships'] = false;
 
-                $relationships[$secureId] = $this->normalizer->normalize(
+                $relationships[$id] = $this->normalizer->normalize(
                     $value,
                     $format,
                     $nestedContext
                 );
             }
 
-            return $secureId;
+            return $id;
         }
 
         if ($value instanceof Collection) {
@@ -195,19 +195,14 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
 
     protected function buildIdKey(): string
     {
-        return 'secureId';
+        return VariableHelper::ID;
     }
 
-    /**
-     * @param AbstractEntity|HasSecureIdTrait $object
-     * @param array $context
-     * @return string|int
-     */
     protected function buildIdValue(
         AbstractEntity $object,
         array $context = []
-    ): string|int {
-        return $object->getSecureId();
+    ): string {
+        return (string) $object->getId();
     }
 
     public function getSupportedTypes(?string $format): array

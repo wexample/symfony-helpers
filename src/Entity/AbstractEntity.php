@@ -2,10 +2,10 @@
 
 namespace Wexample\SymfonyHelpers\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Entity\Traits\BaseEntityTrait;
@@ -21,9 +21,13 @@ abstract class AbstractEntity implements AbstractEntityInterface
     public const PROPERTY_NAME_ID = VariableHelper::ID;
 
     #[Id]
-    #[Column(type: Types::INTEGER)]
-    #[GeneratedValue(strategy: "IDENTITY")]
-    protected $id;
+    #[Column(type: UuidType::NAME, unique: true)]
+    protected Uuid $id;
+
+    public function __construct()
+    {
+        $this->id = Uuid::v7();
+    }
 
     public static function buildEntityPath(
         string $className

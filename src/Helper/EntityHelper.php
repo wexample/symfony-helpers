@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\Order;
 
 use function implode;
 
+use Symfony\Component\Uid\Uuid;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
@@ -72,7 +73,7 @@ class EntityHelper
         $comparator = static fn (
             AbstractEntity $a,
             AbstractEntity $b
-        ): int => $a->getId() <=> $b->getId();
+        ): int => $a->getId()->compare($b->getId());
 
         if ($entities instanceof Collection) {
             return $entities->matching(
@@ -127,7 +128,7 @@ class EntityHelper
     ): array {
         /** @var BaseEntityTrait $entity */
         foreach ($entities as $entity) {
-            $output[$entity->getId()] = $entity;
+            $output[(string) $entity->getId()] = $entity;
         }
 
         return $output;
@@ -138,10 +139,10 @@ class EntityHelper
         AbstractEntityInterface|string $entityB
     ): bool {
         return ClassHelper::getRealClassPath($entity) === ClassHelper::getRealClassPath($entityB)
-            && $entity->getId() === $entityB->getId();
+            && $entity->getId()->equals($entityB->getId());
     }
 
-    public static function getId(AbstractEntity|int|null $entity): ?int
+    public static function getId(AbstractEntity|Uuid|null $entity): ?Uuid
     {
         return ClassHelper::isClassPath($entity, AbstractEntity::class) ? $entity->getId() : $entity;
     }
@@ -156,7 +157,7 @@ class EntityHelper
             ?AbstractEntity $carry,
             AbstractEntity $current
         ): AbstractEntity {
-            if ($carry === null || $current->getId() < $carry->getId()) {
+            if ($carry === null || $current->getId()->compare($carry->getId()) < 0) {
                 return $current;
             }
 

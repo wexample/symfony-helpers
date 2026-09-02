@@ -8,6 +8,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Symfony\Component\Uid\Uuid;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
@@ -19,7 +20,7 @@ use Wexample\SymfonyHelpers\Helper\VariableHelper;
  * @method AbstractEntity[]    findAll()
  * @method AbstractEntity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method AbstractEntity|null findOneBy(array $criteria, array $orderBy = null)
- * @method QueryBuilder        queryById(int $id, QueryBuilder $builder = null)
+ * @method QueryBuilder        queryById(Uuid|string $id, QueryBuilder $builder = null)
  */
 abstract class AbstractRepository extends ServiceEntityRepository
 {
@@ -531,7 +532,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         return 'id';
     }
 
-    public function findOneByDefaultIdentifier(string|int $identifier): ?AbstractEntity
+    public function findOneByDefaultIdentifier(Uuid|string $identifier): ?AbstractEntity
     {
         return $this->findOneBy([
             $this->getDefaultIdentifierName() => $identifier,

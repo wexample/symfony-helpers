@@ -34,10 +34,6 @@ services:
         tags:
             - { name: 'wexample.rectify.rule', priority: 140 }
 
-    Wexample\SymfonyHelpers\Service\Rectify\Rule\HasSecureIdTraitRule:
-        tags:
-            - { name: 'wexample.rectify.rule', priority: 130 }
-
     Wexample\SymfonyHelpers\Service\Rectify\Rule\LinkedToEntityTraitRule:
         tags:
             - { name: 'wexample.rectify.rule', priority: 120 }

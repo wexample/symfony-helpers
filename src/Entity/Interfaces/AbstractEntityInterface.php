@@ -2,9 +2,11 @@
 
 namespace Wexample\SymfonyHelpers\Entity\Interfaces;
 
+use Symfony\Component\Uid\Uuid;
+
 interface AbstractEntityInterface
 {
-    public function getId(): ?int;
+    public function getId(): Uuid;
 
-    public function setId(int $id);
+    public function setId(Uuid $id);
 }
