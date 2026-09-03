@@ -274,4 +274,23 @@ class FileHelper
 
         return (int) ($num * $multiplier);
     }
+
+    /**
+     * The other way round, for display: 1536 becomes 1.5 KB. Bytes stay whole,
+     * since half a byte says nothing.
+     */
+    public static function formatBytes(int $bytes): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+        $power = 0;
+
+        while ($bytes >= 1024 && $power < count($units) - 1) {
+            $bytes /= 1024;
+            ++$power;
+        }
+
+        return 0 === $power
+            ? $bytes.' B'
+            : round($bytes, 1).' '.$units[$power];
+    }
 }
