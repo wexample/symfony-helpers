@@ -9,7 +9,7 @@ src/WexampleSymfonyHelpersBundle.php extends src/Class/AbstractBundle.php, which
 src/DependencyInjection/WexampleSymfonyHelpersExtension.php delegates entirely to src/DependencyInjection/AbstractWexampleSymfonyExtension.php, which does two things at container build time:
 
 - `prepend()` — detects whether an `Entity/` directory sits next to the extension file and, if so, registers its attribute mappings with Doctrine ORM automatically. This means any bundle that extends `AbstractWexampleSymfonyExtension` gets its entities picked up without touching `config/packages/doctrine.yaml`.
-- `loadConfig()` — loads src/Resources/config/services.yaml, which auto-wires everything under `Routing/`, `Service/`, and `Twig/`, registers `SimpleRoutesRouteLoader` as a `routing.loader`, and tags each rectify rule with `wexample.rectify.rule`.
+- `loadConfig()` — loads src/Resources/config/services.yaml, which auto-wires everything under `Routing/`, `Service/`, and `Twig/`, and registers `SimpleRoutesRouteLoader` as a `routing.loader`.
 
 ### Helpers
 
@@ -37,7 +37,7 @@ Because helpers are static, they are the expected first stop when you need a sha
 
 **Interfaces** (`src/Entity/Interfaces/`) define contracts: `AbstractEntityInterface`, `UserEntityInterface`, `WithUserEntityInterface`, `LinkedToAnyEntityInterface`.
 
-The `#[RectifiableEntity]` attribute (src/Attribute/RectifiableEntity.php) marks an entity for automated structural checks. Its parameters (`api`, `import`, `config`) hint at what cousins are expected to exist.
+The `#[LinkableEntity]` attribute (src/Attribute/LinkableEntity.php) marks an entity others are meant to point at, and `#[ImportableEntity]` (src/Attribute/ImportableEntity.php) one that carries import DTOs. Both are read by `filestate-symfony`, which scaffolds the corresponding satellites; the package itself only declares them.
 
 ### Repository layer
 
@@ -63,8 +63,6 @@ Services are the main extension point for host applications.
 **`ReversedRoleHierarchy`** inverts the `security.role_hierarchy.roles` parameter so you can ask "what roles imply this role" rather than the Symfony default of "what roles does this role grant".
 
 **Syntax services** (`src/Service/Syntax/`) are code-generation utilities. src/Service/Syntax/AbstractSyntaxService.php defines the concept of a "cousin": given a source class path, a cousin is a related class (test, API controller, manipulator trait) whose path is derived by substituting a namespace prefix and adding a suffix. `writeCousinIfMissing()` uses Twig to render a PHP template to disk when the cousin file does not exist yet. `EntitySyntaxService` and `ControllerSyntaxService` each declare their own cousin maps.
-
-**Rectify system** — `RectifyService` (src/Service/RectifyService.php) scans `src/Entity/` for classes carrying `#[RectifiableEntity]`, then runs every service tagged `wexample.rectify.rule` against each one. Each rule implements `AbstractRectifyRule::apply(ReflectionClass): string[]` and returns violation messages; some rules also auto-fix the file (e.g., `EntityExtendRule` inserts the `extends AbstractEntity` declaration if missing). The `wexample.rectify.rule` tag carries a `priority` that controls the order rules run.
 
 ### Routing
 
@@ -93,7 +91,7 @@ src/Command/AbstractCommand.php auto-derives the Symfony console name from `getC
 
 `AbstractBundleCommand` extends it and injects `BundleService`, overriding `getCommandPrefixGroup()` to derive the prefix from the bundle class name.
 
-src/Command/RectifyCommand.php is the only shipped concrete command. It calls `RectifyService::validateRectifiableEntities()` and prints violations or a success message.
+The package ships no concrete command of its own.
 
 Command traits add narrow concerns: `FilePathCommandTrait`, `JsonArgumentCommandTrait`, `EnvironmentSpecificCommandTrait`, `EntityManipulationCommandTrait`, and `CommandLoggerTrait` (colorised `writeln` with optional indent).
 
