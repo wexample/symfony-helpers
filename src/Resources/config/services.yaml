@@ -18,8 +18,3 @@ services:
     Wexample\SymfonyHelpers\Service\ReversedRoleHierarchy:
         arguments: ['%security.role_hierarchy.roles%']
 
-    Wexample\SymfonyHelpers\Service\Rectify\Rule\ImportDtoRule:
-        tags:
-            - { name: 'wexample.rectify.rule', priority: 105 }
-
-    Wexample\SymfonyHelpers\Command\RectifyCommand: ~
