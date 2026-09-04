@@ -104,7 +104,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $method,
         $arguments
     ): AbstractEntity {
-        $entityShortName = TextHelper::removePrefix($method, 'saveNew');
+        // A saveNew call delegates here keeping its own method name.
+        $entityShortName = TextHelper::removePrefix(
+            $method,
+            str_starts_with($method, 'saveNew') ? 'saveNew' : 'createNew'
+        );
         $expectedEntityShortName = ClassHelper::getShortName(static::getEntityClassName());
 
         if ($entityShortName !== $expectedEntityShortName) {
