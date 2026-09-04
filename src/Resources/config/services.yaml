@@ -18,10 +18,6 @@ services:
     Wexample\SymfonyHelpers\Service\ReversedRoleHierarchy:
         arguments: ['%security.role_hierarchy.roles%']
 
-    Wexample\SymfonyHelpers\Service\Rectify\Rule\RepositoryCreateNewMethodRule:
-        tags:
-            - { name: 'wexample.rectify.rule', priority: 145 }
-
     Wexample\SymfonyHelpers\Service\Rectify\Rule\EntityManipulatorTraitRule:
         tags:
             - { name: 'wexample.rectify.rule', priority: 140 }
