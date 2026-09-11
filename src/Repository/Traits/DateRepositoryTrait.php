@@ -5,7 +5,7 @@ namespace Wexample\SymfonyHelpers\Repository\Traits;
 use DateTimeInterface;
 use Doctrine\ORM\QueryBuilder;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
-use Wexample\SymfonyHelpers\Helper\DateHelper;
+use Wexample\PhpDate\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 use Wexample\SymfonyHelpers\Repository\AbstractRepository;
 

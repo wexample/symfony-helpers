@@ -3,6 +3,7 @@
 namespace Wexample\SymfonyHelpers\Helper;
 
 use DateTime;
+use Wexample\PhpDate\Helper\DateHelper;
 
 class GitHelper
 {

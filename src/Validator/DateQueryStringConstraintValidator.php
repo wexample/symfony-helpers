@@ -5,7 +5,7 @@ namespace Wexample\SymfonyHelpers\Validator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Wexample\SymfonyHelpers\Helper\DateHelper;
+use Wexample\PhpDate\Helper\DateHelper;
 
 class DateQueryStringConstraintValidator extends ConstraintValidator
 {
