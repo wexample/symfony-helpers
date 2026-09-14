@@ -278,7 +278,12 @@ abstract class AbstractRepository extends ServiceEntityRepository
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 
-        $builder = $this->orderByDefaultPagination(builder: $builder);
+        // A window over unordered rows is a different set on every read, so an
+        // order there must be — but only as a floor: a builder that already
+        // says its own is obeyed, not overwritten.
+        if (! $builder->getDQLPart('orderBy')) {
+            $builder = $this->orderByDefaultPagination(builder: $builder);
+        }
 
         if ($length and $length > 0) {
             $builder
