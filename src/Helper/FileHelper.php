@@ -8,7 +8,9 @@ use function is_dir;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Wexample\Helpers\Helper\FileHelper as PhpHelpersFileHelper;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\PhpFile\Helper\FileSizeHelper;
 
 class FileHelper
 {
@@ -211,86 +213,28 @@ class FileHelper
     }
 
     /**
-     * @deprecated Use \Wexample\SymfonyHelpers\Helper\FileHelper::buildRelativePath() instead.
+     * @deprecated Use \Wexample\Helpers\Helper\FileHelper::buildRelativePath() instead.
      */
     public static function buildRelativePath(
         string $filePath,
         string $relativeTo
     ): ?string {
-        if (str_starts_with($filePath, $relativeTo)) {
-            $relativePath = substr($filePath, strlen($relativeTo));
-
-            // Ensure the relative path does not start with a '/'
-            return ltrim($relativePath, '/');
-        } else {
-            return null;
-        }
-    }
-
-    public static function convertToBytes(string|int $size): ?int
-    {
-        if (is_int($size)) {
-            return $size;
-        }
-
-        $size = trim(strtoupper($size));
-
-        if (! preg_match('/^(\d+(?:\.\d+)?)\s*([KMGTP]?B?|[KMGTP]O)?$/i', $size, $matches)) {
-            return null;
-        }
-
-        $num = (float) $matches[1];
-        $unit = $matches[2] ?? '';
-
-        $multipliers = [
-            'B' => 1,
-            'KB' => 1024,
-            'MB' => 1024 ** 2,
-            'GB' => 1024 ** 3,
-            'TB' => 1024 ** 4,
-            'PB' => 1024 ** 5,
-            'KO' => 1024,
-            'MO' => 1024 ** 2,
-            'GO' => 1024 ** 3,
-            'TO' => 1024 ** 4,
-            'PO' => 1024 ** 5,
-            'K' => 1024,
-            'M' => 1024 ** 2,
-            'G' => 1024 ** 3,
-            'T' => 1024 ** 4,
-            'P' => 1024 ** 5,
-        ];
-
-        if ($unit === '') {
-            return (int) $num;
-        }
-
-        $unit = strtoupper($unit);
-        $multiplier = $multipliers[$unit] ?? null;
-
-        if ($multiplier === null) {
-            return null;
-        }
-
-        return (int) ($num * $multiplier);
+        return PhpHelpersFileHelper::buildRelativePath($filePath, $relativeTo);
     }
 
     /**
-     * The other way round, for display: 1536 becomes 1.5 KB. Bytes stay whole,
-     * since half a byte says nothing.
+     * @deprecated Use \Wexample\PhpFile\Helper\FileSizeHelper::parse() instead.
+     */
+    public static function convertToBytes(string|int $size): ?int
+    {
+        return FileSizeHelper::parse($size);
+    }
+
+    /**
+     * @deprecated Use \Wexample\PhpFile\Helper\FileSizeHelper::format() instead.
      */
     public static function formatBytes(int $bytes): string
     {
-        $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-        $power = 0;
-
-        while ($bytes >= 1024 && $power < count($units) - 1) {
-            $bytes /= 1024;
-            ++$power;
-        }
-
-        return 0 === $power
-            ? $bytes.' B'
-            : round($bytes, 1).' '.$units[$power];
+        return FileSizeHelper::format($bytes);
     }
 }
