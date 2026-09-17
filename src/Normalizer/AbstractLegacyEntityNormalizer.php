@@ -6,9 +6,9 @@ use ArrayObject;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Wexample\Helpers\Helper\ClassHelper;
+use Wexample\PhpDate\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
-use Wexample\PhpDate\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
