@@ -6,11 +6,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\Email;
 use Wexample\Helpers\Helper\TextHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
+use Wexample\SymfonySearch\Attribute\SearchEmail;
 
 trait HasEmailTrait
 {
     #[ORM\Column(type: VariableHelper::VARIABLE_TYPE_STRING, length: 255)]
     #[Email()]
+    // Inert where `wexample/symfony-search` is not installed, which is why this
+    // package can name it without requiring it — the api requires this one and
+    // search requires the api, so the dependency would close a circle.
+    #[SearchEmail]
     protected ?string $email = null;
 
     public function getEmail(): ?string

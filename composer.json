@@ -33,5 +33,8 @@
     "install": {
       "bundle_env": "all"
     }
+  },
+  "suggest": {
+    "wexample/symfony-search": "To make the entity traits findable: HasTitleTrait, HasNameTrait, HasBodyTrait, HasDescriptionTrait and HasEmailTrait carry the attribute saying how their column is searched"
   }
 }
