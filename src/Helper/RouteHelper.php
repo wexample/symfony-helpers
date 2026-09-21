@@ -166,12 +166,27 @@ class RouteHelper
     public static function resolveControllerMethodReflection(
         Request $request
     ): ?ReflectionMethod {
-        $controller = $request->attributes->get('_controller');
-        if (! is_string($controller) || ! str_contains($controller, '::')) {
+        return self::resolveMethodReflection(
+            $request->attributes->get('_controller')
+        );
+    }
+
+    /**
+     * The method behind a `Class::method` controller, when there is one to reflect on.
+     *
+     * Everything a route can name that is not that — an invokable service id, a
+     * closure, a controller whose class was removed — answers null rather than
+     * throwing: a caller walking the whole collection meets those routes on the
+     * way to the ones it wants, and they are not its business.
+     */
+    public static function resolveMethodReflection(
+        mixed $controller
+    ): ?ReflectionMethod {
+        if (! is_string($controller) || ! str_contains($controller, ClassHelper::METHOD_SEPARATOR)) {
             return null;
         }
 
-        [$class, $method] = explode('::', $controller, 2);
+        [$class, $method] = explode(ClassHelper::METHOD_SEPARATOR, $controller, 2);
         if (! class_exists($class) || ! method_exists($class, $method)) {
             return null;
         }
