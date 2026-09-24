@@ -3,7 +3,7 @@
 namespace Wexample\SymfonyHelpers\Voter;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Wexample\SymfonyHelpers\Entity\AbstractUser;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Wexample\SymfonyHelpers\Helper\RoleHelper;
 
 abstract class AbstractLoggedUserEntityVoter extends AbstractEntityVoter
@@ -17,7 +17,7 @@ abstract class AbstractLoggedUserEntityVoter extends AbstractEntityVoter
     ): bool {
         $user = $token->getUser();
 
-        if (! $user instanceof AbstractUser) {
+        if (! $user instanceof UserInterface) {
             // the user must be logged in; if not, deny access
             return false;
         }

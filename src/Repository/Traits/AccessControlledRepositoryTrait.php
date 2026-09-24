@@ -3,14 +3,14 @@
 namespace Wexample\SymfonyHelpers\Repository\Traits;
 
 use Doctrine\ORM\QueryBuilder;
-use Wexample\SymfonyHelpers\Entity\AbstractUser;
+use Wexample\SymfonyHelpers\Entity\Interfaces\UserEntityInterface;
 
 trait AccessControlledRepositoryTrait
 {
     public function queryPaginatedForUser(
         int $page,
         ?int $length,
-        AbstractUser $user,
+        UserEntityInterface $user,
         QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->queryAccessFilter($user, $builder);
@@ -29,7 +29,7 @@ trait AccessControlledRepositoryTrait
     }
 
     abstract protected function queryAccessFilter(
-        AbstractUser $user,
+        UserEntityInterface $user,
         QueryBuilder $builder = null
     ): QueryBuilder;
 }

@@ -29,7 +29,7 @@ Because helpers are static, they are the expected first stop when you need a sha
 
 `AbstractEntity` (the base) adds the `BaseEntityTrait` and a single identifier: a `Symfony\Component\Uid\Uuid` mapped with `UuidType`, generated as a **UUIDv7** in the constructor. Three consequences are worth knowing before writing against it. An entity carries its identity from the moment it is instantiated, so there is no "id is null until persist" state and no `if (! $entity->getId())` test for newness. v7 is time-ordered, so ordering by `id` remains a stable creation order — which is what `orderByDefaultPagination()` and `EntityHelper::sortById()` rely on. And the id is an *object*: compare with `->equals()`, never `===`, and cast to `(string)` before using it as an array key.
 
-`AbstractUser` extends it and implements `UserEntityInterface` with a unique `$username` and a no-op `eraseCredentials()`. `SystemParameter` stores a named string value (key–value application config) and is itself abstract so host apps can extend and map it.
+The user model itself lives in `wexample/symfony-user`; this package keeps only `UserEntityInterface`, which its voters and repository traits type against. `SystemParameter` stores a named string value (key–value application config) and is itself abstract so host apps can extend and map it.
 
 **Traits** (`src/Entity/Traits/`) are composable columns. Each trait owns exactly one concern: `HasEmailTrait`, `HasDateCreatedTrait`, `HasPositionTrait`, `HasJsonDataTrait`, `HasEmbeddingTrait`, and about twenty others. You add them to an entity class by declaring `use HasEmailTrait;`; no service is involved.
 
