@@ -6,7 +6,7 @@ git:
 global:
   name: symfony_helpers
   type: app
-  version: 9.0.0
+  version: 9.0.1
 wex:
   migration: 7
   version: 6.0.136
