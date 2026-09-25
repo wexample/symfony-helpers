@@ -36,6 +36,66 @@ class GitHelper
         return $tags ? explode(PHP_EOL, $tags) : [];
     }
 
+    /**
+     * The branch checked out, the short hash of the commit when none is (a
+     * detached HEAD), or null when the directory is no repository.
+     */
+    public static function getCurrentBranch(string $repo): ?string
+    {
+        $branch = self::readGit($repo, ['rev-parse', '--abbrev-ref', 'HEAD']);
+
+        if ('HEAD' === $branch) {
+            return self::readGit($repo, ['rev-parse', '--short', 'HEAD']);
+        }
+
+        return $branch;
+    }
+
+    /**
+     * How many paths differ from the last commit, untracked ones included: what
+     * a commit made now would take, or leave behind. Null when the directory is
+     * no repository.
+     */
+    public static function countUncommittedChanges(string $repo): ?int
+    {
+        $status = self::readGit($repo, ['status', '--porcelain'], allowEmpty: true);
+
+        if (null === $status) {
+            return null;
+        }
+
+        return '' === $status ? 0 : count(explode(PHP_EOL, $status));
+    }
+
+    /**
+     * Git run by whoever runs PHP, the repository declared safe for that one
+     * call: a repository owned by someone else is refused otherwise, and
+     * switching user only works for root. Null when git fails.
+     */
+    private static function readGit(string $repo, array $arguments, bool $allowEmpty = false): ?string
+    {
+        if (! is_dir($repo)) {
+            return null;
+        }
+
+        $command = array_merge(
+            ['git', '-c', 'safe.directory='.$repo, '-C', $repo],
+            $arguments
+        );
+
+        $output = [];
+        $code = 0;
+        exec(implode(' ', array_map('escapeshellarg', $command)).' 2>/dev/null', $output, $code);
+
+        if (0 !== $code) {
+            return null;
+        }
+
+        $result = trim(implode(PHP_EOL, $output));
+
+        return '' === $result && ! $allowEmpty ? null : $result;
+    }
+
     public static function readLog(
         string $dir,
         null|int|DateTime $limit = 100
