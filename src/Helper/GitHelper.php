@@ -52,6 +52,28 @@ class GitHelper
     }
 
     /**
+     * The commit checked out: its short hash and the first line of its message,
+     * or null when the directory is no repository or holds no commit yet.
+     *
+     * @return array{hash: string, subject: string}|null
+     */
+    public static function getLastCommit(string $repo): ?array
+    {
+        $log = self::readGit($repo, ['log', '-1', '--format=%h%n%s']);
+
+        if (null === $log) {
+            return null;
+        }
+
+        $lines = explode(PHP_EOL, $log, 2);
+
+        return [
+            'hash' => $lines[0],
+            'subject' => $lines[1] ?? '',
+        ];
+    }
+
+    /**
      * How many paths differ from the last commit, untracked ones included: what
      * a commit made now would take, or leave behind. Null when the directory is
      * no repository.
