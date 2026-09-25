@@ -9,7 +9,7 @@ use stdClass;
 trait HasJsonDataTrait
 {
     #[ORM\Column(type: Types::JSON, nullable: true)]
-    private ?string $jsonData = null;
+    protected ?string $jsonData = null;
 
     public function getJsonData(): array|null|stdClass
     {

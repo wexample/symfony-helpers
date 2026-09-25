@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait HasTargetTrait
 {
     #[ORM\ManyToOne(targetEntity: self::class)]
-    private ?self $target = null;
+    protected ?self $target = null;
 
     public function getTarget(): ?self
     {

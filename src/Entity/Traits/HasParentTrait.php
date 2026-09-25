@@ -9,13 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
 trait HasParentTrait
 {
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
-    private ?self $parent = null;
+    protected ?self $parent = null;
 
     /**
      * @var Collection<int, self>
      */
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
-    private Collection $children;
+    protected Collection $children;
 
     protected function constructHasParentTrait(): void
     {

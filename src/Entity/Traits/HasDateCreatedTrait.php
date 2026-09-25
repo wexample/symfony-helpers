@@ -10,7 +10,7 @@ use Wexample\SymfonyHelpers\Helper\VariableHelper;
 trait HasDateCreatedTrait
 {
     #[Column(type: VariableHelper::VARIABLE_TYPE_DATETIME)]
-    private ?DateTimeInterface $dateCreated = null;
+    protected ?DateTimeInterface $dateCreated = null;
 
     public function getDateCreated(): ?DateTimeInterface
     {

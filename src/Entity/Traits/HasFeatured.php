@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping\Column;
 trait HasFeatured
 {
     #[Column]
-    private ?bool $featured = false;
+    protected ?bool $featured = false;
 
     public function isFeatured(): ?bool
     {

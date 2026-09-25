@@ -13,10 +13,10 @@ use Wexample\SymfonyHelpers\Helper\VariableHelper;
 trait LinkedToEntityTrait
 {
     #[Column(type: VariableHelper::VARIABLE_TYPE_STRING, length: 255, nullable: true)]
-    private ?string $entityType = null;
+    protected ?string $entityType = null;
 
     #[Column(type: UuidType::NAME, nullable: true)]
-    private ?Uuid $entityId = null;
+    protected ?Uuid $entityId = null;
 
     public function getEntityType(): ?string
     {

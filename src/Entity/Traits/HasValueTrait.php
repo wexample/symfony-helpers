@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping\Column;
 trait HasValueTrait
 {
     #[Column(length: 255, nullable: true)]
-    private ?string $value = null;
+    protected ?string $value = null;
 
     public function getValue(): ?string
     {

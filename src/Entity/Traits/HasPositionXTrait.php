@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping\Column;
 trait HasPositionXTrait
 {
     #[Column(nullable: true)]
-    private ?int $positionX = null;
+    protected ?int $positionX = null;
 
     public function getPositionX(): ?int
     {

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping\Column;
 trait HasOriginTrait
 {
     #[Column(length: 30)]
-    private ?string $origin = null;
+    protected ?string $origin = null;
 
     public function getOrigin(): ?string
     {

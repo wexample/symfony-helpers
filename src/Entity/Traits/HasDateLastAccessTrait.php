@@ -10,7 +10,7 @@ use Wexample\SymfonyHelpers\Helper\VariableHelper;
 trait HasDateLastAccessTrait
 {
     #[Column(type: VariableHelper::VARIABLE_TYPE_DATETIME)]
-    private ?DateTimeInterface $dateLastAccess = null;
+    protected ?DateTimeInterface $dateLastAccess = null;
 
     public function getDateLastAccess(): ?DateTimeInterface
     {

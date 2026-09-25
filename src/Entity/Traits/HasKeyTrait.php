@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping\Column;
 trait HasKeyTrait
 {
     #[Column(length: 128, nullable: true)]
-    private ?string $key = null;
+    protected ?string $key = null;
 
     public function getKey(): ?string
     {
