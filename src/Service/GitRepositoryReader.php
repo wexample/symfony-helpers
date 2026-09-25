@@ -81,6 +81,51 @@ final readonly class GitRepositoryReader
     }
 
     /**
+     * The last commits reachable from HEAD, newest first and each after its
+     * children (`--topo-order`), as a history graph needs them: full hash,
+     * parents, subject, author, date (ISO 8601) and the refs pointing at it
+     * (`HEAD -> main`, `origin/main`, `tag: v1.0`), split.
+     *
+     * @return array<array{hash: string, parents: string[], subject: string, author: string, date: string, refs: string[]}>|null
+     */
+    public function log(string $repository, int $limit = 50): ?array
+    {
+        $output = $this->git($repository, [
+            'log',
+            '--topo-order',
+            '--max-count='.max(1, $limit),
+            '--format=%H%x00%P%x00%s%x00%an%x00%aI%x00%D%x1e',
+        ]);
+
+        if (null === $output) {
+            return null;
+        }
+
+        $commits = [];
+
+        foreach (explode("\x1e", $output) as $record) {
+            $fields = explode("\0", trim($record, "\n"));
+
+            if (count($fields) < 6) {
+                continue;
+            }
+
+            [$hash, $parents, $subject, $author, $date, $refs] = $fields;
+
+            $commits[] = [
+                'hash' => $hash,
+                'parents' => '' === $parents ? [] : explode(' ', $parents),
+                'subject' => $subject,
+                'author' => $author,
+                'date' => $date,
+                'refs' => '' === $refs ? [] : array_map('trim', explode(',', $refs)),
+            ];
+        }
+
+        return $commits;
+    }
+
+    /**
      * Whether git is at work in that repository right now: a commit, a checkout
      * or an add holds the index lock, and reading beside it is reading a state
      * about to change.
