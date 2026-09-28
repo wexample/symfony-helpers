@@ -7,7 +7,7 @@ use Wexample\PhpDate\Helper\DateHelper;
 
 class GitHelper
 {
-    public static function getTagsForLastCommit(string $repo = null): array
+    public static function getTagsForLastCommit(?string $repo = null): array
     {
         if (is_null($repo)) {
             $repo = getcwd();

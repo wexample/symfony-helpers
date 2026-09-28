@@ -10,7 +10,7 @@ abstract class AbstractBundleCommand extends AbstractCommand
 {
     public function __construct(
         protected BundleService $bundleService,
-        string $name = null,
+        ?string $name = null,
     ) {
         parent::__construct(
             $name

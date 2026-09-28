@@ -36,7 +36,7 @@ class DomHelper
         string $tagName,
         array $attributes = [],
         string $body = '',
-        bool $allowSingleTag = null
+        ?bool $allowSingleTag = null
     ): string {
         $output = '<'.$tagName;
 

@@ -34,8 +34,8 @@ trait WithMessageEntityServiceTrait
      */
     public function queryForEntitiesWithMessages(
         array $entities,
-        string $messageLevel = null,
-        QueryBuilder $builder = null
+        ?string $messageLevel = null,
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $ids = [];
 
@@ -57,14 +57,14 @@ trait WithMessageEntityServiceTrait
 
     abstract public function buildEntityMessages(
         AbstractEntityInterface $entity,
-        string $messageLevel = null
+        ?string $messageLevel = null
     ): array;
 
     // abstract public function getEntityRepository(): AbstractRepository;
 
     public function filterEntityMessages(
         array $messages,
-        string $level = null
+        ?string $level = null
     ): array {
         // May be used by default.
         if (! $level) {

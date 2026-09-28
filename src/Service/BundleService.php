@@ -36,7 +36,7 @@ class BundleService
         string $upgradeType = BundleHelper::UPGRADE_TYPE_MINOR,
         int $increment = 1,
         bool $build = false,
-        string $version = null
+        ?string $version = null
     ): string {
         $config = PackageHelper::getPackageComposerConfiguration($packagePath);
 

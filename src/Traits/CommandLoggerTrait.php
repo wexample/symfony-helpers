@@ -14,7 +14,7 @@ trait CommandLoggerTrait
     public function log(
         string $message,
         string $color = TextHelper::ASCII_COLOR_WHITE,
-        int $indent = null
+        ?int $indent = null
     ): void {
         $message = $this->formatLogMessage($message, $color, $indent);
 

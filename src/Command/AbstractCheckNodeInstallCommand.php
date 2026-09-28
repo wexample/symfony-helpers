@@ -16,7 +16,7 @@ abstract class AbstractCheckNodeInstallCommand extends AbstractBundleCommand
     public function __construct(
         private readonly KernelInterface $kernel,
         BundleService $bundleService,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct(
             $bundleService,

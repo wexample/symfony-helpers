@@ -53,7 +53,7 @@ class FileHelper
 
     public static function createFileIfMissingAndGetContent(
         string $path,
-        string $content = null,
+        ?string $content = null,
     ): string {
         FileHelper::createFileIfMissing($path, $content);
 
@@ -62,7 +62,7 @@ class FileHelper
 
     public static function createFileIfMissing(
         string $path,
-        string $content = null
+        ?string $content = null
     ): void {
         FileHelper::createDirIfMissing(dirname($path));
 
@@ -122,7 +122,7 @@ class FileHelper
 
     public static function removeExtension(
         string $path,
-        string $extension = null
+        ?string $extension = null
     ): string {
         if (is_null($extension)) {
             $extension = pathinfo($path)['extension'];

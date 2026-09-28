@@ -26,7 +26,7 @@ trait SearchableRepositoryTrait
     public function querySearchStringOrArray(
         string $field,
         array|string $value,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 

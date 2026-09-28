@@ -39,7 +39,7 @@ class RequestHelper
 
     public static function parseRequestValue(
         array|float|int|string $value,
-        string $targetType = null
+        ?string $targetType = null
     ): array|bool|float|int|null|string {
         if (TextHelper::isBooleanOrNull($value)) {
             return TextHelper::parseBooleanOrNull($value);

@@ -11,7 +11,7 @@ trait AccessControlledRepositoryTrait
         int $page,
         ?int $length,
         UserEntityInterface $user,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->queryAccessFilter($user, $builder);
 
@@ -30,6 +30,6 @@ trait AccessControlledRepositoryTrait
 
     abstract protected function queryAccessFilter(
         UserEntityInterface $user,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder;
 }

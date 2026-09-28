@@ -143,7 +143,7 @@ class ArrayHelper
     public static function truncateChildrenArrayByLength(
         array $array,
         ?int $min = 0,
-        int $max = null
+        ?int $max = null
     ): array {
         $max = is_null($max) ? count($array) : $max;
         $output = [];

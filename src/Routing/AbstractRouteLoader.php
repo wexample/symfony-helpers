@@ -12,7 +12,7 @@ abstract class AbstractRouteLoader extends Loader
 
     public function __construct(
         protected ContainerInterface $container,
-        string $env = null
+        ?string $env = null
     ) {
         parent::__construct($env);
     }
@@ -37,14 +37,14 @@ abstract class AbstractRouteLoader extends Loader
 
     abstract protected function loadOnce(
         $resource,
-        string $type = null
+        ?string $type = null
     ): RouteCollection;
 
     abstract protected function getName(): string;
 
     public function supports(
         $resource,
-        string $type = null
+        ?string $type = null
     ): bool {
         return $type === $this->getName();
     }

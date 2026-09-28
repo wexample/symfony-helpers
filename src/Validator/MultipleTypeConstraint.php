@@ -14,7 +14,7 @@ class MultipleTypeConstraint extends Constraint
     public function __construct(
         array $types,
         mixed $options = null,
-        array $groups = null,
+        ?array $groups = null,
         mixed $payload = null
     ) {
         $options['types'] = $types;

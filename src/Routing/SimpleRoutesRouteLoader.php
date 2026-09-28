@@ -28,7 +28,7 @@ class SimpleRoutesRouteLoader extends AbstractRouteLoader
      */
     protected function loadOnce(
         $resource,
-        string $type = null
+        ?string $type = null
     ): RouteCollection {
         $collection = new RouteCollection();
 

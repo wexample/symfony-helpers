@@ -39,14 +39,14 @@ trait ConsoleLoggerTrait
     abstract public function log(
         string $message,
         string $color = TextHelper::ASCII_COLOR_WHITE,
-        int $indent = null
+        ?int $indent = null
     ): void;
 
     public function logEntity(
         AbstractEntityInterface $abstractEntity,
         string $message,
-        string $color = null,
-        int $indent = null
+        ?string $color = null,
+        ?int $indent = null
     ): void {
         $this->log(
             $this->buildLocalEntityName($abstractEntity).' | '.$message,
@@ -62,7 +62,7 @@ trait ConsoleLoggerTrait
 
     public function logSuccessCheckbox(
         string $message,
-        int $indent = null
+        ?int $indent = null
     ): void {
         $this->logSuccess(
             '✓ '.$message,
@@ -72,7 +72,7 @@ trait ConsoleLoggerTrait
 
     public function logSuccess(
         string $message,
-        int $indent = null
+        ?int $indent = null
     ): void {
         $this->log(
             $message,
@@ -83,7 +83,7 @@ trait ConsoleLoggerTrait
 
     public function logWarn(
         string $message,
-        int $indent = null
+        ?int $indent = null
     ): void {
         $this->log(
             $message,
@@ -94,7 +94,7 @@ trait ConsoleLoggerTrait
 
     public function logErrorCheckbox(
         string $message,
-        int $indent = null
+        ?int $indent = null
     ): void {
         $this->logError(
             'x '.$message,
@@ -104,7 +104,7 @@ trait ConsoleLoggerTrait
 
     public function logError(
         string $message,
-        int $indent = null
+        ?int $indent = null
     ): void {
         $this->log(
             $message,
@@ -131,7 +131,7 @@ trait ConsoleLoggerTrait
     public function formatLogMessage(
         array|object|string|null $message,
         string $color = TextHelper::ASCII_DARK_COLOR_GRAY,
-        int $indent = null
+        ?int $indent = null
     ): string {
         if (! is_string($message)) {
             $message = json_encode($message);

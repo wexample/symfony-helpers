@@ -18,9 +18,9 @@ use Wexample\SymfonyHelpers\Helper\VariableHelper;
 /**
  * @method AbstractEntity|null find($id, $lockMode = null, $lockVersion = null)
  * @method AbstractEntity[]    findAll()
- * @method AbstractEntity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @method AbstractEntity|null findOneBy(array $criteria, array $orderBy = null)
- * @method QueryBuilder        queryById(Uuid|string $id, QueryBuilder $builder = null)
+ * @method AbstractEntity[]    findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
+ * @method AbstractEntity|null findOneBy(array $criteria, ?array $orderBy = null)
+ * @method QueryBuilder        queryById(Uuid|string $id, ?QueryBuilder $builder = null)
  */
 abstract class AbstractRepository extends ServiceEntityRepository
 {
@@ -257,7 +257,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      */
     public function orderByDefaultPagination(
         string $order = self::SORT_ASC,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder(
             $builder
@@ -274,7 +274,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function queryPaginated(
         int $page,
         ?int $length = null,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 
@@ -297,7 +297,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function findPaginated(
         int $page,
         ?int $length,
-        QueryBuilder $builder = null,
+        ?QueryBuilder $builder = null,
     ): array {
         return $this->queryPaginated($page, $length, $builder)
             ->getQuery()
@@ -308,7 +308,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * Counts the rows a builder would match, ignoring its paginated window.
      */
     public function countAll(
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): int {
         $builder = $this->querySelectCount(
             $builder ? clone $builder : null
@@ -332,7 +332,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         string $fieldName,
         $value,
         ?string $entityName = null,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 
@@ -348,7 +348,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     public function createOrGetQueryBuilder(
-        QueryBuilder $builder = null,
+        ?QueryBuilder $builder = null,
         ?string $aliasSuffix = null
     ): ?QueryBuilder {
         // Search for interesting invoices.
@@ -384,7 +384,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function findHasSome(
         array $criteria,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): bool {
         $builder = $this->querySelectCount($builder);
         $builder->setMaxResults(1);
@@ -407,7 +407,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     public function querySelectCount(
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 
@@ -442,7 +442,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function queryJoinEntity(
         string $targetEntityClassName,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $key = $targetEntityClassName::getEntityKeyName();
         $this->createOrGetQueryBuilder($builder)->join(
@@ -457,7 +457,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         string $targetEntityClassName,
         string $fieldName,
         $value,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->queryJoinEntity(
             targetEntityClassName: $targetEntityClassName,

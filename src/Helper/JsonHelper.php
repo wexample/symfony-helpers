@@ -54,7 +54,7 @@ class JsonHelper
 
     public static function read(
         string $path,
-        bool $associative = null,
+        ?bool $associative = null,
         int $flags = 0,
         array|object|null $default = null
     ): array|object|null {
@@ -105,7 +105,7 @@ class JsonHelper
      */
     public static function readOrNull(
         string $path,
-        bool $associative = null,
+        ?bool $associative = null,
         int $flags = 0
     ): array|object|null {
         if (! is_file($path) || ! is_readable($path)) {

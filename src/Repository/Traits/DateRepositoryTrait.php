@@ -25,7 +25,7 @@ trait DateRepositoryTrait
     public function queryDateInMonth(
         $fields,
         DateTimeInterface $dateMonth,
-        QueryBuilder $builder = null,
+        ?QueryBuilder $builder = null,
         string $whereQuery = ''
     ): QueryBuilder {
         return $this->queryDateRange(
@@ -40,7 +40,7 @@ trait DateRepositoryTrait
     public function queryDateBefore(
         string $field,
         DateTimeInterface $date,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         return $this->queryDateBoundary(
             $field,
@@ -56,7 +56,7 @@ trait DateRepositoryTrait
         DateTimeInterface $date,
         string $parameterSuffix,
         string $operator,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 
@@ -79,7 +79,7 @@ trait DateRepositoryTrait
     public function queryDateAfter(
         string $field,
         DateTimeInterface $date,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         return $this->queryDateBoundary(
             $field,
@@ -94,7 +94,7 @@ trait DateRepositoryTrait
         $fields,
         DateTimeInterface $dateFirst,
         DateTimeInterface $dateLast,
-        QueryBuilder $builder = null,
+        ?QueryBuilder $builder = null,
         string $whereQuery = ''
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
@@ -159,7 +159,7 @@ trait DateRepositoryTrait
         DateTimeInterface $dateYear,
         bool $ordered = true,
         string $whereQuery = '',
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $builder = $this->queryDateRange(
             $fields,
@@ -185,7 +185,7 @@ trait DateRepositoryTrait
 
     public function orderByDateField(
         string $field,
-        QueryBuilder $builder = null,
+        ?QueryBuilder $builder = null,
         string $order = AbstractRepository::SORT_ASC
     ): void {
         $builder = $this->createOrGetQueryBuilder($builder);
@@ -199,7 +199,7 @@ trait DateRepositoryTrait
 
     public function queryLastByDateField(
         string $field,
-        QueryBuilder $builder = null
+        ?QueryBuilder $builder = null
     ): QueryBuilder {
         $this->orderByDateField(
             field: $field,
@@ -222,7 +222,7 @@ trait DateRepositoryTrait
      */
     public function queryOrderByDateAndNull(
         string $fieldName,
-        QueryBuilder $builder = null,
+        ?QueryBuilder $builder = null,
     ): QueryBuilder {
         $builder = $this->createOrGetQueryBuilder($builder);
 

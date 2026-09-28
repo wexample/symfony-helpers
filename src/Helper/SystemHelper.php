@@ -20,8 +20,8 @@ class SystemHelper
 
     public static function exec(
         array $commands,
-        string $workingDir = null,
-        string $username = null
+        ?string $workingDir = null,
+        ?string $username = null
     ): string {
         if ($workingDir) {
             $commands = array_merge(
