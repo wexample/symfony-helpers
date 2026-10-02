@@ -1,6 +1,6 @@
 # symfony_helpers
 
-Version: 12.0.0
+Version: 12.0.1
 
 `wexample/symfony-helpers` is a Symfony bundle that supplies reusable building blocks for application development: static constant dictionaries across more than twenty helper classes (environment names, Doctrine column types, security roles, status values, HTML, routing, and more), composable Doctrine entity traits (`HasEmailTrait`, `HasStatusTrait`, `HasDateCreatedTrait`, and others), and abstract base classes for controllers, console commands, Twig extensions, and entity services. It targets Symfony developers — particularly those working within the Wexample package ecosystem — who want shared, stable conventions rather than re-implementing the same patterns across projects.
 
@@ -150,6 +150,7 @@ Visit the [Wexample Suite documentation](https://docs.wexample.com) for the comp
 - symfony/twig-bundle: >=6.2
 - symfony/uid: >=6.2
 - symfony/process: >=6.2
+- symfony/security-core: >=6.2
 - symfony/doctrine-bridge: >=6.2
 - laminas/laminas-text: ^2.10
 - doctrine/common: ^3.4
@@ -157,7 +158,7 @@ Visit the [Wexample Suite documentation](https://docs.wexample.com) for the comp
 - doctrine/doctrine-bundle: ^2.9
 - wexample/php-date: >=2.0.0
 - wexample/php-file: >=2.0.0
-- wexample/php-helpers: >=5.0.0
+- wexample/php-helpers: >=6.0.0
 
 ## Versioning & Compatibility Policy
 

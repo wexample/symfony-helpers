@@ -3,7 +3,7 @@
   "description": "Helpers for symfony development : constants dictionary, helpers, etc.",
   "type": "library",
   "license": "MIT",
-  "version": "12.0.0",
+  "version": "12.0.1",
   "autoload": {
     "psr-4": {
       "Wexample\\SymfonyHelpers\\": "src/"
@@ -29,7 +29,7 @@
     "doctrine/doctrine-bundle": "^2.9",
     "wexample/php-date": ">=2.0.0",
     "wexample/php-file": ">=2.0.0",
-    "wexample/php-helpers": ">=5.0.0"
+    "wexample/php-helpers": ">=6.0.0"
   },
   "extra": {
     "install": {
