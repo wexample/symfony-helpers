@@ -39,7 +39,7 @@ abstract class AbstractException extends \Exception
         int $code = 0,
         ?string $internalCodeSuffix = null,
         array $context = [],
-        \Throwable $previous = null
+        ?\Throwable $previous = null
     ) {
         $this->context = $context;
         $this->internalCodeSuffix = $internalCodeSuffix;
