@@ -86,16 +86,20 @@ final readonly class GitRepositoryReader
      * parents, subject, author, date (ISO 8601) and the refs pointing at it
      * (`HEAD -> main`, `origin/main`, `tag: v1.0`), split.
      *
+     * Given a `$path` — relative to the repository —, the commits that touched
+     * it, each one's parents rewritten to the previous of those
+     * (`--parents`): the file's own history, a graph that holds together.
+     *
      * @return array<array{hash: string, parents: string[], subject: string, author: string, date: string, refs: string[]}>|null
      */
-    public function log(string $repository, int $limit = 50): ?array
+    public function log(string $repository, int $limit = 50, ?string $path = null): ?array
     {
-        $output = $this->git($repository, [
+        $output = $this->git($repository, array_merge([
             'log',
             '--topo-order',
             '--max-count='.max(1, $limit),
             '--format=%H%x00%P%x00%s%x00%an%x00%aI%x00%D%x1e',
-        ]);
+        ], null === $path ? [] : ['--parents', '--', $path]));
 
         if (null === $output) {
             return null;
