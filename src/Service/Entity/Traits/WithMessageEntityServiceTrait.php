@@ -2,16 +2,16 @@
 
 namespace Wexample\SymfonyHelpers\Service\Entity\Traits;
 
-use App\Wex\BaseBundle\Translation\Translator;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use JetBrains\PhpStorm\ArrayShape;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Wexample\SymfonyHelpers\Entity\Interfaces\AbstractEntityInterface;
 use Wexample\SymfonyHelpers\Repository\AbstractRepository;
 
 trait WithMessageEntityServiceTrait
 {
-    abstract public function getTranslator(): Translator;
+    abstract public function getTranslator(): TranslatorInterface;
 
     #[ArrayShape(['type' => 'string', 'key' => 'string', 'message' => 'string'])]
     public function buildEntityMessage(
@@ -23,7 +23,7 @@ trait WithMessageEntityServiceTrait
             'type' => $type,
             'key' => $message,
             'message' => $this->getTranslator()->trans(
-                'entity.'.$this->getEntityTableizedName().Translator::DOMAIN_SEPARATOR.'message.'.$type.'.'.$message,
+                'entity.'.$this->getEntityTableizedName().'::message.'.$type.'.'.$message,
                 $args
             ),
         ];
