@@ -41,6 +41,11 @@ class RequestHelper
         array|float|int|string $value,
         ?string $targetType = null
     ): array|bool|float|int|null|string {
+        // Asked for as text, a value stays text: "411", "007" or "true" are words then.
+        if (TypesHelper::STRING === $targetType && ! is_array($value)) {
+            return (string) $value;
+        }
+
         if (TextHelper::isBooleanOrNull($value)) {
             return TextHelper::parseBooleanOrNull($value);
         }
