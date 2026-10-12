@@ -2,25 +2,26 @@
 
 namespace Wexample\SymfonyHelpers\Entity\Traits;
 
-use App\Entity\User;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Wexample\SymfonyHelpers\Entity\Interfaces\UserEntityInterface;
 
+/**
+ * The host app maps the interface to its own user class:
+ * doctrine.orm.resolve_target_entities: { UserEntityInterface: App\Entity\User }.
+ */
 trait LinkedToUserTrait
 {
-    #[ManyToOne(targetEntity: User::class)]
+    #[ManyToOne(targetEntity: UserEntityInterface::class)]
     #[JoinColumn(name: "user_id", nullable: false)]
-    protected ?User $user = null;
+    protected ?UserEntityInterface $user = null;
 
-    public function getUser(): ?User
+    public function getUser(): ?UserEntityInterface
     {
         return $this->user;
     }
 
-    /**
-     * @param mixed $user
-     */
-    public function setUser(?User $user)
+    public function setUser(?UserEntityInterface $user): void
     {
         $this->user = $user;
     }
