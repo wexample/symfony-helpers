@@ -2,8 +2,6 @@
 
 namespace Wexample\SymfonyHelpers\Class;
 
-use Laminas\Text\Table\Decorator\Unicode;
-
 /**
  * Fork from ArrayToTextTable
  *
@@ -18,9 +16,20 @@ class ArrayToTextTable
     final public const ALIGN_CENTER = STR_PAD_BOTH;
     final public const ALIGN_RIGHT = STR_PAD_LEFT;
 
+    protected const TOP_LEFT = '┌';
+    protected const TOP_RIGHT = '┐';
+    protected const BOTTOM_LEFT = '└';
+    protected const BOTTOM_RIGHT = '┘';
+    protected const VERTICAL = '│';
+    protected const HORIZONTAL = '─';
+    protected const CROSS = '┼';
+    protected const VERTICAL_RIGHT = '├';
+    protected const VERTICAL_LEFT = '┤';
+    protected const HORIZONTAL_DOWN = '┬';
+    protected const HORIZONTAL_UP = '┴';
+
     protected array $keys;
     protected array $widths;
-    protected Unicode $decorator;
     protected string $indentation;
     protected string $displayKeys;
     protected bool $upperKeys;
@@ -31,7 +40,6 @@ class ArrayToTextTable
     public function __construct(protected array $data = [])
     {
         $this->setData($data)
-            ->setDecorator(new Unicode())
             ->setIndentation('')
             ->setDisplayKeys('auto')
             ->setUpperKeys(true)
@@ -53,7 +61,6 @@ class ArrayToTextTable
 
         $data = $this->prepare();
         $i = $this->indentation;
-        $d = $this->decorator;
 
         $displayKeys = $this->displayKeys;
         if ($displayKeys === 'auto') {
@@ -67,7 +74,7 @@ class ArrayToTextTable
             }
         }
 
-        $table = $i.$this->line($d->getTopLeft(), $d->getHorizontal(), $d->getHorizontalDown(), $d->getTopRight()).PHP_EOL;
+        $table = $i.$this->line(static::TOP_LEFT, static::HORIZONTAL, static::HORIZONTAL_DOWN, static::TOP_RIGHT).PHP_EOL;
 
         if ($displayKeys) {
             $keysRow = array_combine($this->keys, $this->keys);
@@ -76,24 +83,19 @@ class ArrayToTextTable
             }
             $table .= $i.implode(PHP_EOL, $this->row($keysRow, $this->keysAlignment)).PHP_EOL;
 
-            $table .= $i.$this->line($d->getVerticalRight(), $d->getHorizontal(), $d->getCross(), $d->getVerticalLeft()).PHP_EOL;
+            $table .= $i.$this->line(static::VERTICAL_RIGHT, static::HORIZONTAL, static::CROSS, static::VERTICAL_LEFT).PHP_EOL;
         }
 
         foreach ($data as $row) {
             $table .= $i.implode(PHP_EOL, $this->row($row, $this->valuesAlignment)).PHP_EOL;
         }
 
-        return $table . ($i.$this->line($d->getBottomLeft(), $d->getHorizontal(), $d->getHorizontalUp(), $d->getBottomRight()).PHP_EOL);
+        return $table . ($i.$this->line(static::BOTTOM_LEFT, static::HORIZONTAL, static::HORIZONTAL_UP, static::BOTTOM_RIGHT).PHP_EOL);
     }
 
     public function getData(): array
     {
         return $this->data;
-    }
-
-    public function getDecorator(): Unicode
-    {
-        return $this->decorator;
     }
 
     public function getIndentation(): string
@@ -142,13 +144,6 @@ class ArrayToTextTable
         }
 
         $this->data = $arrayData;
-
-        return $this;
-    }
-
-    public function setDecorator(Unicode $decorator): static
-    {
-        $this->decorator = $decorator;
 
         return $this;
     }
@@ -240,14 +235,14 @@ class ArrayToTextTable
         $row,
         $alignment
     ): false|string {
-        $line = $this->decorator->getVertical();
+        $line = static::VERTICAL;
 
         foreach ($row as $key => $value) {
-            $line .= ' '.static::mb_str_pad($value, $this->widths[$key], ' ', $alignment).' '.$this->decorator->getVertical();
+            $line .= ' '.static::mb_str_pad($value, $this->widths[$key], ' ', $alignment).' '.static::VERTICAL;
         }
 
         if (empty($row)) {
-            $line .= $this->decorator->getVertical();
+            $line .= static::VERTICAL;
         }
 
         return $line;

@@ -152,7 +152,6 @@ Visit the [Wexample Suite documentation](https://docs.wexample.com) for the comp
 - symfony/process: >=6.2
 - symfony/security-core: >=6.2
 - symfony/doctrine-bridge: >=6.2
-- laminas/laminas-text: ^2.10
 - doctrine/common: ^3.4
 - doctrine/orm: ^3.3
 - doctrine/doctrine-bundle: ^2.9
