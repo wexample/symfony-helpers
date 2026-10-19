@@ -5,7 +5,9 @@ namespace Wexample\SymfonyHelpers\Routing;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouteCollection;
+use Wexample\SymfonyHelpers\Attribute\WorkerSafe;
 
+#[WorkerSafe('A route loader runs while the routes are compiled into the cache, never while a request is served.')]
 abstract class AbstractRouteLoader extends Loader
 {
     protected bool $isLoaded = false;

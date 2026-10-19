@@ -2,12 +2,17 @@
 
 namespace Wexample\SymfonyHelpers\DependencyInjection\Compiler;
 
+use Attribute;
 use LogicException;
 use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Contracts\Service\ResetInterface;
 use Wexample\SymfonyHelpers\Attribute\WorkerSafe;
 
@@ -23,8 +28,10 @@ use Wexample\SymfonyHelpers\Attribute\WorkerSafe;
  *  - declared safe, the service or the property marked #[WorkerSafe] with the
  *    reason — a memo of what the code or the configuration says.
  *
- * Checked on the services the container keeps, ours only: a property declared
- * by a vendor class is the vendor's. The `wexample_symfony_helpers.worker_safety`
+ * Checked before the removing passes, which inline the private services used
+ * in one place out of the list of definitions; on the services something uses —
+ * public, tagged or referenced —, as the removing passes would keep them; ours
+ * only, a property declared by a vendor class being the vendor's. The `wexample_symfony_helpers.worker_safety`
  * parameter decides what a breach does: `strict` stops the build, `warn` (the
  * default) lists the breaches in the `.violations` parameter and the compiler
  * log, `off` skips the check.
@@ -60,8 +67,9 @@ class WorkerSafeServicesCompilerPass implements CompilerPassInterface
 
         $violations = [];
         $checked = [];
+        $referenced = $this->referencedIds($container);
 
-        foreach ($container->getDefinitions() as $definition) {
+        foreach ($container->getDefinitions() as $id => $definition) {
             $class = $definition->getClass();
 
             // A service built anew at each use keeps nothing between two; an
@@ -72,6 +80,7 @@ class WorkerSafeServicesCompilerPass implements CompilerPassInterface
                 || $definition->isSynthetic()
                 || ! $definition->isShared()
                 || $definition->hasErrors()
+                || ! ($definition->isPublic() || [] !== $definition->getTags() || isset($referenced[$id]))
                 || isset($checked[$class])
                 || ! $this->isOurs($class, $namespaces)
                 || ! class_exists($class)
@@ -82,8 +91,13 @@ class WorkerSafeServicesCompilerPass implements CompilerPassInterface
             $checked[$class] = true;
 
             // A command runs once per process, from the console: no worker
-            // serving web requests ever executes it.
-            if (is_subclass_of($class, Command::class)) {
+            // serving web requests ever executes it. An attribute or a
+            // validation constraint a resource glob registered is built by
+            // reflection or the validator, never taken from the container.
+            if (is_subclass_of($class, Command::class)
+                || is_subclass_of($class, Constraint::class)
+                || [] !== (new ReflectionClass($class))->getAttributes(Attribute::class)
+            ) {
                 continue;
             }
 
@@ -114,6 +128,44 @@ class WorkerSafeServicesCompilerPass implements CompilerPassInterface
         }
 
         $container->log($this, $message);
+    }
+
+    /**
+     * The ids something refers to: an argument, a call, a property, a factory,
+     * an alias — what the removing passes would keep for being used.
+     *
+     * @return array<string, true>
+     */
+    private function referencedIds(ContainerBuilder $container): array
+    {
+        $ids = [];
+        $collect = function (mixed $value) use (&$collect, &$ids): void {
+            if ($value instanceof Reference) {
+                $ids[(string) $value] = true;
+            } elseif ($value instanceof Definition) {
+                $collect($value->getArguments());
+                $collect($value->getMethodCalls());
+                $collect($value->getProperties());
+                $collect($value->getFactory());
+                $collect($value->getConfigurator());
+            } elseif ($value instanceof ArgumentInterface) {
+                $collect($value->getValues());
+            } elseif (is_array($value)) {
+                foreach ($value as $item) {
+                    $collect($item);
+                }
+            }
+        };
+
+        foreach ($container->getDefinitions() as $definition) {
+            $collect($definition);
+        }
+
+        foreach ($container->getAliases() as $alias) {
+            $ids[(string) $alias] = true;
+        }
+
+        return $ids;
     }
 
     /**

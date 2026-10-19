@@ -13,11 +13,12 @@ class WexampleSymfonyHelpersBundle extends AbstractBundle
     {
         parent::build($container);
 
-        // Once the unused definitions are gone: only the services the
-        // container keeps can carry anything from one request to the next.
+        // Before the removing passes: those also inline the private services
+        // used in one place, which then leave the list of definitions while
+        // still living as long as the service holding them.
         $container->addCompilerPass(
             new WorkerSafeServicesCompilerPass(),
-            PassConfig::TYPE_AFTER_REMOVING
+            PassConfig::TYPE_BEFORE_REMOVING
         );
     }
 }
