@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class EntityNeutralService
 {
     public function __construct(
-        public EntityManagerInterface $entityManager,
+        public readonly EntityManagerInterface $entityManager,
     ) {
     }
 

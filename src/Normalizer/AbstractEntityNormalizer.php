@@ -14,12 +14,14 @@ use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 use Wexample\SymfonyHelpers\Interface\NormalizableDataInterface;
+use Wexample\SymfonyHelpers\Attribute\WorkerSafe;
 
 abstract class AbstractEntityNormalizer extends AbstractNormalizer implements NormalizerAwareInterface
 {
     use EntityManipulatorTrait;
     use NormalizerAwareTrait;
 
+    #[WorkerSafe('A setting of the normalizer class, never changed at runtime.')]
     public bool $isEntrypoint = true;
 
     /**

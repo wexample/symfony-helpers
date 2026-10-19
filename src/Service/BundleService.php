@@ -10,7 +10,7 @@ use Wexample\SymfonyHelpers\Helper\PackageHelper;
 class BundleService
 {
     public function __construct(
-        protected KernelInterface $kernel,
+        protected readonly KernelInterface $kernel,
     ) {
     }
 

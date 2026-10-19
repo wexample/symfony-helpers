@@ -12,7 +12,7 @@ use Wexample\SymfonyHelpers\Helper\VariableHelper;
 
 class RoleSyntaxService
 {
-    private mixed $roles = [];
+    private readonly mixed $roles;
 
     public function __construct(
         ParameterBagInterface $parameterBag,
