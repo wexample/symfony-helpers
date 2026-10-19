@@ -9,12 +9,12 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\PhpDate\Helper\DateHelper;
+use Wexample\SymfonyHelpers\Attribute\WorkerSafe;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 use Wexample\SymfonyHelpers\Interface\NormalizableDataInterface;
-use Wexample\SymfonyHelpers\Attribute\WorkerSafe;
 
 abstract class AbstractEntityNormalizer extends AbstractNormalizer implements NormalizerAwareInterface
 {

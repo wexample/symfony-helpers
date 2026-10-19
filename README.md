@@ -1,6 +1,6 @@
 # symfony_helpers
 
-Version: 16.0.1
+Version: 17.0.0
 
 `wexample/symfony-helpers` is a Symfony bundle that supplies reusable building blocks for application development: static constant dictionaries across more than twenty helper classes (environment names, Doctrine column types, security roles, status values, HTML, routing, and more), composable Doctrine entity traits (`HasEmailTrait`, `HasStatusTrait`, `HasDateCreatedTrait`, and others), and abstract base classes for controllers, console commands, Twig extensions, and entity services. It targets Symfony developers — particularly those working within the Wexample package ecosystem — who want shared, stable conventions rather than re-implementing the same patterns across projects.
 
@@ -141,8 +141,6 @@ This package is part of the Wexample Suite — a collection of high-quality, mod
 
 The suite includes packages for configuration management, file handling, prompts, and more. Each package can be used independently or as part of the integrated suite.
 
-Visit the [Wexample Suite documentation](https://docs.wexample.com) for the complete package ecosystem.
-
 ## Dependencies
 
 - php: >=8.5
@@ -184,6 +182,8 @@ Free to use in both personal and commercial projects.
 This packages suite embodies this spirit. Trusted by professionals and enthusiasts alike, it delivers a consistent, high-quality foundation for modern development — open, elegant, and battle-tested. Its reputation is built on years of collaboration, refinement, and rigorous attention to detail, making it a natural choice for those who demand both robustness and beauty in their tools.
 
 Wexample cultivates a culture of mastery. Each package, each contribution carries the mark of a community that values precision, ethics, and innovation — a community proud to shape the future of digital craftsmanship.
+
+Built and maintained by [Romain Weeger](https://weeger.io).
 
 ## Migration Notes
 
