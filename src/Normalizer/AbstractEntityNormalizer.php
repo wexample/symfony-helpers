@@ -14,6 +14,7 @@ use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
+use Wexample\SymfonyHelpers\Interface\HeadStructuredDataProviderInterface;
 use Wexample\SymfonyHelpers\Interface\NormalizableDataInterface;
 
 abstract class AbstractEntityNormalizer extends AbstractNormalizer implements NormalizerAwareInterface
@@ -219,7 +220,10 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
         ?string $format = null,
         array $context = []
     ): bool {
-        return $this->isEntrypoint && ClassHelper::isClassPath($data, static::getEntityClassName());
+        // The schema.org description of an entity has a shape of its own.
+        return $this->isEntrypoint
+            && HeadStructuredDataProviderInterface::FORMAT_SCHEMA_ORG !== $format
+            && ClassHelper::isClassPath($data, static::getEntityClassName());
     }
 
     protected function normalizeDateTimeOrNull(
