@@ -1,6 +1,6 @@
 # symfony_helpers
 
-Version: 18.0.0
+Version: 18.0.1
 
 `wexample/symfony-helpers` is a Symfony bundle that supplies reusable building blocks for application development: static constant dictionaries across more than twenty helper classes (environment names, Doctrine column types, security roles, status values, HTML, routing, and more), composable Doctrine entity traits (`HasEmailTrait`, `HasStatusTrait`, `HasDateCreatedTrait`, and others), and abstract base classes for controllers, console commands, Twig extensions, and entity services. It targets Symfony developers — particularly those working within the Wexample package ecosystem — who want shared, stable conventions rather than re-implementing the same patterns across projects.
 
@@ -144,20 +144,18 @@ The suite includes packages for configuration management, file handling, prompts
 ## Dependencies
 
 - php: >=8.5
-- twig/string-extra: ^3.6
-- symfony/twig-bundle: >=6.2
-- symfony/uid: >=6.2
-- symfony/process: >=6.2
-- symfony/security-core: >=6.2
-- symfony/doctrine-bridge: >=6.2
+- symfony/uid: ^7.4 || ^8.0
+- symfony/security-core: ^7.4 || ^8.0
+- symfony/doctrine-bridge: ^7.4 || ^8.0
 - doctrine/common: ^3.4
 - doctrine/orm: ^3.3
 - doctrine/doctrine-bundle: ^2.9
 - wexample/php-date: >=2.1.0
 - wexample/php-file: >=2.0.0
 - wexample/php-helpers: >=7.0.0
-- symfony/serializer: >=6.2
-- symfony/validator: >=6.2
+- symfony/serializer: ^7.4 || ^8.0
+- symfony/validator: ^7.4 || ^8.0
+- twig/twig: ^3.6
 
 ## Versioning & Compatibility Policy
 
