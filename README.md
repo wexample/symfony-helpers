@@ -1,6 +1,6 @@
 # symfony_helpers
 
-Version: 18.0.2
+Version: 18.0.3
 
 Helpers for symfony development : constants dictionary, helpers, etc.
 
