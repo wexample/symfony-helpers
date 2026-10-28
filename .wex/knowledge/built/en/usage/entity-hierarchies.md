@@ -1,0 +1,48 @@
+# Entity hierarchies
+
+An entity may be the root of a hierarchy — a `Session` that is a `ClaudeSession` or a `SyrtisSession` —, each kind in a table of its own joined to the root's, the subclasses living in other packages than the root. The stack treats the whole hierarchy as one entity: a subclass is one more kind of it, not another entity.
+
+## What the root declares
+
+```php
+#[ORM\Entity(repositoryClass: SessionRepository::class)]
+#[ORM\Table(name: 'session')]
+#[ORM\InheritanceType('JOINED')]
+#[ORM\DiscriminatorColumn(name: 'engine', type: Types::STRING, length: 32)]
+abstract class Session extends AbstractEntity
+```
+
+No discriminator map: the root cannot list subclasses other packages add to it. Doctrine builds the map from every mapped subclass, and `EntityInheritanceListener` renames its values so that the column stores the same word the api serves (below). A root that writes its own `#[DiscriminatorMap]` keeps it.
+
+`AbstractEntity` is a mapped superclass, which is what lets a subclass joined to its root inherit the `id` without mapping the column twice.
+
+## What a subclass is called
+
+`EntityHierarchyHelper` reads the hierarchy off the mapping attributes alone — no entity manager —, so the same answer comes from a static method of the entity, a normalizer or a test without a kernel:
+
+| | `Session` | `ClaudeSession` | `SyrtisSession` |
+|---|---|---|---|
+| `getRootClass()` | `Session` | `Session` | `Session` |
+| `getEntityKeyName()`, `getTableizedName()` | `session` | `session` | `session` |
+| `getDiscriminatorName()` | `engine` | `engine` | `engine` |
+| `getDiscriminatorValue()` | `session` | `claude` | `syrtis` |
+
+The discriminator value is the subclass's name with the root's taken off the end; a name that does not end with the root's is kept whole (`Bike` under `Vehicle` is `bike`).
+
+## What the api serves
+
+The envelope names the hierarchy; the entity says which kind it is, under the discriminator's name, as a read-only property:
+
+```json
+{ "type": "session", "entity": { "id": "…", "name": "…", "engine": "syrtis", "scenario": "…" } }
+```
+
+A normalizer is written per class that has something of its own to say, the subclass's extending the root's and returning a dto that extends the root's. `EntityNormalizerRegistry` sends every entity to the normalizer written for the nearest class in its ancestry: a listing of sessions normalized through the session normalizer hands each Syrtis session to the Syrtis one, and a kind with no normalizer of its own goes to the root's. `manipulatesEntity()` on a manipulator of the root — a voter, a repository — holds for every kind.
+
+A list queried on the root (`apiResponseQueryPage` on `Session`) comes back with mixed kinds, each normalized as what it is.
+
+## Live topics and the browser
+
+A subclass is published on the root's topics (`entity/session/event/<id>`) and is open to subscription where the root's `#[LiveEntity]` says so: the root declares, the kinds follow.
+
+The export of an entity (`api:export:entities`) says the subclass's parent (`extends`) and its place in the hierarchy (`discriminator: { property, value }`), and lists the discriminator among the properties. The browser's client registers the kinds it knows (`getEntityClasses()`) and hydrates a row to the class its discriminator names, so a `Session` read from the api is a `SyrtisSession` instance when the row is one.
