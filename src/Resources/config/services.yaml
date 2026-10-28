@@ -9,6 +9,10 @@ services:
         resource: '../../{Routing,Service,Twig}'
         tags: ['controller.service_arguments']
 
+    Wexample\SymfonyHelpers\EventListener\EntityInheritanceListener: ~
+
+    Wexample\SymfonyHelpers\Normalizer\EntityNormalizerRegistry: ~
+
     Wexample\SymfonyHelpers\Routing\SimpleRoutesRouteLoader:
         arguments:
             $container: '@service_container'

@@ -4,15 +4,18 @@ namespace Wexample\SymfonyHelpers\Normalizer;
 
 use ArrayObject;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Contracts\Service\Attribute\Required;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\PhpDate\Helper\DateHelper;
 use Wexample\SymfonyHelpers\Attribute\WorkerSafe;
 use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 use Wexample\SymfonyHelpers\Entity\Traits\Manipulator\EntityManipulatorTrait;
 use Wexample\SymfonyHelpers\Helper\EntityHelper;
+use Wexample\SymfonyHelpers\Helper\EntityHierarchyHelper;
 use Wexample\SymfonyHelpers\Helper\VariableHelper;
 use Wexample\SymfonyHelpers\Interface\HeadStructuredDataProviderInterface;
 use Wexample\SymfonyHelpers\Interface\NormalizableDataInterface;
@@ -26,6 +29,21 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
     public bool $isEntrypoint = true;
 
     /**
+     * Null where the normalizer is built outside the container — a test —:
+     * it then answers for its own class alone.
+     */
+    #[WorkerSafe('The registry of the normalizers, the same for every request.')]
+    protected ?EntityNormalizerRegistry $entityNormalizerRegistry = null;
+
+    #[Required]
+    public function setEntityNormalizerRegistry(
+        #[Autowire(service: EntityNormalizerRegistry::class)]
+        ?EntityNormalizerRegistry $registry
+    ): void {
+        $this->entityNormalizerRegistry = $registry;
+    }
+
+    /**
      * @param AbstractEntity $data
      * @param string|null $format
      * @param array $context
@@ -36,6 +54,15 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
         ?string $format = null,
         array $context = []
     ): array|string|int|float|bool|ArrayObject|null {
+        // A subclass with a normalizer of its own goes to it, whichever one
+        // the caller holds: a listing of sessions is normalized through the
+        // session normalizer and still says what each row turns out to be.
+        $nearest = $this->entityNormalizerRegistry?->findFor($data);
+
+        if ($nearest && $nearest !== $this) {
+            return $nearest->normalize($data, $format, $context);
+        }
+
         $entity = $this->normalizeEntity(
             entity: $data,
             format: $format,
@@ -44,6 +71,12 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
 
         if ($entity instanceof NormalizableDataInterface) {
             $entity = $entity->toArray();
+        }
+
+        // What the row turns out to be, under the name the root gave the
+        // column: the one word the browser reads to tell the kinds apart.
+        if (is_array($entity) && null !== $discriminator = EntityHierarchyHelper::getDiscriminatorName($data)) {
+            $entity[$discriminator] = EntityHierarchyHelper::getDiscriminatorValue($data);
         }
 
         $relationships = $this->normalizeRelationships(
@@ -79,7 +112,8 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
         $relationships = $relationships + $autoRelationships;
 
         return [
-            'type' => ClassHelper::getFieldName($data),
+            // The hierarchy's name: a subclass is one more kind of the same entity.
+            'type' => ClassHelper::getFieldName(EntityHierarchyHelper::getRootClass($data)),
             'entity' => $entity,
             'metadata' => $metadata,
             'relationships' => $relationships,
@@ -210,9 +244,15 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
 
     public function getSupportedTypes(?string $format): array
     {
-        return [
-            static::getEntityClassName() => true,
-        ];
+        $types = [static::getEntityClassName() => true];
+
+        // A class of a hierarchy answers for subclasses it cannot list, those
+        // living in other packages: the serializer is to ask each time.
+        if (EntityHierarchyHelper::isInHierarchy(static::getEntityClassName())) {
+            $types['object'] = false;
+        }
+
+        return $types;
     }
 
     public function supportsNormalization(
@@ -221,9 +261,14 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
         array $context = []
     ): bool {
         // The schema.org description of an entity has a shape of its own.
-        return $this->isEntrypoint
-            && HeadStructuredDataProviderInterface::FORMAT_SCHEMA_ORG !== $format
-            && ClassHelper::isClassPath($data, static::getEntityClassName());
+        if (! $this->isEntrypoint || HeadStructuredDataProviderInterface::FORMAT_SCHEMA_ORG === $format) {
+            return false;
+        }
+
+        // Its own class, and the subclasses no other normalizer is nearer to.
+        return $this->entityNormalizerRegistry
+            ? $this->entityNormalizerRegistry->findFor($data) === $this
+            : ClassHelper::isClassPath($data, static::getEntityClassName());
     }
 
     protected function normalizeDateTimeOrNull(

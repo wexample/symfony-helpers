@@ -5,6 +5,7 @@ namespace Wexample\SymfonyHelpers\Entity\Traits;
 use Symfony\Component\Uid\Uuid;
 use Wexample\Helpers\Helper\ClassHelper;
 use Wexample\Helpers\Helper\TextHelper;
+use Wexample\SymfonyHelpers\Helper\EntityHierarchyHelper;
 
 trait BaseEntityTrait
 {
@@ -18,13 +19,17 @@ trait BaseEntityTrait
         $this->id = $id;
     }
 
+    /**
+     * Both names are the hierarchy's — the root's —: a subclass is one more
+     * kind of the same entity, not another entity.
+     */
     public static function getTableizedName(): string
     {
-        return ClassHelper::getTableizedName(static::class);
+        return ClassHelper::getTableizedName(EntityHierarchyHelper::getRootClass(static::class));
     }
 
     public static function getCamelName(): string
     {
-        return TextHelper::toCamel(ClassHelper::getShortName(static::class));
+        return TextHelper::toCamel(ClassHelper::getShortName(EntityHierarchyHelper::getRootClass(static::class)));
     }
 }

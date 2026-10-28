@@ -7,9 +7,13 @@ use Wexample\SymfonyHelpers\Entity\AbstractEntity;
 
 trait EntityManipulatorTrait
 {
+    /**
+     * The entity, or any subclass of it: what manipulates a session
+     * manipulates every kind of session.
+     */
     public static function manipulatesEntity(object|string $entityClass): bool
     {
-        return ClassHelper::isClassPath($entityClass, self::getEntityClassName());
+        return is_a(ClassHelper::getRealClassPath($entityClass), self::getEntityClassName(), true);
     }
 
     /**
