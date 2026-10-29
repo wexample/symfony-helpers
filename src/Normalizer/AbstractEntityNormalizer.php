@@ -57,7 +57,7 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
         // A subclass with a normalizer of its own goes to it, whichever one
         // the caller holds: a listing of sessions is normalized through the
         // session normalizer and still says what each row turns out to be.
-        $nearest = $this->entityNormalizerRegistry?->findFor($data);
+        $nearest = $this->delegates() ? $this->entityNormalizerRegistry?->findFor($data) : null;
 
         if ($nearest && $nearest !== $this) {
             return $nearest->normalize($data, $format, $context);
@@ -118,6 +118,16 @@ abstract class AbstractEntityNormalizer extends AbstractNormalizer implements No
             'metadata' => $metadata,
             'relationships' => $relationships,
         ];
+    }
+
+    /**
+     * Whether an entity whose class has a nearer normalizer goes to it. A
+     * normalizer that is a view of its own — one shape whatever the subclass,
+     * called by name — answers false and normalizes every row itself.
+     */
+    protected function delegates(): bool
+    {
+        return true;
     }
 
     protected function normalizeRelationships(
